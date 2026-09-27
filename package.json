@@ -10,7 +10,7 @@
   "exports": { ".": "./src/main.mjs" },
   "files": ["bin", "src"],
   "engines": { "node": ">=20" },
-  "dependencies": { "@taifoon/term": "file:../term" },
+  "dependencies": { "@taifoon/term": "^0.1.0" },
   "peerDependencies": { "@taifoon/jev": ">=0.1.1" },
   "peerDependenciesMeta": { "@taifoon/jev": { "optional": true } },
   "scripts": {
