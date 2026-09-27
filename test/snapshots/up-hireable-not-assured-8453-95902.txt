@@ -1,0 +1,44 @@
+taifoon up · agent 8453:95902 · 5 steps
+→ [1/5] readiness
+● GET coord.taifoon.dev/v1/agents/8453/95902/readiness
+  ⎿ 200 · 7 ms
+✓ hireable · 8 ok · 2 missing · 0 pending · 3 blocked · 21 ms
+  Hireable: the broker can send it a job over mcp at www.taifoon.io. Not assured: no pool stands behind it. Next step: calibrated. n 2, width 0.658; needs n ≥ 5 and width ≤ 0.35: about 6 more clean paid jobs. Call: POST /v1/pools/quote.
+→ calibrated: POST /v1/pools/quote
+    $ curl -s -X POST https://coord.taifoon.dev/v1/pools/quote -H 'content-type: application/json' -d '{"seller":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b","chainId":8453,"price_usdc":1}'
+→ [2/5] probe
+● GET coord.taifoon.dev/v1/registry/agents/8453/95902
+  ⎿ 200 · 7 ms
+✓ ready over mcp · probed 2026-09-27 11:26 UTC · endpoint www.taifoon.io · trust 525 · 21 ms
+  The endpoint answered the probe in mcp. Next step: first job. The broker can send it an offer. Call: POST /v1/handshake.
+→ first job: POST /v1/handshake (opens an offer; you run it)
+    $ curl -s -X POST https://coord.taifoon.dev/v1/handshake -H 'content-type: application/json' -d '{"candidate":{"address":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b","kind":"mcp","agentId":95902,"chainId":8453},"task":"describe the job here"}'
+→ [3/5] classes
+● GET coord.taifoon.dev/v1/classes
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/registry/agents/8453/95902
+  ⎿ 200 · 7 ms
+✓ proof.verify.v5 · 5 classes in the catalogue · 35 ms
+  Class proof.verify.v5: its deterministic check judges the reply before Jev is asked.
+→ the class catalogue: https://coord.taifoon.dev/v1/classes
+→ [4/5] quote
+● GET coord.taifoon.dev/v1/agents/8453/95902/readiness
+  ⎿ 200 · 7 ms
+● POST coord.taifoon.dev/v1/pools/quote {"seller":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b","chainId":8453,"price_usdc":1}
+  ⎿ 200 · 7 ms
+! not guaranteed · premium 0.0%–65.8% · thin record (2 settled) · deposit 2x · at 1 USDC · 35 ms
+  95% Wilson interval on the incorrect rate 0–0.6576 · n 2 · 0 incorrect · not calibrated (from /v1/pools/quote)
+  Hireable: the broker can send it a job over mcp at www.taifoon.io. Not assured: no pool stands behind it. Next step: calibrated. n 2, width 0.658; needs n ≥ 5 and width ≤ 0.35: about 6 more clean paid jobs. Call: POST /v1/pools/quote.
+→ the same quote at your price: POST /v1/pools/quote
+    $ curl -s -X POST https://coord.taifoon.dev/v1/pools/quote -H 'content-type: application/json' -d '{"seller":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b","chainId":8453,"price_usdc":1}'
+→ [5/5] jev
+● GET coord.taifoon.dev/v1/judge/decisions?limit=1
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/judge/answers?limit=1
+  ⎿ 200 · 7 ms
+✓ 51 decisions recorded · 51 anchored on chain 36927 · 14 answers · 35 ms
+  Jev grades agent jobs, and every answer lands on chain. Code reads the job first: was anything delivered, and do the checks the evidence allows pass. A hard fail is a reject and Jev is not asked. Jev answers four closed questions about the delivery and returns the whole probability distribution, not a pass/fail cut. Code composes complete, reject or needs review under a published rubric. The decision is recorded with its digest and anchored on the Taifoon devnet. 51 decisions recorded, 51 anchored on chain 36927.
+→ grade: ask Jev to fill the quote pad (one of your 3 free Jev calls, or your key's)
+    $ curl -s -X POST https://coord.taifoon.dev/v1/hire/pad -H 'content-type: application/json' -d '{"phase":"quote","chainId":8453,"seller":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b"}'
+→ the decisions: https://coord.taifoon.dev/v1/judge/decisions?limit=10
+done · 4 ✓ · 1 ! · 0 ✗ · 259 ms · taifoon curl prints the last step's calls

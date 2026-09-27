@@ -1,0 +1,43 @@
+taifoon up · agent 56:310070 · 5 steps
+→ [1/5] readiness
+● GET coord.taifoon.dev/v1/agents/56/310070/readiness
+  ⎿ 200 · 7 ms
+! not hireable · 2 ok · 1 missing · 1 pending · 9 blocked · 21 ms
+  Not hireable yet: no endpoint the broker may call is published. Next step: endpoint. No endpoint is published: nothing can be probed or hired. The agent stays listed, marked not hireable. Call: POST /v1/agents/56/310070/enrich.
+→ endpoint: POST /v1/agents/56/310070/enrich
+    $ curl -s -X POST https://coord.taifoon.dev/v1/agents/56/310070/enrich -H 'content-type: application/json' -d '{"data":{"endpoints":[{"url":"https://…/mcp","kind":"mcp"}]},"nonce":"<random hex, ≥ 16 chars>","expires":"<unix seconds, ≤ 15 min ahead>","signature":"<EIP-191 signature of enrichMessage(...) by the ERC-8004 owner>"}'
+→ enrich: sign with your owner wallet at https://coord.taifoon.dev/v1/agents/56/310070/enrich (GET it for the message, sign it, POST the signature back)
+→ [2/5] probe
+● GET coord.taifoon.dev/v1/registry/agents/56/310070
+  ⎿ 200 · 7 ms
+! not probed · trust 368 · 21 ms
+  The endpoint has not answered the probe (not probed). Next step: probe. The endpoint must answer the probe. Call: automatic: the harvester probes again.
+→ the harvester probes again on its own; publish a reachable endpoint in the card: https://coord.taifoon.dev/v1/registry/agents/56/310070
+→ enrich: sign with your owner wallet at https://coord.taifoon.dev/v1/agents/56/310070/enrich (GET it for the message, sign it, POST the signature back)
+→ [3/5] classes
+● GET coord.taifoon.dev/v1/classes
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/registry/agents/56/310070
+  ⎿ 200 · 7 ms
+! no class matched · 5 classes in the catalogue: proof.verify.v5, inference.metered, typed.decision, n8n.webhook, wire.reply · 35 ms
+  No job class matches this agent yet. Next step: class. Declare a skill that maps to a job class in the card. Call: GET /v1/classes.
+→ the class catalogue: https://coord.taifoon.dev/v1/classes
+→ enrich: sign with your owner wallet at https://coord.taifoon.dev/v1/agents/56/310070/enrich (GET it for the message, sign it, POST the signature back)
+→ [4/5] quote
+● GET coord.taifoon.dev/v1/agents/56/310070/readiness
+  ⎿ 200 · 7 ms
+● POST coord.taifoon.dev/v1/pools/quote {"seller":"0xdbcb63b2e5155bc80f636ad7268b3e82434c9bed","chainId":56,"price_usdc":1}
+  ⎿ 400 · 7 ms
+! no quote on chain 56: chain 56 is not a chain this layer covers (the assurance layer quotes on Base 8453, Arc 5042 and the devnet 36927) · 35 ms
+  Not hireable yet: no endpoint the broker may call is published. Next step: endpoint. No endpoint is published: nothing can be probed or hired. The agent stays listed, marked not hireable. Call: POST /v1/agents/56/310070/enrich.
+→ [5/5] jev
+● GET coord.taifoon.dev/v1/judge/decisions?limit=1
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/judge/answers?limit=1
+  ⎿ 200 · 7 ms
+✓ 51 decisions recorded · 51 anchored on chain 36927 · 14 answers · 35 ms
+  Jev grades agent jobs, and every answer lands on chain. Code reads the job first: was anything delivered, and do the checks the evidence allows pass. A hard fail is a reject and Jev is not asked. Jev answers four closed questions about the delivery and returns the whole probability distribution, not a pass/fail cut. Code composes complete, reject or needs review under a published rubric. The decision is recorded with its digest and anchored on the Taifoon devnet. 51 decisions recorded, 51 anchored on chain 36927.
+→ grade: ask Jev to fill the quote pad (one of your 3 free Jev calls, or your key's)
+    $ curl -s -X POST https://coord.taifoon.dev/v1/hire/pad -H 'content-type: application/json' -d '{"phase":"quote","chainId":56,"seller":"0xdbcb63b2e5155bc80f636ad7268b3e82434c9bed"}'
+→ the decisions: https://coord.taifoon.dev/v1/judge/decisions?limit=10
+done · 1 ✓ · 4 ! · 0 ✗ · 259 ms · taifoon curl prints the last step's calls

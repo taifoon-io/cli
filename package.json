@@ -1,0 +1,20 @@
+{
+  "name": "@taifoon/cli",
+  "version": "0.1.0",
+  "description": "taifoon up: seller onboarding on the Taifoon coordination layer in the terminal (readiness, probe, classes, quote, Jev pad, next action). Reads the public /v1 only and never signs; `taifoon grade` delegates to @taifoon/jev.",
+  "license": "MIT",
+  "author": { "name": "Taifoon", "email": "yawning.monsoon@proton.me", "url": "https://github.com/taifoon-io" },
+  "repository": { "type": "git", "url": "git+https://github.com/taifoon-io/cli.git" },
+  "type": "module",
+  "bin": { "taifoon": "bin/taifoon.mjs" },
+  "exports": { ".": "./src/main.mjs" },
+  "files": ["bin", "src"],
+  "engines": { "node": ">=20" },
+  "dependencies": { "@taifoon/term": "file:../term" },
+  "peerDependencies": { "@taifoon/jev": ">=0.1.1" },
+  "peerDependenciesMeta": { "@taifoon/jev": { "optional": true } },
+  "scripts": {
+    "test": "node --test test/up.test.mjs test/grade.test.mjs test/live.test.mjs",
+    "record": "node test/record-fixtures.mjs"
+  }
+}

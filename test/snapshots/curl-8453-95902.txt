@@ -1,0 +1,5 @@
+# [5/5] jev · read 2 min ago
+curl -s https://coord.taifoon.dev/v1/judge/decisions?limit=1
+curl -s https://coord.taifoon.dev/v1/judge/answers?limit=1
+# next
+curl -s -X POST https://coord.taifoon.dev/v1/hire/pad -H 'content-type: application/json' -d '{"phase":"quote","chainId":8453,"seller":"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b"}'

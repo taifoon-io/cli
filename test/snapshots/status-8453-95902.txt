@@ -1,0 +1,6 @@
+taifoon status · agent 8453:95902 · <home>/up/8453-95902.json
+✓ [1/5] readiness · hireable · 8 ok · 2 missing · 0 pending · 3 blocked · 2 min ago
+✓ [2/5] probe · ready over mcp · probed 2026-09-27 11:26 UTC · endpoint www.taifoon.io · trust 525 · 2 min ago
+✓ [3/5] classes · proof.verify.v5 · 5 classes in the catalogue · 2 min ago
+! [4/5] quote · not guaranteed · premium 0.0%–65.8% · thin record (2 settled) · deposit 2x · at 1 USDC · 2 min ago
+✓ [5/5] jev · 51 decisions recorded · 51 anchored on chain 36927 · 14 answers · 2 min ago
