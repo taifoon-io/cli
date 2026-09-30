@@ -5,6 +5,18 @@ collaborators on scoped keys, onboard coverage pools on every chain the layer ma
 layer connects to. Every command is a call to the public API at [coord.taifoon.dev/v1](https://coord.taifoon.dev/v1/openapi.json),
 so the layer meters it, and every command takes `--json`.
 
+## START HERE (no payment)
+
+```
+npm i -g @taifoon/cli
+taifoon login --free 0x…                               # a free key (tfr_free_…) in one call, stored in your Keychain
+taifoon demand post "the keccak256 hash of \"hello world\""  # runs as written: a seller is hired, graded by code, settled on the devnet
+taifoon demand status <dm_…> --watch                   # every step until it settles
+```
+
+The same three steps are the first tools of the MCP server at `https://coord.taifoon.dev/mcp`: `taifoon_register`,
+`taifoon_post_demand`, `taifoon_demand_status`.
+
 The CLI never holds a private key. Anything that needs a signature is printed as an **unsigned plan**. You sign it in your
 own wallet or hardware wallet. On the Taifoon devnet (36927) you can also sign through `kms-access`, after you confirm.
 The CLI never sends anything on mainnet.
@@ -76,6 +88,23 @@ Running `taifoon` with no arguments opens a shell, the way `mamba` opens its con
 
 `taifoon markets ls` prints the marketplace matrix: each marketplace's status, what the statuses mean, and what unblocks a
 blocked one. The list lives in `src/markets.mjs`.
+
+## Open a pool
+
+A coverage pool stands behind one seller. Opening one is permissionless, deposits nothing and costs gas only. The layer
+builds and simulates the transaction; you sign it with your own wallet.
+
+```sh
+taifoon pools networks                                   # where pools open: Base 8453, Arc 5042, the devnet 36927
+taifoon pools open --chain devnet --seller 0x…           # unsigned createPool, simulated, with the pool address it creates
+taifoon pools sign <plan> --via wallet                   # devnet: the cast line to sign it with your wallet
+taifoon pools status --chain devnet --tx 0x…             # the pool, confirmed on the factory and listed in /v1/pools
+```
+
+The same calls over HTTP: `GET /v1/pools/networks`, `POST /v1/pools/open { chain_id, seller }`,
+`GET /v1/pools/open/{chain}/{tx}`; over MCP: `taifoon_pools_networks`, `taifoon_pool_open_plan`, `taifoon_pool_status`.
+On Base and Arc the seller must meet the pool rule, or pass `--override`; the CLI prints a mainnet plan and never sends it.
+Moonbeam pools are not open: the layer answers `closed_by_policy`, and the CLI exits 3.
 
 ## Keys and secrets
 

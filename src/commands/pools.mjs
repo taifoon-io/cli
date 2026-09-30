@@ -173,6 +173,71 @@ async function create(ctx, [chainRaw, assetRaw, seller]) {
   return 0;
 }
 
+// ── _POOL_OPEN_v1_: open a pool on any supported network through /v1 (one module on the layer: lib/pool-open) ──────────
+async function networks(ctx) {
+  const { p } = ctx;
+  const r = await ctx.get('/v1/pools/networks', { key: false });
+  if (!r.ok) { ctx.fail(`pools/networks: ${r.json?.error ?? r.status ?? r.error}`); return 1; }
+  if (ctx.json) { ctx.emit(r.json); return 0; }
+  ctx.line(rule(p, `where a pool opens · ${r.json.supported.length} lines`));
+  ctx.line(table(p, [
+    { key: 'chain', title: 'chain', fmt: (v) => p.muted(v) }, { key: 'line', title: 'line', fmt: (v) => p.accent(v) },
+    { key: 'factory', title: 'factory', fmt: (v) => p.ink(v) }, { key: 'assets', title: 'assets', fmt: (v) => p.muted(v) },
+    { key: 'pools', title: 'pools', align: 'right' }, { key: 'status', title: 'status', flex: true, fmt: (v) => pill(p, v) },
+  ], r.json.supported.map((s) => ({ chain: `${s.chain} ${s.chain_id}`, line: `${s.line}${s.default ? ' *' : ''}`, factory: s.factory, assets: s.assets.map((a) => a.symbol).join(','), pools: s.pool_count ?? 'unread', status: s.status }))));
+  for (const c of r.json.closed_by_policy ?? []) ctx.line(`  ${p.faint('closed by policy')} ${p.muted(`${c.system} on ${chainName(c.chain_id)} (${c.factory ?? '—'})`)}`);
+  ctx.line(`  ${p.faint(`not supported yet: ${(r.json.not_supported?.chains ?? []).length} chains · open one: taifoon pools open --chain devnet --seller 0x…`)}`);
+  return 0;
+}
+
+async function open(ctx, [sellerArg]) {
+  const { p } = ctx;
+  const chain = chainId(ctx.f.chain ?? '');
+  const seller = String(ctx.f.seller ?? sellerArg ?? '');
+  if (!chain || !seller) { ctx.fail('usage: taifoon pools open --chain base|arc|devnet --seller <0x… | ERC-8004 id> [--asset USDC] [--line layer|v4|v4-glmr] [--from 0x…] [--override]'); return 2; }
+  const body = { chain_id: chain, seller, ...(ctx.f.asset ? { asset: String(ctx.f.asset) } : {}), ...(ctx.f.line ? { line: String(ctx.f.line) } : {}),
+    ...(ctx.f.from ? { from: String(ctx.f.from) } : {}), ...(ctx.f.name ? { name: String(ctx.f.name) } : {}), ...(ctx.f.symbol ? { symbol: String(ctx.f.symbol) } : {}),
+    ...(ctx.f.override === true ? { override: true } : {}), ...(ctx.f.tenant ? { tenant: String(ctx.f.tenant) } : {}) };
+  const r = await ctx.post('/v1/pools/open', body, { key: false });
+  const j = r.json ?? {};
+  if (j.code === 'closed_by_policy') { ctx.fail(j.error ?? NOT_OPEN); if (ctx.json) ctx.emit(j); return 3; }
+  if (!r.ok && j.state !== 'simulation_failed') { ctx.fail(`pools/open: ${j.code ?? r.status} ${j.error ?? ''}${Array.isArray(j.eligibility?.missing) && j.eligibility.missing.length ? ` · missing: ${j.eligibility.missing.join('; ')}` : ''}`); if (ctx.json) ctx.emit(j); return 1; }
+  if (j.state === 'exists') {
+    if (ctx.json) { ctx.emit(j); return 0; }
+    ctx.line(panel(p, `pool exists · ${chainName(chain)}`, [`${p.faint('pool   ')} ${p.ink(j.pool)}`, `${p.faint('seller ')} ${p.ink(j.seller.address)}`, `${p.faint('asset  ')} ${p.ink(`${j.asset.symbol} ${j.asset.address}`)}`, p.faint(j.explorer?.pool ?? '')]));
+    return 0;
+  }
+  const calls = j.tx ? [{ step: 'createPool', to: j.tx.to, data: j.tx.data, value: '0', effect: `Creates the ${j.asset.symbol} coverage pool behind ${j.seller.address}. Deposits nothing; gas only.` }] : [];
+  const plan = savePlan(ctx.env, { kind: 'pools.open', chainId: chain, network: isMainnet(chain) ? 'mainnet' : 'devnet', line: j.line, factory: j.factory, seller: j.seller.address, asset: j.asset.address, expected_pool: j.expected_pool?.address ?? null, calls });
+  if (ctx.json) { ctx.emit({ ...j, cli_plan: plan.id }); return j.ok ? 0 : 1; }
+  ctx.line(planPanel(ctx, plan, isMainnet(chain)));
+  const sim = j.simulation ?? {};
+  ctx.line(`  ${p.faint('simulated ')} ${sim.ok ? p.live('ok') : p.miss('failed')} ${p.faint(`gas ${sim.gas ?? '—'} · fee ${sim.fee_native ?? '—'} ${String(sim.native ?? '').split(' ')[0]} · block ${sim.block ?? '—'}`)}`);
+  ctx.line(`  ${p.faint('pool      ')} ${p.ink(j.expected_pool?.address ?? '—')} ${p.faint(j.expected_pool?.matches_simulation ? '(nonce prediction = simulation)' : '')}`);
+  for (const w of j.why ?? []) ctx.line(`  ${p.faint('why       ')} ${p.muted(w)}`);
+  ctx.line(`  ${p.faint(`then: taifoon pools status --chain ${chain} --tx <hash>`)}`);
+  return j.ok ? 0 : 1;
+}
+
+async function status(ctx) {
+  const { p } = ctx;
+  const chain = chainId(ctx.f.chain ?? '');
+  if (!chain || (!ctx.f.tx && !ctx.f.seller)) { ctx.fail('usage: taifoon pools status --chain <c> --tx 0x… | --seller 0x… [--asset] [--line]'); return 2; }
+  const path = ctx.f.tx ? `/v1/pools/open/${chain}/${ctx.f.tx}` : `/v1/pools/status?${new URLSearchParams({ chain: String(chain), seller: String(ctx.f.seller), ...(ctx.f.asset ? { asset: String(ctx.f.asset) } : {}), ...(ctx.f.line ? { line: String(ctx.f.line) } : {}) })}`;
+  const r = await ctx.get(path, { key: false });
+  const j = r.json ?? {};
+  if (ctx.json) { ctx.emit(j); return j.ok ? 0 : 1; }
+  if (!j.state) { ctx.fail(`pools/status: ${j.code ?? r.status} ${j.error ?? ''}`); return 1; }
+  ctx.line(panel(p, `pool status · ${chainName(chain)} · ${j.state}`, [
+    `${p.faint('pool   ')} ${p.ink(j.pool ?? '—')}`, `${p.faint('seller ')} ${p.ink(j.seller ?? '—')}`,
+    ...(j.tx ? [`${p.faint('tx     ')} ${p.ink(j.tx)} ${p.faint(`block ${j.block ?? '—'} · ${j.confirmations ?? '—'} conf`)}`] : []),
+    `${p.faint('factory')} ${p.muted(`poolOf = ${j.checks?.factory_pool_of ?? '—'}`)}`,
+    `${p.faint('/v1/pools')} ${p.muted(j.listed_in_v1_pools?.listed === true ? 'listed' : j.listed_in_v1_pools?.listed === false ? 'not listed yet' : 'not read')}`,
+    ...(j.why ?? []).map((w) => p.faint(w)),
+  ]));
+  return j.ok ? 0 : 1;
+}
+
 async function poolRow(ctx, chain, pool) {
   const r = await ctx.get(`/v1/pools/state?chain=${chain}&ids=${pool}`, { key: false });
   return (r.json?.pools ?? []).find((x) => x.address.toLowerCase() === pool.toLowerCase()) ?? null;
@@ -268,17 +333,20 @@ export default {
     ['pools quote <seller> [--price-usdc n | --tenant moonbeam --price-glmr n] [--chain]', 'the terms one job would settle on'],
     ['pools pilot', 'Moonbeam pools: not open yet on Base; pilot partners; the devnet'],
     ['pools factories [--chain]', 'every pool factory in the address registry'],
+    ['pools networks', 'where a pool opens: every supported chain and line, read live (/v1/pools/networks)'],
+    ['pools open --chain <c> --seller <0x|agent id> [--asset] [--line] [--from] [--override]', 'UNSIGNED, simulated createPool from /v1/pools/open, with the pool it creates'],
+    ['pools status --chain <c> --tx 0x… | --seller 0x…', 'confirm an opened pool on the factory and in /v1/pools'],
     ['pools create <chain> <asset> <seller> [--line layer|moonbeam|v4|v4-glmr]', 'UNSIGNED createPool plan'],
     ['pools deposit <pool> <amount> --receiver 0x… [--chain]', 'UNSIGNED approve + deposit plan (devnet default)'],
     ['pools redeem <pool> <shares> --owner 0x… [--chain]', 'UNSIGNED redeem plan (devnet default)'],
     ['pools plans [rm <id>]', 'the plans kept in ~/.taifoon/plans'],
     ['pools sign <plan> --via kms:<project> | wallet', 'send a DEVNET plan after your yes (mainnet: never)'],
   ],
-  subs: ['ls', 'quote', 'pilot', 'factories', 'create', 'deposit', 'redeem', 'plans', 'sign'],
+  subs: ['ls', 'quote', 'pilot', 'factories', 'networks', 'open', 'status', 'create', 'deposit', 'redeem', 'plans', 'sign'],
   complete: (w) => (w[0] === 'create' && w.length === 1 ? ['base', 'arc', 'devnet'] : w[0] === 'ls' ? ['--chain', '--tenant', '--live'] : []),
-  valued: ['chain', 'tenant', 'price-usdc', 'price-glmr', 'price', 'class', 'line', 'factory', 'name', 'symbol', 'receiver', 'owner', 'via'],
+  valued: ['chain', 'tenant', 'price-usdc', 'price-glmr', 'price', 'class', 'line', 'factory', 'name', 'symbol', 'receiver', 'owner', 'via', 'seller', 'asset', 'from', 'tx'],
   async run(ctx, [sub = 'ls', ...rest]) {
-    const h = { ls, list: ls, quote, pilot, factories: listFactories, create, deposit, redeem, sign, plans }[sub];
+    const h = { ls, list: ls, quote, pilot, factories: listFactories, networks, open, status, create, deposit, redeem, sign, plans }[sub];
     if (!h) { ctx.fail(`unknown: pools ${sub} · taifoon help pools`); return 2; }
     return h(ctx, rest);
   },

@@ -1,0 +1,127 @@
+{
+ "schema": "taifoon.catalog.v1",
+ "read_at": "2026-09-30T14:00:00Z",
+ "fee": {
+  "bps": 49,
+  "env": "RESALE_FEE_BPS",
+  "rule": "seller price + 49 bps",
+  "agreement": "TSUL"
+ },
+ "counts": {
+  "listed": 2,
+  "priced": 1,
+  "covered": 1,
+  "openable": 1,
+  "assurance_ready": 0,
+  "buy_now": 1,
+  "quote_on_request": 1
+ },
+ "matched": 2,
+ "offset": 0,
+ "limit": 20,
+ "next_offset": null,
+ "rows": [
+  {
+   "id": "cat_0123456789abcdef",
+   "kind": "class_worker",
+   "name": "utility-belt",
+   "seller": "belt.fabtally.com",
+   "protocol": "mcp",
+   "host": "belt.fabtally.com",
+   "url": "https://belt.fabtally.com/mcp",
+   "chain_id": null,
+   "agent_id": null,
+   "owner": null,
+   "skills": [
+    "hash"
+   ],
+   "classes": [
+    "mcp.digest"
+   ],
+   "status": "buy_now",
+   "price": {
+    "seller_usdc": "0",
+    "seller_source": "the class worker's tool call costs nothing",
+    "fee_bps": 49,
+    "fee_usdc": "0",
+    "our_usdc": "0",
+    "token": "dUSDC"
+   },
+   "assurance": {
+    "record": null,
+    "basis": "layer hires",
+    "ready": false,
+    "missing": [
+     "n >= 8"
+    ],
+    "covered": true,
+    "pool": "0x2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f",
+    "pool_openable": null
+   },
+   "grade": {
+    "by": "code (the class check)",
+    "class": "mcp.digest",
+    "det": "digest_exact"
+   },
+   "buy": {
+    "method": "POST",
+    "path": "/v1/demands",
+    "body": {
+     "catalog_id": "cat_0123456789abcdef",
+     "input": {
+      "algorithm": "sha256",
+      "text": "hello"
+     }
+    }
+   },
+   "next": "POST /v1/demands with catalog_id"
+  },
+  {
+   "id": "cat_fedcba9876543210",
+   "kind": "erc8004",
+   "name": "Agent",
+   "seller": "app.singularry.org",
+   "protocol": "mcp",
+   "host": "belt.fabtally.com",
+   "url": "https://belt.fabtally.com/mcp",
+   "chain_id": 56,
+   "agent_id": "359598",
+   "owner": null,
+   "skills": [
+    "hash"
+   ],
+   "classes": [
+    "wire.reply"
+   ],
+   "status": "quote_on_request",
+   "price": {
+    "seller_usdc": null,
+    "seller_source": null,
+    "fee_bps": 49,
+    "fee_usdc": null,
+    "our_usdc": null,
+    "token": "USDC"
+   },
+   "assurance": {
+    "record": null,
+    "basis": "none",
+    "ready": false,
+    "missing": [
+     "a record"
+    ],
+    "covered": false,
+    "pool": null,
+    "pool_openable": {
+     "chain_id": 36927
+    }
+   },
+   "grade": {
+    "by": "code (the class check)",
+    "class": "mcp.digest",
+    "det": "digest_exact"
+   },
+   "buy": null,
+   "next": "POST /v1/demands with catalog_id"
+  }
+ ]
+}

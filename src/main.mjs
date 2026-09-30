@@ -55,6 +55,13 @@ export async function helpText(cmdName) {
   const blocks = names.map((x) => { const c = t.get(x); return `  ${c.name} — ${c.summary}\n${usageLines(c).join('\n')}`; });
   return `taifoon ${VERSION} — the Taifoon coordination layer in the terminal (every command is a /v1 call; it never holds a private key)
 
+START HERE, no payment:
+  1. taifoon login --free 0x…                        a free key (tfr_free_…) in one call, stored in your Keychain
+  2. taifoon demand post "the keccak256 hash of \\"hello world\\""
+                                                     runs as written: the layer picks a seller, hires it, grades the
+                                                     reply by code and settles on the devnet within minutes
+  3. taifoon demand status <dm_…> --watch           every step until it settles
+
   taifoon                 the interactive shell (tab completion, a status bar); piped stdin runs the same commands line by line
   taifoon help <command>  one command's usage
 
