@@ -1,0 +1,2500 @@
+{
+ "base": "https://coord.taifoon.dev",
+ "recorded_at": "2026-09-29T18:20:12.217Z",
+ "responses": {
+  "GET /v1/metrics": {
+   "status": 200,
+   "json": {
+    "ok": true,
+    "schema": "taifoon.metrics.v1",
+    "day": "2026-09-29",
+    "generated_at": "2026-09-29T18:19:59.700Z",
+    "rule": {
+     "ours": "our own relayer keys (every operator-minted key not labelled customer:), the operator token, calls from our own boxes, wallets in the address registry, and every devnet buyer (public test keys)",
+     "customers": "everyone else: visitors, customer: keys, and keys or payments from a wallet that is not in the address registry",
+     "provable": {
+      "on-chain": "an event of one of our contracts: anyone can re-read it",
+      "off-chain": "a coordd row or counter: our record, not a chain fact"
+     },
+     "callers": "hashed only: key:<24 hex of sha256(key)> or ip:<16 hex of a salted sha256>; no IP, key, body or query is kept"
+    },
+    "headline": {
+     "ours": {
+      "api_calls": 271,
+      "unique_callers": 3,
+      "gateway_steps": 36,
+      "handshakes": 42,
+      "hires_settled": 19,
+      "grades": 15,
+      "bridges": 0,
+      "bridge_volume_usdc": 0,
+      "fees_earned_usdc": 0,
+      "would_charge_usdc": 0.034
+     },
+     "customers": {
+      "api_calls": 30,
+      "unique_callers": 5,
+      "gateway_steps": 15,
+      "handshakes": 1,
+      "hires_settled": 0,
+      "grades": 0,
+      "bridges": 0,
+      "bridge_volume_usdc": 0,
+      "fees_earned_usdc": 0,
+      "would_charge_usdc": 0.015
+     }
+    },
+    "compare": {
+     "today": {
+      "ours": {
+       "api_calls": 271,
+       "unique_callers": 3,
+       "gateway_steps": 36,
+       "handshakes": 42,
+       "hires_settled": 19,
+       "grades": 15,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0,
+       "would_charge_usdc": 0.034
+      },
+      "customers": {
+       "api_calls": 30,
+       "unique_callers": 5,
+       "gateway_steps": 15,
+       "handshakes": 1,
+       "hires_settled": 0,
+       "grades": 0,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0,
+       "would_charge_usdc": 0.015
+      }
+     },
+     "yesterday": {
+      "ours": {
+       "api_calls": 0,
+       "unique_callers": 0,
+       "gateway_steps": 0,
+       "handshakes": 36,
+       "hires_settled": 15,
+       "grades": 58,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0.15,
+       "would_charge_usdc": 0
+      },
+      "customers": {
+       "api_calls": 0,
+       "unique_callers": 0,
+       "gateway_steps": 0,
+       "handshakes": 35,
+       "hires_settled": 0,
+       "grades": 1,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0,
+       "would_charge_usdc": 0
+      }
+     },
+     "avg7": {
+      "ours": {
+       "api_calls": 0,
+       "unique_callers": 0,
+       "gateway_steps": 0,
+       "handshakes": 8.4286,
+       "hires_settled": 6.7143,
+       "grades": 12,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0.0214,
+       "would_charge_usdc": 0
+      },
+      "customers": {
+       "api_calls": 0,
+       "unique_callers": 0,
+       "gateway_steps": 0,
+       "handshakes": 6.4286,
+       "hires_settled": 0,
+       "grades": 6,
+       "bridges": 0,
+       "bridge_volume_usdc": 0,
+       "fees_earned_usdc": 0,
+       "would_charge_usdc": 0
+      }
+     },
+     "days": {
+      "today": "2026-09-29",
+      "yesterday": "2026-09-28",
+      "avg7": [
+       "2026-09-22",
+       "2026-09-28"
+      ]
+     }
+    },
+    "api": {
+     "calls": {
+      "ours": 271,
+      "customers": 30
+     },
+     "unique_callers": {
+      "ours": 2,
+      "customers": 4
+     },
+     "by_route": [
+      {
+       "route": "agents/ledger",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 47
+      },
+      {
+       "route": "proof/verifiable/:chain",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 27
+      },
+      {
+       "route": "registry/agents",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 27
+      },
+      {
+       "route": "agents/registered",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 25
+      },
+      {
+       "route": "classes/sellers",
+       "method": "GET",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 18
+      },
+      {
+       "route": "gw/steps",
+       "method": "POST",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 15
+      },
+      {
+       "route": "harvest",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 4
+      },
+      {
+       "route": "judge/answers",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 4
+      },
+      {
+       "route": "judge/decisions",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 4
+      },
+      {
+       "route": "judge/decisions",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 4
+      },
+      {
+       "route": "our-card",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 4
+      },
+      {
+       "route": "workflows",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 4
+      },
+      {
+       "route": "agents/jobs",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "chains",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "handshake",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "judge/batch",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "metrics",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 3
+      },
+      {
+       "route": "our-cards",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 3
+      },
+      {
+       "route": "pools/plan",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "judge/ref",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "route": "agents/payments",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "agents/providers",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "assurance",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "capabilities/search",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "capabilities/skills",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "capabilities",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "classes/sellers",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 2
+      },
+      {
+       "route": "handshake/:id",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "jobs/:jobId/complete",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "jobs",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "network",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 2
+      },
+      {
+       "route": "proof/tx/:chain/:tx",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "registry/search",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 2
+      },
+      {
+       "route": "relayer/whoami",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "assurance/quote",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "transfer/plan",
+       "method": "POST",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "route": "agents/:chain/:agentId/readiness",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "agents/cards",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "agents/contracts",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "agents/ledger",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "agents/market",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "agents/named",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "agents/who/:address",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "capabilities/search",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "classes",
+       "method": "GET",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "classes",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "directory",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "ecosystems",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "genome/actions",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "hiring/stages",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "jobs/tasks",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/credits",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/decisions/:id",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/demos",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/ready",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/study",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/trace/:chain/:jobId",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "judge/traces",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "landscape/wire",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "landscape",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "metrics/series",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "n8n/catalog",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "names",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "onboarding/batch",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "onboarding/flows",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "our-card",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "pools/state",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "route": "pools",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "protocols/agents",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "protocols",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "registry/agents/:chain/:id/assurance",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "registry/agents/:chain/:id",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "registry/owners/:addr",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "registry/search",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "registry/stats",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "root/chains",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "root/latest",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "root/proof/:chain/:block",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "root",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "scan",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "settle",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "standards",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "stream/snapshot",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "transfer/:chain/:tx",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "transfer/watch/:chain/:tx",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "transfers",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "vault/policy",
+       "method": "GET",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "agents/register",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "assurance/call",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "classes/probes",
+       "method": "POST",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "enroll/plan",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "handshake/:id",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "handshake",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "jobs/:jobId/complete",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "jobs",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "network",
+       "method": "POST",
+       "key_class": "key",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "settle",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      },
+      {
+       "route": "vault/policy",
+       "method": "POST",
+       "key_class": "visitor",
+       "whose": "ours",
+       "calls": 1
+      }
+     ],
+     "by_channel": {
+      "direct": {
+       "ours": 271,
+       "customers": 30
+      }
+     },
+     "by_status": {
+      "2xx": {
+       "ours": 253,
+       "customers": 26
+      },
+      "4xx": {
+       "ours": 15,
+       "customers": 4
+      },
+      "5xx": {
+       "ours": 3,
+       "customers": 0
+      }
+     },
+     "by_chain": [
+      {
+       "chain": 8453,
+       "whose": "ours",
+       "calls": 23
+      },
+      {
+       "chain": 5042,
+       "whose": "ours",
+       "calls": 3
+      },
+      {
+       "chain": 100,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 10,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 1101,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 130,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 1329,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 137,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 143,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 146,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 196,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 1,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 25,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 2741,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 324,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 36927,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 42161,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 42220,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 43114,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 480,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 534352,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 56,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 57073,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 59144,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 98866,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 999,
+       "whose": "ours",
+       "calls": 2
+      },
+      {
+       "chain": 36927,
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "chain": 8453,
+       "whose": "customers",
+       "calls": 1
+      }
+     ],
+     "top_callers": [
+      {
+       "caller": "ip:cd1a0eab1915e29f",
+       "whose": "ours",
+       "calls": 233
+      },
+      {
+       "caller": "key:e4d648edec910aba63d5e329",
+       "whose": "ours",
+       "calls": 38
+      },
+      {
+       "caller": "ip:a1e30ef9451540d9",
+       "whose": "customers",
+       "calls": 25
+      },
+      {
+       "caller": "ip:eae96e6e4b328131",
+       "whose": "customers",
+       "calls": 3
+      },
+      {
+       "caller": "ip:008c17ee2f3ec8ec",
+       "whose": "customers",
+       "calls": 1
+      },
+      {
+       "caller": "ip:339387c00d123729",
+       "whose": "customers",
+       "calls": 1
+      }
+     ]
+    },
+    "gateway": {
+     "steps": {
+      "ours": 36,
+      "customers": 15
+     },
+     "by_kind": [
+      {
+       "kind": "mcp",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 21
+      },
+      {
+       "kind": "mcp",
+       "whose": "customers",
+       "state": "Settled",
+       "steps": 15
+      },
+      {
+       "kind": "rpc",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 4
+      },
+      {
+       "kind": "a2a",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 2
+      },
+      {
+       "kind": "route",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 2
+      },
+      {
+       "kind": "uagents",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 2
+      },
+      {
+       "kind": "webhook",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 2
+      },
+      {
+       "kind": "rpc",
+       "whose": "ours",
+       "state": "Failed",
+       "steps": 1
+      },
+      {
+       "kind": "webhook",
+       "whose": "ours",
+       "state": "Failed",
+       "steps": 1
+      },
+      {
+       "kind": "x402",
+       "whose": "ours",
+       "state": "Settled",
+       "steps": 1
+      }
+     ],
+     "unique_callers": {
+      "ours": 1,
+      "customers": 1
+     },
+     "top_callers": [
+      {
+       "caller": "key:e4d648edec910aba63d5e329",
+       "whose": "ours",
+       "steps": 36,
+       "would_charge_usdc": 0.033
+      },
+      {
+       "caller": "ip:a1e30ef9451540d9",
+       "whose": "customers",
+       "steps": 15,
+       "would_charge_usdc": 0.015
+      }
+     ],
+     "fee": {
+      "charged_rate_usdc": 0,
+      "shadow_rate_usdc": 0.001,
+      "would_charge_usdc": {
+       "ours": 0.034,
+       "customers": 0.015
+      },
+      "charged_usdc": {
+       "ours": 0,
+       "customers": 0
+      },
+      "rule": "nothing charged (price 0 until the owner sets one); each settled call accrues 0.001 USDC it WOULD have charged"
+     },
+     "unattributed_steps": 0
+    },
+    "handshakes": {
+     "opened": {
+      "ours": 42,
+      "customers": 1
+     },
+     "delivered": {
+      "ours": 34,
+      "customers": 1
+     },
+     "by_protocol": [
+      {
+       "protocol": "a2a-registry",
+       "whose": "ours",
+       "opened": 13,
+       "delivered": 7
+      },
+      {
+       "protocol": "mcp-registry",
+       "whose": "ours",
+       "opened": 12,
+       "delivered": 11
+      },
+      {
+       "protocol": "mcp",
+       "whose": "ours",
+       "opened": 9,
+       "delivered": 8
+      },
+      {
+       "protocol": "a2a",
+       "whose": "ours",
+       "opened": 4,
+       "delivered": 4
+      },
+      {
+       "protocol": "uagents",
+       "whose": "ours",
+       "opened": 4,
+       "delivered": 4
+      },
+      {
+       "protocol": "mcp",
+       "whose": "customers",
+       "opened": 1,
+       "delivered": 1
+      }
+     ]
+    },
+    "hires": {
+     "settled": [
+      {
+       "chain": 36927,
+       "verdict": "expire",
+       "whose": "ours",
+       "provable": "on-chain",
+       "n": 4
+      },
+      {
+       "chain": 36927,
+       "verdict": "complete",
+       "whose": "ours",
+       "provable": "on-chain",
+       "n": 11
+      },
+      {
+       "chain": 36927,
+       "verdict": "reject",
+       "whose": "ours",
+       "provable": "on-chain",
+       "n": 3
+      },
+      {
+       "chain": 8453,
+       "verdict": "complete",
+       "whose": "ours",
+       "provable": "on-chain",
+       "n": 1
+      }
+     ],
+     "note": "a hire counts once its ending is recorded (relayer, evaluator leg, keeper or site); funded-but-open jobs are in the funnel"
+    },
+    "grades": {
+     "n": 15,
+     "by_kind_payer": {
+      "grade|own-key|n8n|ours": 15
+     },
+     "anchored_by_chain": {
+      "36927": 15
+     }
+    },
+    "bridges": [],
+    "grade_purchases": {
+     "n": {
+      "ours": 0,
+      "customers": 0
+     },
+     "grades": {
+      "ours": 0,
+      "customers": 0
+     },
+     "usdc": {
+      "ours": 0,
+      "customers": 0
+     }
+    },
+    "onboarding": {
+     "agents_registered": 2,
+     "agents_registered_total": 8,
+     "resources_listed": 9
+    },
+    "funnel": [
+     {
+      "id": "discovered",
+      "n": 48871,
+      "what": "agents in the readiness export (the harvested registry, spam and duplicates filtered)",
+      "source": "/v1/agents/readiness/summary",
+      "from_prev": null
+     },
+     {
+      "id": "hireable",
+      "n": 4920,
+      "what": "a callable endpoint that answered, a skill, a class with a code check",
+      "source": "/v1/agents/readiness/summary",
+      "from_prev": 0.1007
+     },
+     {
+      "id": "handshaken",
+      "n": 40,
+      "what": "distinct agents an offer reached through /v1/handshake",
+      "source": "coordd hs_ rows",
+      "from_prev": 0.0081
+     },
+     {
+      "id": "hired",
+      "n": 65,
+      "what": "distinct jobs funded through the layer (settle rows + handshakes bound to a job)",
+      "source": "coordd settle: + hs_ rows",
+      "from_prev": 1.625
+     },
+     {
+      "id": "graded",
+      "n": 121,
+      "what": "composed grades in the decision ledger",
+      "source": "/v1/judge/decisions",
+      "from_prev": 1.8615
+     },
+     {
+      "id": "settled",
+      "n": 57,
+      "what": "jobs with a recorded ending (complete, reject, expire, cheat)",
+      "source": "/v1/settle",
+      "from_prev": 0.4711
+     },
+     {
+      "id": "paid",
+      "n": 20,
+      "what": "jobs that ended complete (the seller paid on chain)",
+      "source": "/v1/settle",
+      "from_prev": 0.3509
+     }
+    ],
+    "fees": [
+     {
+      "path": "bridge",
+      "where": "transfer/plan → CctpFeeRouterV3 (Base, Arc)",
+      "rule": "10 bps of the amount, floor 0.02 USDC; a named partner takes 50 %",
+      "status": "live: every /v1/transfer/plan routes through the router by default (route.via = cctp_fee_router)",
+      "provable": "on-chain",
+      "earned_usdc": {
+       "ours": 0,
+       "customers": 0
+      },
+      "source": "Bridged logs (arc /v1/bridge/ledger)"
+     },
+     {
+      "path": "evaluator",
+      "where": "POST /v1/settle via:\"us\" → V4 hook + JudgeAdapter as evaluator",
+      "rule": "1 % of the price, floor 0.01 USDC, capped at 10 % by the hook; paid only when our decision stands",
+      "status": "live on the devnet 36927; Base awaits the owner’s yes per component",
+      "provable": "on-chain",
+      "earned": [
+       {
+        "chain": 36927,
+        "line": "Taifoon Devnet",
+        "symbol": "dUSDC",
+        "live": true,
+        "earned_ours": 0.02,
+        "earned_customers": 0,
+        "jobs": {
+         "ours": 2,
+         "customers": 0
+        }
+       },
+       {
+        "chain": 36927,
+        "line": "Taifoon Devnet · GLMR line",
+        "symbol": "dGLMR",
+        "live": true,
+        "earned_ours": 0.06,
+        "earned_customers": 0,
+        "jobs": {
+         "ours": 6,
+         "customers": 0
+        }
+       }
+      ],
+      "source": "/v1/fees (EvaluatorFeePaid, FeeForwarded)"
+     },
+     {
+      "path": "gateway",
+      "where": "coord.taifoon.dev/gw/<protocol>/<resource> — every λ step",
+      "rule": "0 charged until the owner sets a price; 0.001 USDC per settled call is accrued as WOULD HAVE CHARGED",
+      "status": "accruing off-chain (coordd gwf:), no rail collects it yet",
+      "provable": "off-chain",
+      "would_charge_usdc": {
+       "ours": 0.034,
+       "customers": 0.015
+      },
+      "charged_usdc": {
+       "ours": 0,
+       "customers": 0
+      },
+      "source": "gwf:t:<day>"
+     },
+     {
+      "path": "grades",
+      "where": "POST /v1/judge/credits/key (pay-to-key on Base)",
+      "rule": "0.15 USDC per block of 3 grades (at the oracle’s fallback peg)",
+      "status": "live on Base",
+      "provable": "on-chain",
+      "earned_usdc": {
+       "ours": 0.15,
+       "customers": 0
+      },
+      "source": "coordd key-claim: (each a USDC transfer to the payee)"
+     },
+     {
+      "path": "x402",
+      "where": "5 paywalled skills",
+      "rule": "0.1–1 USDC per call to the vault",
+      "status": "not collecting: no facilitator is set (the owner’s choice)",
+      "provable": "on-chain",
+      "earned_usdc": {
+       "ours": 0,
+       "customers": 0
+      },
+      "source": "facilitator settlements"
+     }
+    ],
+    "needs_yes": [
+     "a gateway price: GATEWAY_FEE_USDC_PER_CALL (and bps on paid resources); today 0, only accrued as would-have-charged",
+     "a rail to collect the gateway fee: relayer-key credit debits (off-chain) or GatewayFeeCollector on Base (a new contract)",
+     "settle through us on Base: the V4 hook, factory and fee-forwarding JudgeAdapter, the fee policy, Moonbeam naming our adapter, KMS verdict posting, the keeper",
+     "an x402 facilitator, so the five paywalled skills can take payment",
+     "the step-root anchor (a Merkle root of each epoch’s step digests on chain), which makes \"this call went through us\" provable"
+    ],
+    "rows": [
+     {
+      "metric": "api.calls",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 271,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.unique_callers",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "callers",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 42,
+      "unit": "handshakes",
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.delivered",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 34,
+      "unit": "handshakes",
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 36,
+      "unit": "steps",
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.fee.would_charge",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 0.034,
+      "unit": "USDC",
+      "source": "gwf:t",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 30,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.unique_callers",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 4,
+      "unit": "callers",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "handshakes",
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.delivered",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "handshakes",
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 15,
+      "unit": "steps",
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.fee.would_charge",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 0.015,
+      "unit": "USDC",
+      "source": "gwf:t",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 8453,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 23,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 5042,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 3,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 100,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 10,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 1101,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 130,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 1329,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 137,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 143,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 146,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 196,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 1,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 25,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 2741,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 324,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 36927,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 42161,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 42220,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 43114,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 480,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 534352,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 56,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 57073,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 59144,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 98866,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 999,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 36927,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "api.calls",
+      "chain": 8453,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "calls",
+      "source": "access log (mt:)",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 21,
+      "unit": "steps",
+      "labels": {
+       "kind": "mcp",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 15,
+      "unit": "steps",
+      "labels": {
+       "kind": "mcp",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 4,
+      "unit": "steps",
+      "labels": {
+       "kind": "rpc",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "steps",
+      "labels": {
+       "kind": "a2a",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "steps",
+      "labels": {
+       "kind": "route",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "steps",
+      "labels": {
+       "kind": "uagents",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "steps",
+      "labels": {
+       "kind": "webhook",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "steps",
+      "labels": {
+       "kind": "rpc",
+       "state": "Failed"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "steps",
+      "labels": {
+       "kind": "webhook",
+       "state": "Failed"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "gateway.steps",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "steps",
+      "labels": {
+       "kind": "x402",
+       "state": "Settled"
+      },
+      "source": "gwc:k",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 13,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "a2a-registry"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 12,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "mcp-registry"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 9,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "mcp"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 4,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "a2a"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 4,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "uagents"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "handshakes.opened",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 1,
+      "unit": "handshakes",
+      "labels": {
+       "protocol": "mcp"
+      },
+      "source": "coordd hs_",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "hires.settled",
+      "chain": 36927,
+      "whose": "ours",
+      "provable": "on-chain",
+      "value": 4,
+      "unit": "jobs",
+      "labels": {
+       "verdict": "expire"
+      },
+      "source": "coordd settle:",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "hires.settled",
+      "chain": 36927,
+      "whose": "ours",
+      "provable": "on-chain",
+      "value": 11,
+      "unit": "jobs",
+      "labels": {
+       "verdict": "complete"
+      },
+      "source": "coordd settle:",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "hires.settled",
+      "chain": 36927,
+      "whose": "ours",
+      "provable": "on-chain",
+      "value": 3,
+      "unit": "jobs",
+      "labels": {
+       "verdict": "reject"
+      },
+      "source": "coordd settle:",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "hires.settled",
+      "chain": 8453,
+      "whose": "ours",
+      "provable": "on-chain",
+      "value": 1,
+      "unit": "jobs",
+      "labels": {
+       "verdict": "complete"
+      },
+      "source": "coordd settle:",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "grades.composed",
+      "chain": null,
+      "whose": "ours",
+      "provable": "off-chain",
+      "value": 15,
+      "unit": "decisions",
+      "labels": {
+       "kind": "grade",
+       "payer": "own-key",
+       "via": "n8n"
+      },
+      "source": "decision ledger",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "grades.anchored",
+      "chain": 36927,
+      "whose": "ours",
+      "provable": "on-chain",
+      "value": 15,
+      "unit": "decisions",
+      "source": "JevDecisionLog",
+      "day": "2026-09-29"
+     },
+     {
+      "metric": "agents.registered",
+      "chain": null,
+      "whose": "customers",
+      "provable": "off-chain",
+      "value": 2,
+      "unit": "agents",
+      "source": "coordd coordination_agents",
+      "day": "2026-09-29"
+     }
+    ],
+    "sources": {
+     "errors": [
+      "bridges: The operation was aborted due to timeout"
+     ],
+     "read_at": "2026-09-29T18:19:58.744Z",
+     "bridges_read": false
+    }
+   }
+  },
+  "GET /v1/network": {
+   "status": 200,
+   "json": {
+    "ok": true,
+    "at": "2026-09-29T18:18:10.156Z",
+    "chains": [
+     {
+      "chain": 8453,
+      "endpoints": 8,
+      "head": 51958266,
+      "latency_ms": 117,
+      "name": "Base",
+      "ok": true,
+      "step": "st_bdaca5cf8fb6c011",
+      "usable": 8,
+      "why": null
+     },
+     {
+      "chain": 5042,
+      "endpoints": 0,
+      "head": null,
+      "latency_ms": null,
+      "name": "Arc",
+      "ok": false,
+      "step": "st_ebc0d9e59490b7f6",
+      "usable": 0,
+      "why": "no endpoint in the warmbed rotation for this chain"
+     },
+     {
+      "chain": 42220,
+      "endpoints": 4,
+      "head": 78805125,
+      "latency_ms": 93,
+      "name": "Celo",
+      "ok": true,
+      "step": "st_8046852242471c1c",
+      "usable": 4,
+      "why": null
+     },
+     {
+      "chain": 36927,
+      "endpoints": 1,
+      "head": 1204582,
+      "latency_ms": 189,
+      "name": "Taifoon devnet",
+      "ok": true,
+      "step": "st_d726fca1ce946c64",
+      "usable": 1,
+      "why": null
+     },
+     {
+      "chain": 3692781,
+      "endpoints": 1,
+      "head": 318249,
+      "latency_ms": 151,
+      "name": "Taifoon mainnet",
+      "ok": true,
+      "step": "st_5688569031823503",
+      "usable": 1,
+      "why": null
+     }
+    ],
+    "chains_healthy": "4/5",
+    "classes": [
+     {
+      "class": "proof.verify.v5",
+      "latency_ms": 1447,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "www.taifoon.io",
+       "kind": "mcp"
+      },
+      "step": "st_d9bb1cae51d6e03b",
+      "title": "Verify a block under the SuperRoot",
+      "tools": 46,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "inference.metered",
+      "latency_ms": 1262,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "api.taifoon.dev",
+       "kind": "mcp"
+      },
+      "step": "st_e958522634478ed3",
+      "title": "Metered inference on a measured GPU node",
+      "tools": 6,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "typed.decision",
+      "latency_ms": 305,
+      "method": "card",
+      "online": true,
+      "seller": {
+       "host": "n8n.taifoon.dev",
+       "kind": "n8n"
+      },
+      "step": "st_4caf94307db1297d",
+      "title": "Typed decisions on a state",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "n8n.webhook",
+      "latency_ms": 1116,
+      "method": "card",
+      "online": true,
+      "seller": {
+       "host": "n8n.taifoon.dev",
+       "kind": "n8n"
+      },
+      "step": "st_a44f2d8a3a8c52cc",
+      "title": "One job for a registered n8n workflow",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "transfer.attest.cctp",
+      "latency_ms": 1458,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "www.taifoon.io",
+       "kind": "mcp"
+      },
+      "step": "st_29a1d789fd683a29",
+      "title": "Attest a cross-chain transfer (CCTP)",
+      "tools": 46,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "typed.compile",
+      "latency_ms": 10521,
+      "method": "card",
+      "online": false,
+      "seller": {
+       "host": "n8n.taifoon.dev",
+       "kind": "n8n"
+      },
+      "step": "st_d26dfbe77c741da4",
+      "title": "Compile rules into typed questions",
+      "tools": null,
+      "via": "direct",
+      "why": "card answered unreachable"
+     },
+     {
+      "class": "mech.compute",
+      "latency_ms": null,
+      "method": null,
+      "online": false,
+      "seller": {
+       "host": null,
+       "kind": null
+      },
+      "step": null,
+      "title": "Exact arithmetic from an Olas Mech on Base",
+      "tools": null,
+      "via": null,
+      "why": "no seller ranked for this class"
+     },
+     {
+      "class": "tee.typed.compile",
+      "latency_ms": 1851,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "api.taifoon.dev",
+       "kind": "mcp"
+      },
+      "step": "st_bd0508e0e5dab368",
+      "title": "Compile rules into typed questions inside an enclave",
+      "tools": 1,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "memoacp.transfer_token",
+      "latency_ms": null,
+      "method": null,
+      "online": false,
+      "seller": {
+       "host": null,
+       "kind": null
+      },
+      "step": null,
+      "title": "A token transfer through a Virtuals memo-ACP seller on Base",
+      "tools": null,
+      "via": null,
+      "why": "no seller ranked for this class"
+     },
+     {
+      "class": "text.tweet",
+      "latency_ms": 807,
+      "method": "a2a.card",
+      "online": false,
+      "seller": {
+       "host": "api.bitagent.io",
+       "kind": "a2a"
+      },
+      "step": "st_b9b2d152bcb008a7",
+      "title": "One ready-to-post tweet, to the task’s own spec",
+      "tools": null,
+      "via": "direct",
+      "why": "a2a.card answered 404"
+     },
+     {
+      "class": "stats.describe",
+      "latency_ms": 236,
+      "method": "uagents.almanac",
+      "online": true,
+      "seller": {
+       "host": "agent1qvtnt9s6uhua3c3jundxrpgqjsy9quc2h4s83anjg6r2m95g90dn2ruw8zm",
+       "kind": "uagents"
+      },
+      "step": "st_8c27a67208ebbe24",
+      "title": "Descriptive statistics of a list of numbers, from an Agentverse agent",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "chat.word_count",
+      "latency_ms": 46,
+      "method": "uagents.almanac",
+      "online": true,
+      "seller": {
+       "host": "agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq",
+       "kind": "uagents"
+      },
+      "step": "st_63dc4b88d7dec637",
+      "title": "Count the words of a text, from an Agentverse chat agent (the ASI:One chat protocol)",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "x402.chain_head",
+      "latency_ms": 519,
+      "method": "x402.unpaid",
+      "online": true,
+      "seller": {
+       "host": "api.onesource.io",
+       "kind": "x402"
+      },
+      "step": "st_735470c8123c5e1e",
+      "title": "A chain’s latest block number, bought per call from an x402 resource",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "mcp.digest",
+      "latency_ms": 1456,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "belt.fabtally.com",
+       "kind": "mcp"
+      },
+      "step": "st_a298202322135651",
+      "title": "The digest of a text, from an MCP server in the official MCP registry",
+      "tools": 13,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "agentkit.erc20_transfer",
+      "latency_ms": 1108,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "api.taifoon.dev",
+       "kind": "mcp"
+      },
+      "step": "st_dff643c85d4ee0b0",
+      "title": "An ERC-20 transfer, made by a Coinbase AgentKit agent",
+      "tools": 3,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "a2a.json_normalize",
+      "latency_ms": 220,
+      "method": "a2a.card",
+      "online": true,
+      "seller": {
+       "host": "mach-agent-lab-edge.vercel.app",
+       "kind": "a2a"
+      },
+      "step": "st_4b8b31f354022aeb",
+      "title": "A JSON object in a stable key order, from an A2A agent in the A2A Registry or an MCP canonicalize tool",
+      "tools": null,
+      "via": "direct",
+      "why": null
+     },
+     {
+      "class": "credential.verify.celo",
+      "latency_ms": 1148,
+      "method": "mcp.tools_list",
+      "online": true,
+      "seller": {
+       "host": "api.hashproof.dev",
+       "kind": "mcp"
+      },
+      "step": "st_b5e8ffc93d49b5a0",
+      "title": "A verifiable credential checked against its record on Celo, by an ERC-8004 agent on Celo",
+      "tools": 6,
+      "via": "gateway",
+      "why": null
+     },
+     {
+      "class": "wire.reply",
+      "latency_ms": null,
+      "method": null,
+      "online": false,
+      "seller": {
+       "host": null,
+       "kind": null
+      },
+      "step": null,
+      "title": "One job for an answering agent, over its own protocol",
+      "tools": null,
+      "via": null,
+      "why": "no seller ranked for this class"
+     }
+    ],
+    "published_at": "2026-09-29T18:18:13.509Z",
+    "routes": [
+     {
+      "amount_usdc": 1,
+      "eta_s": null,
+      "expected_received_usdc": 0.962928,
+      "fee_rule": "10 bps, floor 0.02 USDC",
+      "fee_usdc": 0.02,
+      "from": 8453,
+      "latency_ms": 797,
+      "ok": true,
+      "step": "st_acf026315a179d70",
+      "to": 5042,
+      "token": "USDC",
+      "via": "cctp_fee_router",
+      "why": null
+     },
+     {
+      "amount_usdc": 1,
+      "eta_s": null,
+      "expected_received_usdc": 0.925238,
+      "fee_rule": "10 bps, floor 0.02 USDC",
+      "fee_usdc": 0.02,
+      "from": 5042,
+      "latency_ms": 528,
+      "ok": true,
+      "step": "st_9a2f770e8b2543c5",
+      "to": 8453,
+      "token": "USDC",
+      "via": "cctp_fee_router",
+      "why": null
+     }
+    ],
+    "routes_ok": "2/2",
+    "rules": {
+     "cost": "zero: handshake-level calls only (MCP initialize + tools/list, an A2A card, an unpaid 402, a warmbed rotation read, a transfer quote); never a paid call, a Jev call or a transaction",
+     "data": "public endpoints and our own quotes only; no customer data"
+    },
+    "run_id": "ac_a58fd10377c7",
+    "schema": "taifoon.network.v1",
+    "sellers": {
+     "classes": 18,
+     "median_latency_ms": 1116,
+     "online": 13,
+     "p90_latency_ms": 1458
+    },
+    "steps_recorded": 36,
+    "took_ms": 78089,
+    "age_s": 95,
+    "stale": false,
+    "gateway_today": {
+     "day": "2026-09-29",
+     "steps": 50,
+     "by_kind": {
+      "a2a": 2,
+      "mcp": 36,
+      "route": 2,
+      "rpc": 5,
+      "uagents": 2,
+      "webhook": 3,
+      "x402": 1
+     }
+    }
+   }
+  }
+ }
+}

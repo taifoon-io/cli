@@ -9,7 +9,8 @@ export const FRESH_MS = 10 * 60_000;
 export function stateDir(env = process.env) {
   return join(env.TAIFOON_HOME || join(homedir(), '.taifoon'), 'up');
 }
-const fileFor = (dir, agent) => join(dir, `${agent.chain}-${agent.id}.json`);
+// an x402 resource's id is a URL: its file name keeps only filename-safe characters
+const fileFor = (dir, agent) => join(dir, `${agent.chain}-${String(agent.id).replace(/[^A-Za-z0-9._-]+/g, '_')}.json`);
 
 function readJson(p) { try { return JSON.parse(readFileSync(p, 'utf8')); } catch { return null; } }
 function writeJson(p, v) {

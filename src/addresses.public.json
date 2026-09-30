@@ -1,0 +1,2471 @@
+{
+  "version": 1,
+  "updated": "2026-09-29",
+  "checked_at": "2026-09-28T10:26:19.619Z",
+  "chains": {
+    "56": {
+      "name": "BNB Smart Chain",
+      "explorers": {
+        "bscscan": "https://bscscan.com"
+      },
+      "note": "third-party reads only"
+    },
+    "5042": {
+      "name": "Arc",
+      "explorers": {
+        "arc": "https://explorer.arc.network",
+        "etherscan": "https://arc.etherscan.io"
+      }
+    },
+    "8453": {
+      "name": "Base",
+      "explorers": {
+        "blockscout": "https://base.blockscout.com",
+        "basescan": "https://basescan.org"
+      }
+    },
+    "36927": {
+      "name": "Taifoon devnet",
+      "explorers": {
+        "taifoon": "https://www.taifoon.io/scan/36927"
+      }
+    },
+    "42220": {
+      "name": "Celo",
+      "explorers": {
+        "blockscout": "https://celo.blockscout.com",
+        "celoscan": "https://celoscan.io"
+      },
+      "note": "third-party reads only"
+    }
+  },
+  "systems": {
+    "moonbeam-acp": {
+      "owner": "ours",
+      "description": "Moonbeam ACP: the assurance hook, pool factory, coverage pools and price oracle Moonbeam runs on Base (V3), plus the devnet development copy.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "AssuranceHook (proxy)",
+          "address": "0xc0578657Eda85e0a246771aa1839ce79b54eE80d",
+          "kind": "proxy",
+          "implementation": "0xD04d0E99c9cCDC76754aA432fd7e3795793Bff85",
+          "deploy": {
+            "tx": "0xd68d9fc6fb3347fd924cf9355d02e5aba6f2222cbde6408b8d4878ea0e8a7997",
+            "block": 51741679
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "scheduled-change",
+          "since": "2026-09-24",
+          "notes": "ERC-1967 UUPS proxy; runs AssuranceHook V3 since 2026-09-28 07:34 UTC. Scheduled: the USDC->GLMR route is closed (setRoute to no oracle) at 2026-09-29 ~08:30 UTC, after which cover is GLMR-only."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceHook V3 (implementation)",
+          "address": "0xD04d0E99c9cCDC76754aA432fd7e3795793Bff85",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x9ddc7ceb8e0091faaa9e18f0600e73734884f8be1d5059f0060395396a4c6b8f",
+            "block": 51895612
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-28",
+          "notes": "CREATE2 deploy; the hook proxy points here since the V3 upgrade."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceHook V2 (implementation)",
+          "address": "0xa253495CeD7013549fcC610B226a865E9689c840",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x4d20b1d235ef2da4a635ba8dc348f68ea22feba9fcd690c3ec49fdead6ff9fb9",
+            "block": 51741678
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-24",
+          "notes": "Replaced by the V3 implementation on 2026-09-28."
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory (proxy)",
+          "address": "0x91f078D10E3f0D05fEBcEA35f114063c696aef54",
+          "kind": "proxy",
+          "implementation": "0xeC821ca434F33D7ad5dC146683067DC3B6bB738e",
+          "deploy": {
+            "tx": "0x98dd782e3cf5f588c0c6cd615ad4964f6df6d71eb8a1ff9e43c4c443e855eb66",
+            "block": 51741682
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-24",
+          "notes": "ERC-1967 UUPS proxy; createPool is permissionless (one pool per seller and asset). Pools use the CoveragePool V3 implementation."
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory (implementation)",
+          "address": "0xeC821ca434F33D7ad5dC146683067DC3B6bB738e",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x4a60739b4b2bd6c5f2c5615190ebf4688379199a210f6efdecd92e12e6218e1d",
+            "block": 51741681
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-24",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V3 (implementation)",
+          "address": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xbfc5965977d2efe2d2b04924fcdf5bbae86780bfdfe5cdc24b8ad7d4db9f2318",
+            "block": 51895614
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-28",
+          "notes": "CREATE2 deploy; every Moonbeam pool proxy points here since the V3 upgrade."
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V2 (implementation)",
+          "address": "0x896D8aa8cff61A7639ecCD68e35f58B064790e71",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x2a77d7d47f114b400bde74d230885051324309064f7ec0aa08293275868721e9",
+            "block": 51741680
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-24",
+          "notes": "Replaced by the V3 pool implementation on 2026-09-28."
+        },
+        {
+          "chain": 8453,
+          "name": "MoonbeamPriceOracle",
+          "address": "0x231922a46eDf561f80d494BBbab7c8961e90B795",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0xac9ffab790d3f8347163d202f6b2bb94360a19affb704a8fd43bc5b9e2485c8a",
+            "block": 51895617
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "scheduled-change",
+          "since": "2026-09-28",
+          "notes": "Posted GLMR/USD price (first price 0.0088 USD). Display-only: after the route closure on 2026-09-29 ~08:30 UTC no money path reads it."
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #1",
+          "address": "0x9C1eC3E4250Abe356FB440FF7a8aD158De9bdf39",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x4825a80c7ccee612907deaecbd77ba0566535986c565d1d17cee8a4c5732fb9d",
+            "block": 51741683
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-24",
+          "notes": "first pool (seller: Jobs for AI Agents, ERC-8004 #88536); seller 0x5604fc5e0e27612fd2ee0deb9178192a1f7fd2b6; asset GLMR",
+          "seller": "0x5604FC5E0e27612fd2ee0dEB9178192A1f7fd2B6"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #2",
+          "address": "0x03067CD2fDD78F503FF6f0c99De6D2d824EC03C8",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x802a1924142616f449d82fcc7f87fc712534854355a35be550be05537e703301",
+            "block": 51741921
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-24",
+          "notes": "\"Moonbeam Cover: BaseArb Sentinel\" (ERC-8004 #14357); seller 0xc384eafe4f90044278de5d7d0fd7df2a09e3b562; asset GLMR",
+          "seller": "0xc384eafE4F90044278De5d7d0FD7df2A09e3b562"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #3",
+          "address": "0x95951a4bF6F2f99131a5653060d5E8a24F6feb9e",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x10cd8d9eb777ec9e2b524ded465494d86d5bc603bf38d03aa9a5aeb81554f8ab",
+            "block": 51809571
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "pilot pool; seller 0xfcf0b00f8352dd193a671e40940c9a32396adb49; asset GLMR",
+          "seller": "0xfCf0b00f8352dD193A671e40940C9a32396adB49"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #4",
+          "address": "0x2F8e5378a2d850A18D857Ad8ad30F242B89E3a58",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xbf705d326dbe87e9f27ce059933323f5b7e3df1a0c51bd2d3feec9ffc0a11177",
+            "block": 51809572
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "demo pool (the covered hire); seller 0xdca0f0166bbc52a94073781d3971d8aa1938ef20; asset GLMR",
+          "seller": "0xdcA0F0166bbc52a94073781d3971D8aA1938ef20"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #5",
+          "address": "0x4E527E612c8a638f940407939C2EC300d2295602",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x879bb15c6db306fa55fe4e5d91cb562a55cdda3beadcf7ad14490ac9129705dd",
+            "block": 51823311
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "opened by the factory; seller 0x59040a348cfa3f5e19bd2c9438965ad5b41c5635; asset GLMR",
+          "seller": "0x59040A348CFA3F5E19Bd2C9438965Ad5b41c5635"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #6",
+          "address": "0xe9F09C431c51450013871Bc0fa5cCEBEBD06F6fa",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x63a7550d3a0debc147093024334decee68818fe54941f969afe0e71c19547bee",
+            "block": 51823311
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "opened by the factory; seller 0x7457b799121c9b8c51298d08f1c19f0186648c90; asset GLMR",
+          "seller": "0x7457b799121c9B8C51298d08f1C19f0186648C90"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #7",
+          "address": "0x06f4773B8023Ce743c98cf10d2BeC12c7B752aB4",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x28d754cc825714db3aeb516bac3f109f357498792e646669693fd78ab726a5df",
+            "block": 51823312
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "opened by the factory; seller 0xec4bc04310925326ff80daf419a3861173865689; asset GLMR",
+          "seller": "0xec4Bc04310925326ff80Daf419a3861173865689"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #8",
+          "address": "0xa3B10240BAc710088e134B6d20238de7BDA2678d",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xc39d0b23ccb07127ceb8fab7cd49c8d11f268ccc804d7090e90db843d269103e",
+            "block": 51823312
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "opened by the factory; seller 0x87ef068dee858b0fb6894aa6978174c54b3a05d4; asset GLMR",
+          "seller": "0x87EF068DeE858b0FB6894AA6978174c54b3A05D4"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #9",
+          "address": "0xBf605Dee5C68c368d475f00e2f8Cb5cbF88D0717",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x40c30bf8e0a4a4fb94b85451a990bd069d10210d0fa4eebda4b1b3deeb8eaf52",
+            "block": 51823312
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-26",
+          "notes": "opened by the factory; seller 0x05ad872fe61d33674e29defae0a42a521460d85f; asset GLMR",
+          "seller": "0x05aD872fE61D33674e29dEfae0A42A521460D85F"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #10",
+          "address": "0x1986EB2F13C24Aa58EFe4E0D03b2418E4e4E2813",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x743cd55da8cf114b814f5f58a290f8823102e3b9542a5a95fd0a45ab312a59bf",
+            "block": 51851445
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x4b33758d85678ea86cd875af8caf318462268ba8; asset GLMR",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #11",
+          "address": "0xBcb28A0d217D848b220dDed61d7E6c6e2B039Bdb",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x5582811b5d619499cfc7e5bc5b171ec8880049eaf7ed9ed1d831fa43aa417f7b",
+            "block": 51851446
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x4e368c8d099d68a6b87aa616e3db4940e0721d60; asset GLMR",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #12",
+          "address": "0x526921D1a0e8BD91013fede226Eb148C58EC6d90",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xc14103f59243aa47b1d7b66acae956f7baf830a7385521b6cf1906f838a2f59f",
+            "block": 51851446
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x595e85dbf16abb8ed7daf34bb5be1e55bb557901; asset GLMR",
+          "seller": "0x595E85Dbf16abB8ED7DAf34BB5BE1e55bB557901"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #13",
+          "address": "0xCEFe1c14b2e0b498CCAd5ecDEcdad40872D402D1",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x891e68f780f8143e063c4675d87ac64c5f86a3724faec567b3bb8ffb4cab7a5d",
+            "block": 51851446
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xc9e8b04cef1479661bbbe5080722567f910a7210; asset GLMR",
+          "seller": "0xc9E8B04cEf1479661Bbbe5080722567F910a7210"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #14",
+          "address": "0x18D4733d98e81cdBCB1e96AEDb23Dda6025BAB08",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x8c263e5c191d2665a68438b4fc0efe621b93c20fa8d77b9e347cc8dc27ca396a",
+            "block": 51851447
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x1112889be806840a66419ea1e8d4dd21852993e5; asset GLMR",
+          "seller": "0x1112889BE806840a66419ea1e8D4dd21852993E5"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #15",
+          "address": "0xeAAACa679F608189032b774339d96e6Ef537EA95",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x0c6d00a1fee65543db0f2ae0686ab4604af21713942cb5ae0c995345daa3794e",
+            "block": 51851447
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xf7fb7ff8c0cff4e49f66dfd46ae54fd2f1cee19f; asset GLMR",
+          "seller": "0xf7fb7Ff8C0cfF4e49F66Dfd46Ae54FD2F1cEe19F"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #16",
+          "address": "0x235A5F7cbEC4EFe9d9540C6d7c8a6BF6078B0c5E",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x00dd833c6b46c191d0af8feec22ef9940854f651506296414f8893f3b5867307",
+            "block": 51851447
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x269d78153496b2c32b67780c65f2c008bab3c18b; asset GLMR",
+          "seller": "0x269D78153496B2c32B67780C65F2C008bab3C18b"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #17",
+          "address": "0xD7bAC79C957F424eCD59b8f3D640d479731D75ac",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x6eaa645e7b248579894301d9ef8adda3b5947574b44b9b332012d5ec4255c55f",
+            "block": 51851448
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x68a0f30042e5bec6ff7d689aa8ff59ccb4d9eec7; asset GLMR",
+          "seller": "0x68a0f30042E5BEc6FF7d689AA8fF59cCB4d9EEc7"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #18",
+          "address": "0x88BD6426fabb57B52d82943ACa42dE76Cc0E85F4",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x166fcb7a4ca39b6d45dd06cc38eed91cde6dc03352a06aedeea4401853c1b0f4",
+            "block": 51851448
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xb10bab190f2a1488497731fd5c52a02a2f9787ae; asset GLMR",
+          "seller": "0xB10BaB190F2a1488497731Fd5C52A02A2f9787aE"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #19",
+          "address": "0x328e6E284Ed76cf6Ac6c995E62c58A9168AA139e",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xdeba2a75135e2b6cb2ec0cf2b7010d6ac12971c0069f6bb2fa6f155633349e5b",
+            "block": 51851448
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x39849434839f25f857c24c633d00f23e7d1b8029; asset GLMR",
+          "seller": "0x39849434839f25F857C24c633D00F23e7d1B8029"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #20",
+          "address": "0xeb964ff586a7D4253B47FaEf24E559c3990Eb94C",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xf1ad197851b5db481c765bce7c15abba22638369376d6fc91e0d56a79f8f9b63",
+            "block": 51851449
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xe68b4bdf53fa51d4184841570d46c000de1f3e17; asset GLMR",
+          "seller": "0xe68B4Bdf53fa51d4184841570d46C000De1f3e17"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #21",
+          "address": "0xE6e0850e5F743CBb55cB85E2D98EAA03B785D205",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x9699e3f493359b02cfb0bccf6b194e7c93d9820e798ecbf36d9daaf148c1ea92",
+            "block": 51851449
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xccf57d593aa2cf8f8329e5e8353f69f2b21e34e9; asset GLMR",
+          "seller": "0xCCF57d593aa2cf8F8329e5e8353f69f2B21E34E9"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #22",
+          "address": "0x77850CaE3B3Dd5C99e352fd2F84Ca6afd0c3Fc47",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xc2ec8f5e13c4eb3fbc2a2c2fe1f87c5a131e084e82cce199ac38ebb5569418fd",
+            "block": 51851450
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x93d8ca84641b2a069d8129b9b5fa3809aa9d8a79; asset GLMR",
+          "seller": "0x93d8ca84641B2A069d8129B9b5fa3809Aa9D8a79"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #23",
+          "address": "0xb90425946D534377341FC70a2c76eC9F0f3a3Fa6",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x9e2850859b640c6d9fd42c2e727f4b067706eb35a94c9f89e30b4d7a0e3a12b0",
+            "block": 51851450
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xd82ac03aba79b88213cec1a78832d85665526036; asset GLMR",
+          "seller": "0xD82ac03aba79B88213cec1a78832d85665526036"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #24",
+          "address": "0x6613A6db86bA7b0CB7298202dF2e4993c0BFD220",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xdae77cba03de1af663df2d48a8ddb9ba53c64991d32b039e1c76ee09bda786f0",
+            "block": 51851450
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x379f053f5de57bc1d4d0971f370b648770ed9693; asset GLMR",
+          "seller": "0x379F053F5de57bC1d4D0971f370b648770ED9693"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #25",
+          "address": "0x32D1A03e0D4220B1a07b828029C21C8Da0D953fe",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x33298dc3f0a20d6b70659f891fcae538089aa5c19794482579227bc5a4636f59",
+            "block": 51851451
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0xc6bc6427baf5784b3eaf2b5241b09732d9e1e8b9; asset GLMR",
+          "seller": "0xC6bC6427bAf5784b3eAF2B5241b09732D9E1e8B9"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #26",
+          "address": "0x85149e9A92e481180fab43f2578330Df9c391e97",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x3a85105ebd898bb56ac841820c8ed70949ecef2612e667bd7547135ee5b74191",
+            "block": 51851451
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x8031ed08790b19d51af8ec405315ab0c401c88d5; asset GLMR",
+          "seller": "0x8031ed08790B19d51af8Ec405315AB0C401C88d5"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #27",
+          "address": "0x65285E80269683240c43924824A9b956976d363c",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0xb7fe5bcc52ead5f215b325c02defcbf786b64e2eb54f728d66bf0e632846c187",
+            "block": 51851451
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x8c95120c327ccfcd5c003f1dab484d341f75160e; asset GLMR",
+          "seller": "0x8c95120c327CCFCd5c003f1dAB484d341F75160E"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool #28",
+          "address": "0xc22c5CAb5652b8eC2b9DfCF15BF7692B5517383D",
+          "kind": "pool",
+          "implementation": "0x1F91f3bEF340aeb0E011aa27591fBFF4d199B45c",
+          "deploy": {
+            "tx": "0x57a7818e83b634b2cb99efd1b18cb038d5f7c9068df780f7fdbed3cbbe1f2a15",
+            "block": 51851452
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "opened by the factory; seller 0x72330994f379a71542e7bd5a4cf99a9d9743f4aa; asset GLMR",
+          "seller": "0x72330994f379A71542e7bd5a4CF99A9d9743F4aA"
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook (proxy, devnet)",
+          "address": "0x685392545f7883cd8D505bA5Ef596ca5F8AC7f81",
+          "kind": "proxy",
+          "implementation": "0xb2FeedC7C5023Be01e6129ABb068A0E937c1F98F",
+          "deploy": {
+            "tx": "0x391ac78051066aba5317bcdf88c3dbd875478e2e867cdf11b74c7b02a8d5c18c",
+            "block": 1111042
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V3 (implementation, devnet)",
+          "address": "0xb2FeedC7C5023Be01e6129ABb068A0E937c1F98F",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xeb6d060585a8ee1387fe8156a421bbcd4da61fc32f62d47b0a290dcd5613ac91",
+            "block": 1111162
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter (devnet)",
+          "address": "0x221DFEFf6Dd534b2B99D9E35e1cc1c9E697fE5A8",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xa362ad5b502b36f6d7195452f0c3761af9b42bc2bb6b7274259360675cc92519",
+            "block": 1164913
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "The evaluator of Moonbeam's devnet V3 hook: posts a recorded grade's verdict and digest, and in the same transaction the hook completes the job (Conformant) or rejects it with that digest (NonConformant). Registered on the hook by the tenant's own governance (setEvaluator). Public dev keys; nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V2 (implementation, devnet)",
+          "address": "0x78e03799b178C63923e2BF0A4728A5F6765D7319",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x1c5552516098ab4cc2c70558d8c0e076cbfeeb403b3d106f5ca723c0128fbfda",
+            "block": 1111040
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (proxy, devnet)",
+          "address": "0xf0763843C72465cAceD4c94d73A3aa7e4cb36de0",
+          "kind": "proxy",
+          "implementation": "0x3BC7358B9D26066b2d8dC9B046CF792E8AAE2d9B",
+          "deploy": {
+            "tx": "0xff00301d771a68fd9c54c00fb59bc9a3fb2961eb9ba103a33ef889feb6241d19",
+            "block": 1111049
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (implementation, devnet)",
+          "address": "0x3BC7358B9D26066b2d8dC9B046CF792E8AAE2d9B",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x1e2d15b9654f878c540c4465a6b0f5e5dbae820ad335f1ed5b4b4695ba23686f",
+            "block": 1111047
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V3 (implementation, devnet)",
+          "address": "0x7cD9541B041e8CB3C338D6cbe264095fFE1c27fF",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x1dbafeb056f61042d5e7fdc68e4bf66191b34eb3782d0e94f2216e2e5be52cb6",
+            "block": 1111165
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V2 (implementation, devnet)",
+          "address": "0x11fFa93A84cc83d033b25Cb0B4bcB11066d37e41",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x8fad33fcc0eb7c81ce5f63797c0292e54f73fe01dc3e6e56171eeec7a314b754",
+            "block": 1111045
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "MoonbeamPriceOracle (devnet)",
+          "address": "0x65d6049DEBDDAe76207AC72038445Db5b7e87153",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0x3539b236153092efa37e603b6456e31f0784cf9dd25699d2ad476aab21bdab27",
+            "block": 1111168
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value. USDC->GLMR route open (max age 1 h, haircut 20 %)."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool #1 (devnet)",
+          "address": "0x9F306959A7Fc6aeBB0c4Cba51570AA017EB92cb9",
+          "kind": "pool",
+          "implementation": "0x7cD9541B041e8CB3C338D6cbe264095fFE1c27fF",
+          "deploy": {
+            "tx": "0x60f683acc8c7c2b958a12f5197c471c675e3c1dbfb3538650c67ab662dfa72d6",
+            "block": 1111051
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value. Asset dGLMR."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool #2 (devnet)",
+          "address": "0xd401C710d0fD582dC2A9c75595A0a93F549A7A01",
+          "kind": "pool",
+          "implementation": "0x7cD9541B041e8CB3C338D6cbe264095fFE1c27fF",
+          "deploy": {
+            "tx": "0x2c0f13129c5fedb6a027f06525b47296fc13afe94c83d8424f570db3af1ea627",
+            "block": 1111055
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Taifoon devnet copy: the Base sources with a storage reentrancy guard, Paris bytecode, NOT bytecode-identical to Base; public dev keys, nothing has value. Asset dGLMR."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool #3 (devnet, studio)",
+          "address": "0xD1Bf98F6f6837Af98f3FC79B321ab096b7f9126D",
+          "kind": "pool",
+          "implementation": "0x7cD9541B041e8CB3C338D6cbe264095fFE1c27fF",
+          "deploy": {
+            "tx": "0x0383506d7c05a78210367ea4e9b571b29fcc718d59bef73522c5f421100cf488",
+            "block": 1161000
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Pool 2 of Moonbeam's devnet factory 0xf0763843C72465cAceD4c94d73A3aa7e4cb36de0 (allPools(2); poolOf(seller, asset) returns it; its hook() is the devnet hook 0x685392545f7883cd8D505bA5Ef596ca5F8AC7f81). Seller 0x267EdE1A4C3A8471A576C8B0EE5133428f95f8C5; asset dGLMR; share symbol mbSTUDIO. Taifoon devnet copy: public dev keys, nothing has value.",
+          "seller": "0x267EdE1A4C3A8471A576C8B0EE5133428f95f8C5"
+        },
+        {
+          "chain": 36927,
+          "name": "dGLMR (MockGLMR)",
+          "address": "0x1762c42d8e88F66c4966Ca982c7C6D23f26aD85A",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x65907f548d1532e2edb8ce23da47a5f881dea294b3aaaa8e0ee975c03e18a6ae",
+            "block": 1111025
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": "Mint-anyone test token, 18 decimals."
+        }
+      ]
+    },
+    "taifoon-assurance": {
+      "owner": "ours",
+      "description": "The Taifoon assurance layer (hook, pool factory, coverage pools) on Base and Arc, and its devnet variant with the judge adapter.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "AssuranceHook (proxy)",
+          "address": "0x99Ab0C3756Ef3fd9b3Ce784cAE18d8f564b6B2f8",
+          "kind": "proxy",
+          "implementation": "0x6A0b4B80c09578F04F1FDD48246c018D22aD1220",
+          "deploy": {
+            "tx": "0xdfe039116b7a3c39c0d9a0c11a5b8a0550e78c9120fe22477b93c6aa37b4e53a",
+            "block": 51569480
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": "Same address on Base and Arc (one deployer, same nonces)."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceHook (implementation)",
+          "address": "0x6A0b4B80c09578F04F1FDD48246c018D22aD1220",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x4150f7df650b18ebdd6c9fc820ab14438b8535bc378301a866e036b1c5affdf2",
+            "block": 51569454
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory (proxy)",
+          "address": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+          "kind": "proxy",
+          "implementation": "0x08AC00BB16503b419D7055bE63829D83209da309",
+          "deploy": {
+            "tx": "0x08d82fc3534944725279538945215824dc51318f1287e6f10f2bc43a255c7663",
+            "block": 51569481
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory (implementation)",
+          "address": "0x08AC00BB16503b419D7055bE63829D83209da309",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x09762b721260c6a53927cbc30181f553c41acd4d833e2fc2abc3f58a008de6c8",
+            "block": 51569457
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool (implementation)",
+          "address": "0x8c2c633277dB1b152FfA301d62f74Bab1918879c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x980b448339835ac7f5020596446546be0c1f7304d9a324e54273dc6b132f8834",
+            "block": 51569456
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 5042,
+          "name": "AssuranceHook (proxy)",
+          "address": "0x99Ab0C3756Ef3fd9b3Ce784cAE18d8f564b6B2f8",
+          "kind": "proxy",
+          "implementation": "0x6A0b4B80c09578F04F1FDD48246c018D22aD1220",
+          "deploy": {
+            "tx": "0xd815abed7b414b5eda87799428d0ad5af0e2eb2b155343ed7e9fde0a7ba2689f",
+            "block": 21880226
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": "Same address on Base and Arc (one deployer, same nonces)."
+        },
+        {
+          "chain": 5042,
+          "name": "AssuranceHook (implementation)",
+          "address": "0x6A0b4B80c09578F04F1FDD48246c018D22aD1220",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x782ecb2739a97243a28850b94ef2526148e509b5cb58ba28cf35299ab6c155d1",
+            "block": 21880195
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 5042,
+          "name": "PoolFactory (proxy)",
+          "address": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
+          "kind": "proxy",
+          "implementation": "0x08AC00BB16503b419D7055bE63829D83209da309",
+          "deploy": {
+            "tx": "0x8881b359702ad37f9b716f9a6c4873194bd557363d873c2424a85af97e8ac169",
+            "block": 21880236
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 5042,
+          "name": "PoolFactory (implementation)",
+          "address": "0x08AC00BB16503b419D7055bE63829D83209da309",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xa7d607ffd7b0522e19f5922814db399eb143488dbb4147276e24651ec2aae72e",
+            "block": 21880216
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 5042,
+          "name": "CoveragePool (implementation)",
+          "address": "0x8c2c633277dB1b152FfA301d62f74Bab1918879c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xa91484100942e43c0dda53bad70bace4a713cb8b8f7b90fd49e8d10f4bfd1ae6",
+            "block": 21880206
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool (first pool, USDC)",
+          "address": "0x522728B431E8eb80e0CfDe3c0a0Ae8604Afb32b0",
+          "kind": "pool",
+          "implementation": "0x8c2c633277dB1b152FfA301d62f74Bab1918879c",
+          "deploy": {
+            "tx": "0x164d836d7f9ff035551e2b37dd35fbd40da1e56ded6211e13c391f354389b3a5",
+            "block": 51569550
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-20",
+          "notes": "First coverage pool of the layer; seller 0xccf57d593aa2cf8f8329e5e8353f69f2b21e34e9, asset USDC."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook (proxy, devnet)",
+          "address": "0x7110C8951d17B69054395742e265bbd98259564A",
+          "kind": "proxy",
+          "implementation": "0x9C9b8D339996f5a68c14baF5a66be95cD2176Ad3",
+          "deploy": {
+            "tx": "0x6e2cc0fc66556c1257ca6e190507d39ffc0530bf90f543da424125fffce01070",
+            "block": 909786
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Devnet variant (AssuranceHookDevnet: storage reentrancy guard, Paris bytecode), NOT bytecode-identical to Base/Arc."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHookDevnet (implementation)",
+          "address": "0x9C9b8D339996f5a68c14baF5a66be95cD2176Ad3",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xb3ec00bcc752f073fc929b4b2da5bd723446a1f42e72a9275c5b65875d31023d",
+            "block": 909784
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Devnet variant (AssuranceHookDevnet: storage reentrancy guard, Paris bytecode), NOT bytecode-identical to Base/Arc."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (proxy, devnet)",
+          "address": "0x9BeA381ab97Df2F10216C525D821412d8CAE0001",
+          "kind": "proxy",
+          "implementation": "0xB1ddb71275C2833D15cbd34Adb36a0643783d7fA",
+          "deploy": {
+            "tx": "0x2b7e5b1de2c6eab85539039c8fdcb16ce28744cfaebbe6afa624720b06a3570f",
+            "block": 909792
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Devnet variant (AssuranceHookDevnet: storage reentrancy guard, Paris bytecode), NOT bytecode-identical to Base/Arc."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (implementation, devnet)",
+          "address": "0xB1ddb71275C2833D15cbd34Adb36a0643783d7fA",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x61495908a7b41862da974c01e083f7ac002e8e5a712bbfd79556ce640964befe",
+            "block": 909790
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Devnet variant (AssuranceHookDevnet: storage reentrancy guard, Paris bytecode), NOT bytecode-identical to Base/Arc."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool (implementation, devnet)",
+          "address": "0x4df32DB96Fe6820520023FA5e5388E5486081bCd",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xfbfeca5e95828676ac407b4ec0b7aa5d4d373f615c79563ab57831bdb29551aa",
+            "block": 909788
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Devnet variant (AssuranceHookDevnet: storage reentrancy guard, Paris bytecode), NOT bytecode-identical to Base/Arc."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter (devnet)",
+          "address": "0xbd4c9e797a8DBbfdde9C77bc5A5b21ACf611Db8f",
+          "kind": "adapter",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-23",
+          "notes": "Evaluator on the devnet hook; reject carries the verdict digest."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter (devnet, first build)",
+          "address": "0x51A693EB9846287bfE57485eC1B3F8b3F71cC086",
+          "kind": "adapter",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-22",
+          "notes": "Called hook.reject with the wrong signature, so every non-conformant verdict reverted; revoked as evaluator on 2026-09-23."
+        },
+        {
+          "chain": 36927,
+          "name": "CaptureAuthorizer (devnet)",
+          "address": "0x22121af9EB1C2e8B670Fe8c1173Bfe2B45737972",
+          "kind": "adapter",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Fee 0."
+        },
+        {
+          "chain": 36927,
+          "name": "dUSDC (MockUSDC)",
+          "address": "0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-22",
+          "notes": "Mint-anyone test token, 6 decimals; also the job token of the Moonbeam devnet copy."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (proxy, devnet, dUSDC)",
+          "address": "0x9DE1E23445685a4fcF18CfF491ADad76A806c54d",
+          "kind": "proxy",
+          "implementation": "0x9b9535f3bc5F3Fe1D525a0dc372eF4cC29d7a86d",
+          "deploy": {
+            "tx": "0x7405be0f69db66798d46560117d6bf272f5c57f06491b5684aaf8398bf16a262",
+            "block": 1163329
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, devnet, dUSDC)",
+          "address": "0x9b9535f3bc5F3Fe1D525a0dc372eF4cC29d7a86d",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xc02198a721b1fb689e7b0c6fc23c3fdecca9ccd0d269e9fa2f2b4c9c9059ef81",
+            "block": 1193882
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-29",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury. Devnet windows (_DEVNET_SHORT_WINDOWS_v1_): MIN_WINDOW 60 s, ARBITRATION_WINDOW 120 s (the Cancun source keeps 1 h / 7 days); the constructor refuses any chain but 36927."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, devnet, dUSDC, 1 h windows)",
+          "address": "0xa18a0ba162620af2262EE0020734cC13b618D9B2",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x5247914c8534695cfbed78f9142f4e948f2bdc81668fed8061b74a2e6dcb2674",
+            "block": 1163326
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury. Superseded 2026-09-29 by 0x9b9535f3bc5F3Fe1D525a0dc372eF4cC29d7a86d (60 s / 120 s devnet windows); the proxy was upgraded in place."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (proxy, devnet)",
+          "address": "0x85417BD1EE4833182405e57308f2BbECB5C50888",
+          "kind": "proxy",
+          "implementation": "0x2F4a013E8da3e251501069527BBC922Bc4659310",
+          "deploy": {
+            "tx": "0xbb58e93a4ee5b23404781b1a9311ee3ec910dbec3f402d6e38304c3de52377a8",
+            "block": 1163337
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (implementation, devnet)",
+          "address": "0x2F4a013E8da3e251501069527BBC922Bc4659310",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x14c7a3a8ee225539b7a43b01f0f047b5799c2ddb643029e9b2671877e3c4cecb",
+            "block": 1163334
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (implementation, devnet)",
+          "address": "0x98A50c6C85dCE1A214AB1823f097455e8C747bd9",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x50dbd280c339803338fc951c9e1f20450b9e37c37b9059f26330394620515c0e",
+            "block": 1163331
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack: Assurance V4 (one job asset, here dUSDC = the Taifoon hook line), Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Jobs name the fee-forwarding JudgeAdapter as evaluator; its fee goes to the treasury."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter V4 fee-forwarding (devnet)",
+          "address": "0x3e51dE80257D152356AD4250dEfFf974fCf24537",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x3f5c442b67b4a95c0032c1a2977d99fa66768de0e1664b23f94c6f70a8c184fc",
+            "block": 1163339
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "The named evaluator of settle-through-us jobs on the V4 devnet hook: posts the verdict digest, and forwards every evaluator fee the hook pays it to the treasury fixed at deployment (FeeForwarded in the same transaction; FeeSwept for a rejection that stood). Treasury: the coordination signer's address."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (devnet, n8n typed.compile seller)",
+          "address": "0xf3b95c58cC3408153204479147DF5ca165EcDfc0",
+          "kind": "pool",
+          "implementation": "0x98A50c6C85dCE1A214AB1823f097455e8C747bd9",
+          "deploy": {
+            "tx": "0x65796feb063f78588e04ccdc3dc4653c227cc93fb9340b37163d1f889595edb5",
+            "block": 1163379
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "The V4 devnet pool behind the n8n typed.compile seller (devnet ERC-8004 agent 16); seller 0x21399beeec163bd3e44cc17ceaa49f3b469d2e99, asset dUSDC, backed with 10 dUSDC by a public test key.",
+          "seller": "0x21399bEeec163BD3E44CC17CEaA49f3b469D2e99"
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool (devnet, V1 line, seller 0x7099)",
+          "address": "0x731Cda5A2e0D49d7b6ff47eEab604E5b762222f9",
+          "kind": "pool",
+          "implementation": "0x4df32DB96Fe6820520023FA5e5388E5486081bCd",
+          "deploy": {
+            "tx": "0x5bc520948166c805e00c2e6f1c89234e82a9ba7b89de392b6b71f0994527392c",
+            "block": 992452
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-24",
+          "notes": "Pool 0 of the layer's V1 devnet factory 0x9BeA381ab97Df2F10216C525D821412d8CAE0001 (allPools(0); poolOf(seller, asset) returns it; its hook() is the V1 devnet hook 0x7110C8951d17B69054395742e265bbd98259564A). Seller anvil #1 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; asset 0x948C28425A86BE14b8a637aF7471E87b8396318a (a devnet test token); share symbol mbp-cover-7099. Public dev keys, nothing has value.",
+          "seller": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool (devnet, V1 line, n8n typed.compile seller, lane n)",
+          "address": "0x2981b1617683E9CB4bec158b9fa527Fca3f07202",
+          "kind": "pool",
+          "implementation": "0x4df32DB96Fe6820520023FA5e5388E5486081bCd",
+          "deploy": {
+            "tx": "0xf95e2623cee24b793cc1a0149ef02c094d469afe7b7526b940d4e0c65a3ae602",
+            "block": 1162167
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Pool 1 of the layer's V1 devnet factory 0x9BeA381ab97Df2F10216C525D821412d8CAE0001 (allPools(1); poolOf(seller, asset) returns it; its hook() is the V1 devnet hook 0x7110C8951d17B69054395742e265bbd98259564A). Seller 0x21399bEeec163BD3E44CC17CEaA49f3b469D2e99 (the n8n typed.compile seller); asset dUSDC; share symbol cvN8NTC. Public dev keys, nothing has value.",
+          "seller": "0x21399bEeec163BD3E44CC17CEaA49f3b469D2e99"
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (proxy, devnet, dGLMR)",
+          "address": "0x944F40c11fe1F32bF8284Ce6371837846F81999C",
+          "kind": "proxy",
+          "implementation": "0xCeebDf19Ba0Dd7bE22375080f5c0e94F41dd8F87",
+          "deploy": {
+            "tx": "0xfee2eb36fda73d6f3c9825b4e95694dda6672fb4a508955783e9f23f2ae57998",
+            "block": 1164435
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, devnet, dGLMR)",
+          "address": "0xCeebDf19Ba0Dd7bE22375080f5c0e94F41dd8F87",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xbe67a922a0537e863768325e62393fdcc888b5cbdcded78d60e9f4fb62fcbf71",
+            "block": 1193890
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-29",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts. Devnet windows (_DEVNET_SHORT_WINDOWS_v1_): MIN_WINDOW 60 s, ARBITRATION_WINDOW 120 s (the Cancun source keeps 1 h / 7 days); the constructor refuses any chain but 36927."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, devnet, dGLMR, 1 h windows)",
+          "address": "0x56497Fb17248057a5A80C28Dc8356CdeDbCe6BF0",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x2d69be8202816912b7b1004d31363d38b3cf3bf400538a72e6ec81565e59ab64",
+            "block": 1164433
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts. Superseded 2026-09-29 by 0xCeebDf19Ba0Dd7bE22375080f5c0e94F41dd8F87 (60 s / 120 s devnet windows); the proxy was upgraded in place."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (proxy, devnet, dGLMR)",
+          "address": "0xfa1C556d095F4d1577F4D53c94C35EF2CF782494",
+          "kind": "proxy",
+          "implementation": "0x0b437CD552a192A0662B08dc843cC2CaD8704a9c",
+          "deploy": {
+            "tx": "0x5874dff924a860290354f6458f79625a55b05a197d061e59cbf301cf52d98eb1",
+            "block": 1164441
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (implementation, devnet, dGLMR)",
+          "address": "0x0b437CD552a192A0662B08dc843cC2CaD8704a9c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x8b27ca4b16abd8b1299ef9a377229ea39fcd631b51b6abe190e6709441f46b5f",
+            "block": 1164439
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (implementation, devnet, dGLMR)",
+          "address": "0x78Af981075BaA5F9d64f84cEC26A9970C9B4404A",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x7b48394e72c406d96321205461892416dde88fc9681f01b107a468c0bbef0d4a",
+            "block": 1164437
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "Settle-through-us devnet stack, GLMR line: Assurance V4 (the GLMR-only candidate) with JOB_ASSET = dGLMR, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. A job may name the fee-forwarding JudgeAdapter (GLMR line) as evaluator; the fee is a fraction of the job's own GLMR amounts."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter V4 fee-forwarding (devnet, dGLMR)",
+          "address": "0xe26E6C5Cb47167627d6bC24705ddDc5a6ec22ACE",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xdc0af8623db0538b967f4d46ac6df395bf7ef272afca1502a5bdf63a5969e3ea",
+            "block": 1164443
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "The named evaluator of settle-through-us jobs on the GLMR-line V4 devnet hook; forwards every evaluator fee the hook pays it to the treasury fixed at deployment (the coordination signer's address)."
+        }
+      ]
+    },
+    "jev": {
+      "owner": "ours",
+      "description": "Jev records: the decision log, the answer log and the grade stamp registry. Immutable, no owner.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "JevDecisionLog",
+          "address": "0x209490d6A0FFC5368A42b0c2208BDCda853f6a92",
+          "kind": "log",
+          "deploy": {
+            "tx": "0x0e6300c0b77fe5fa5cbb30bf266f195896020c59772f590722c612e642634fc7",
+            "block": 51856200
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "Records every judge decision (Decided)."
+        },
+        {
+          "chain": 8453,
+          "name": "JevAnswerLog",
+          "address": "0x8e9B9cE86a2d55c10318607b0c815B7B8C66254d",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xeb7d2dac77576e7e2e6e57cda02bca5d5fa18c1fbc42e367cbe9d9f463e1ae87",
+            "block": 51863008
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-27",
+          "notes": "Records every Jev answer (JevAnswered); one trusted recorder fixed in the constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "JevAnswerLog (first deploy)",
+          "address": "0x5bac70eb78224bbCBa83f5A36DF09D549d3f57fa",
+          "kind": "log",
+          "deploy": {
+            "tx": "0x01c40ad6752de442bddbffa3cf5f6d2a53011d549519b185280c93e35c3e07e1",
+            "block": 51856203
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-27",
+          "notes": "Never recorded anything; replaced the same day."
+        },
+        {
+          "chain": 36927,
+          "name": "JevDecisionLog (devnet)",
+          "address": "0x1D622511862DD7DEffB8fEeBc225E0FAdA1e9A05",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xddd3bd398c4296b8b8763b83f8930c9097041c0ee6718321cbbaace21b3e5b33",
+            "block": 981099
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-24",
+          "notes": ""
+        },
+        {
+          "chain": 36927,
+          "name": "JevAnswerLog (devnet)",
+          "address": "0xD8c1d8188Fc8EE388792f6EB3B3dbd4f341Ba8e3",
+          "kind": "log",
+          "deploy": {
+            "tx": "0x5f8abb0299b4b439e65f93e109a1071b3d380566ccf1193505062843b000530a",
+            "block": 1106754
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-27",
+          "notes": ""
+        },
+        {
+          "chain": 36927,
+          "name": "GradeStampRegistry (devnet)",
+          "address": "0xff5B4852AC7066D04FEd8de97bdA52401d03ad6E",
+          "kind": "registry",
+          "deploy": {
+            "tx": "0x25831949402ee4043cb559b68250e3b64d216dce0d44b45844439f1916e01215",
+            "block": 941177
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-23",
+          "notes": "Immutable, append-only grade stamps."
+        }
+      ]
+    },
+    "v5-verifier": {
+      "owner": "ours",
+      "description": "Taifoon V5 proof verification on Base: the verifier, the universal operator (TUO V5), the header oracle and Surge receipt settlement.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "TaifoonV5ProofVerifier (gated)",
+          "address": "0x2D475a53eAA8F9AC78B69bD2429275a622C644f8",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x9d618d1500a6758a3493ccc0460ecab46b770768bf47d1c567981b8b490ca201",
+            "block": 51385713
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": "The verifier TUO V5 points at (superroot-anchor gate on both verify paths)."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonV5ProofVerifier (first build)",
+          "address": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x226b1d80c02a7ba1ef983fb753e80613246e868977c1eb79e7301dcb117d18bf",
+            "block": 51384895
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-16",
+          "notes": "Pre-gate build; unreferenced."
+        },
+        {
+          "chain": 8453,
+          "name": "V5BudgetManagerNoop",
+          "address": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x80d3dcb6f2d107d928a5dd3eca9e6c699339b56fc2fce437b0965124d303b87e",
+            "block": 51385029
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": "Permits all (V1 plumbing)."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonUniversalOperatorV5 (proxy)",
+          "address": "0x785F4701C681dCBa8762FcfaF18db4048215c0ca",
+          "kind": "proxy",
+          "implementation": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "deploy": {
+            "tx": "0x12ceea84aeb5e8997eb13e73443340b54e13460dd39b26692b8f3d172d0995fc",
+            "block": 51385031
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": "TUO V5; executeVerifiedCallV5Strict."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonUniversalOperatorV5 (implementation)",
+          "address": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x5dc0c57bcf0eaa5c7e515205b80f1533682dc037922c2f32a383bf7938f9c0dc",
+            "block": 51385030
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": ""
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonHeaderOracle",
+          "address": "0xCff7404874ffb1Ab1Cc62631bfE097C391b6491d",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0xd1f70b5d8b1b6c0a57078b01b57081a58c1c8b03370fc9d7186d9acf7d1bbf43",
+            "block": 51385034
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": "Header anchors; quorum 1 until more anchorers are enrolled."
+        },
+        {
+          "chain": 8453,
+          "name": "SurgeReceiptSettlement",
+          "address": "0x126C950c2ccc8A9448DE8768fAae362916a0b329",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xfaa1ea6d65ed14b2967448093cc5d94cb0ca0043945a497ce94cf8d457a9676a",
+            "block": 51385036
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-16",
+          "notes": "Surge release against a proven receipt."
+        }
+      ]
+    },
+    "cctp-router": {
+      "owner": "ours",
+      "description": "CctpFeeRouter: one call bridges USDC over Circle CCTP v2 (hooked burn, Circle forwards the mint) and splits a service fee.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "CctpFeeRouterV3",
+          "address": "0x7D93c3B6Cca19581010bA2543e39F3DD231965eb",
+          "kind": "router",
+          "deploy": {
+            "tx": "0x0aca8d13a48c3dee25709115442247a14c3b6ba0fcacf97d6d3fe2d4646df26a",
+            "block": 51432442
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-09-17",
+          "notes": "Fee max(10 bps, 0.02 USDC floor), partner share 50 %."
+        },
+        {
+          "chain": 8453,
+          "name": "CctpFeeRouterV2",
+          "address": "0x8cD18c4a1982080208a755563F84ba0055706508",
+          "kind": "router",
+          "deploy": {
+            "tx": "0x1048c8f9965027894ac1df0bcad224e3c2fbf6adeb1bf9d5b680995fb36100e1",
+            "block": 51431190
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-17",
+          "notes": "Never took traffic; replaced by V3."
+        },
+        {
+          "chain": 8453,
+          "name": "CctpFeeRouter (v1)",
+          "address": "0xedF0C3B2BA863179780F7c595B9038b4075F08ed",
+          "kind": "router",
+          "deploy": {
+            "tx": "0x366566f0cf329a1e23803eaaed0dee0ff8997d66cf719de0383c04dbdcb6acbc",
+            "block": 51389061
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "superseded",
+          "since": "2026-09-16",
+          "notes": "Plain depositForBurn: attested but never forwarded by Circle. Disabled."
+        },
+        {
+          "chain": 5042,
+          "name": "CctpFeeRouterV3 (Arc)",
+          "address": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xa294f83cfcd2645ffdcbd6da4ad621b2812fa04828666ec790b5e2304f2072ec",
+            "block": 21354045
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-09-17",
+          "notes": "Arc as source; same address as an unrelated Base contract (deployer nonce coincidence)."
+        }
+      ]
+    },
+    "circle-cctp-v2": {
+      "owner": "third-party",
+      "description": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "TokenMessengerV2",
+          "address": "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xf412bd56447dc07e0f9b4838adbe8c7d007e07a07f2f24c60af77c11d728c8a2",
+            "block": 26217140
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-02-10",
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain.",
+          "implementation": "0x555E272506C06e7E559d57418563742AFE363ec8"
+        },
+        {
+          "chain": 8453,
+          "name": "MessageTransmitterV2",
+          "address": "0x81D40F21F12A8F0E3252Bccb954D722d4c464B64",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x062c506d43a1b4fd5ae3fb6a63afe6bd19939096fe3e4929f54592dcf6206b6e",
+            "block": 26217124
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-02-10",
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain.",
+          "implementation": "0x7Db629f6Acc20Be49a0A7565c21CC178E9Ac21e3"
+        },
+        {
+          "chain": 8453,
+          "name": "TokenMinterV2",
+          "address": "0xfd78EE919681417d192449715b2594ab58f5D002",
+          "kind": "registry",
+          "deploy": {
+            "tx": "0x597bd7c827e960b7aee0120038c4d4bb71ba501e3bb10adb505277e95d0cba02",
+            "block": 26217110
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-02-10",
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain."
+        },
+        {
+          "chain": 5042,
+          "name": "TokenMessengerV2",
+          "address": "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain.",
+          "implementation": "0x1CcaFdffBC1b7B5C499c97322F961B7d929a41b4"
+        },
+        {
+          "chain": 5042,
+          "name": "MessageTransmitterV2",
+          "address": "0x81D40F21F12A8F0E3252Bccb954D722d4c464B64",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain.",
+          "implementation": "0xdB9feAD96eE05783db38C82DC4689cEEb6712Df0"
+        },
+        {
+          "chain": 5042,
+          "name": "TokenMinterV2",
+          "address": "0xfd78EE919681417d192449715b2594ab58f5D002",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Circle CCTP v2 (third party); CREATE2-canonical, same address on every v2 chain."
+        }
+      ]
+    },
+    "tokens": {
+      "owner": "third-party",
+      "description": "Tokens our contracts settle in.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "USDC",
+          "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x8aa214f98bcf2984add809d10232135cccc4d6ab97d8477e66475d8bf68def34",
+            "block": 2797221
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2023-08-18",
+          "notes": "Circle USDC on Base, 6 decimals."
+        },
+        {
+          "chain": 8453,
+          "name": "GLMR",
+          "address": "0xB3846fD356c2149ee8D30b0449088Dc74e265459",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x20289f6015de15178bcb58d0821fa5bf928347566e69fee7b155c969e9e3c4d1",
+            "block": 47770515
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-06-24",
+          "notes": "GLMR on Base, 18 decimals; the Moonbeam ACP pool asset."
+        },
+        {
+          "chain": 5042,
+          "name": "USDC (Arc ERC-20 facade)",
+          "address": "0x3600000000000000000000000000000000000000",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": null,
+          "notes": "ERC-20 facade over native USDC on Arc, 6 decimals."
+        }
+      ]
+    },
+    "standards-erc8004": {
+      "owner": "third-party",
+      "description": "ERC-8004 identity and reputation registries (canonical deployments), plus our devnet mirrors.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "ERC-8004 Identity Registry",
+          "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xb7aec0797c45d3b4d7475392ad6fe47ba738035278f364f74df6a71fc104a1da",
+            "block": 41663783
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-02-03",
+          "notes": "Canonical deployment.",
+          "implementation": "0x7274e874CA62410a93Bd8bf61c69d8045E399c02"
+        },
+        {
+          "chain": 8453,
+          "name": "ERC-8004 Reputation Registry",
+          "address": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x8085ee63427196ca6298c873dca7805a62a9a23a99d42ab792a7a2dcf9128b32",
+            "block": 41663784
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-02-03",
+          "notes": "Canonical deployment; giveFeedback needs no agent authorisation.",
+          "implementation": "0x16e0FA7f7C56B9a767E34B192B51f921BE31dA34"
+        },
+        {
+          "chain": 5042,
+          "name": "ERC-8004 Identity Registry",
+          "address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Canonical deployment; idle on Arc.",
+          "implementation": "0x7274e874CA62410a93Bd8bf61c69d8045E399c02"
+        },
+        {
+          "chain": 5042,
+          "name": "ERC-8004 Reputation Registry",
+          "address": "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Canonical deployment; idle on Arc.",
+          "implementation": "0x16e0FA7f7C56B9a767E34B192B51f921BE31dA34"
+        },
+        {
+          "chain": 36927,
+          "name": "ERC-8004 Identity Registry (devnet mirror)",
+          "address": "0xCCB18A50e8D29F9B73eAbFc7E38DEA5e03a3f061",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xcf749efe4d0e21f08bde0a8a7f7f2ff92c172f7b8fe8846865809e48579cd2cb",
+            "block": 944828
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-23",
+          "notes": "Ours: the canonical verified source, deployed on the devnet to mirror mainnet agents.",
+          "implementation": "0xac940AddA3E37B1dDb3B3f3a30f06cbB1AD9F941"
+        },
+        {
+          "chain": 36927,
+          "name": "ERC-8004 Reputation Registry (devnet mirror)",
+          "address": "0x6E868D9af3689af28E9f80010b7f37787ea2a1b4",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xa2aab92cd8ede7a87d2074cf78ffa62ffb0e186b42a67a403d98f713340db4c1",
+            "block": 944828
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-23",
+          "notes": "Ours: mirror feedback for mainnet agents and ERC-8183 sellers.",
+          "implementation": "0x58fd26E37e02D2c4EbF324504Fcd87DC82Adb74F"
+        }
+      ]
+    },
+    "standards-erc8183": {
+      "owner": "third-party",
+      "description": "ERC-8183 job contracts and the other agent-commerce protocols we index.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "Virtuals ACP v3 (ERC-8183)",
+          "address": "0x238E541BfefD82238730D00a2208E5497F1832E0",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x2f3ca2d5708c1806eac133ed4a5635a80acad1bf7e3ac914f49142cf43eb0d2f",
+            "block": 44427013
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-04-08",
+          "notes": "Job lifecycle contract of Virtuals ACP v3.",
+          "implementation": "0x8e86FbEf4a4c927561cb6447cEd77ffFbf3B77BC"
+        },
+        {
+          "chain": 8453,
+          "name": "memo-ACP JobManager",
+          "address": "0x9c690c267f20C385f8A053F62bC8C7E2d4b83744",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x7db18a718a78c4d2c364d61efaa15ab51afcf11b86c8742c60cbe1996746738a",
+            "block": 36786075
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-10-13",
+          "notes": "Virtuals memo-based ACP.",
+          "implementation": "0xf9A91f14b4a1A5b68277d7E749660aA81De1BBeB"
+        },
+        {
+          "chain": 8453,
+          "name": "memo-ACP MemoManager",
+          "address": "0x9c6C5A7125934CC6A711A7Bf44f3cDcCcf91F30c",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xe4559815b948dededbb25c1a08d7e278184dca7de6c716c6c94b62dc498d47bf",
+            "block": 36786089
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-10-13",
+          "notes": "Virtuals memo-based ACP.",
+          "implementation": "0xF89a2B1ceA965fa9b9BbD26F6ce1d572F51FC443"
+        },
+        {
+          "chain": 8453,
+          "name": "memo-ACP router",
+          "address": "0xa6C9BA866992cfD7fd6460ba912bfa405adA9df0",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x2a40efe400ac1f645ff979f3381ed537930cb28c94fbc7fb0e1d937e775ceaf6",
+            "block": 36786061
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-10-13",
+          "notes": "Virtuals memo-based ACP.",
+          "implementation": "0x361DECCFc381aCa339218D2A148bC08943D02CDb"
+        },
+        {
+          "chain": 8453,
+          "name": "memo-ACP payment manager",
+          "address": "0xEF4364Fe4487353dF46eb7c811D4FAc78b856c7F",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x6a9a771379ce2b306348451f925506de0ab6ab5d59b1b883b86c5f40bdbac68f",
+            "block": 36786082
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-10-13",
+          "notes": "Virtuals memo-based ACP payouts.",
+          "implementation": "0x6168335568D731eBb113A2373168157C57c9d6Fe"
+        },
+        {
+          "chain": 8453,
+          "name": "BitAgent ERC-8183 escrow",
+          "address": "0x5009ABB3A309115a4a682C66BAf3BC9E0329BaB7",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0xc610b9f4e52676e4e7d23fa9146bed612c00f9b447f9d93ec9be6989ce40418d",
+            "block": 48395723
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-07-09",
+          "notes": "BitAgent/Unibase; evaluator 0x4302e523D982f3b89Cfc43cE4530C012b495Ec11.",
+          "implementation": "0x98DDf1bA7640b3b96Db3Cca933a9923E806D4a0f"
+        },
+        {
+          "chain": 56,
+          "name": "BitAgent ERC-8183 escrow",
+          "address": "0x5b02dF1580ef4580755c68F3E43838F727541a69",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "BitAgent/Unibase on BSC (read only); evaluator 0x26cab683d3c04ab521894eda13f24e3726944472.",
+          "implementation": "0xE93239D185898C748F4a7600B4Fb73B53F1EF7d7"
+        },
+        {
+          "chain": 8453,
+          "name": "Olas Mech Marketplace",
+          "address": "0xf24eE42edA0fc9b33B7D41B06Ee8ccD2Ef7C5020",
+          "kind": "registry",
+          "deploy": {
+            "tx": "0x7f7ca59e7f4dd6caf45b59d04a5ed6efaf58d1b1525681decefa1a9f93ac810e",
+            "block": 26642705
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2025-02-20",
+          "notes": "Olas Mech: public requests and deliverables."
+        }
+      ]
+    },
+    "devnet-builders": {
+      "owner": "ours",
+      "description": "Taifoon devnet builder-program contracts the site lists.",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "FOON ERC-20",
+          "address": "0x8ca92ffdF2a77497eF3657748F4Ac38E47AF58e6",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": null,
+          "notes": ""
+        },
+        {
+          "chain": 36927,
+          "name": "SimpleFaucet",
+          "address": "0xF339831D3A8B6C78EBbf11C7aB03745cfee36097",
+          "kind": "router",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": null,
+          "notes": ""
+        },
+        {
+          "chain": 36927,
+          "name": "Multicall3 (devnet)",
+          "address": "0x3D0d911604254ac5C9E364209c74365adC6E62bd",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xf20007ff4b0e8cad38549e6ae91ca70eaf40cbfb06ce1867084a5a09d51cc75f",
+            "block": 1172603
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-29",
+          "notes": "mds1 Multicall3 (MIT, solc 0.8.12, london: no PUSH0 on the pre-Shanghai devnet), deployed by lane k's buyer (idx 36973). Coinbase AgentKit reads ERC-20 details with viem's multicall; the AgentKit worker's viem chain names this address as multicall3."
+        }
+      ]
+    },
+    "coord-mech": {
+      "owner": "ours",
+      "description": "The coordination layer as a mech: an open request/response contract. Anyone posts a request (task hash + URI, price escrowed in USDC); a fixed worker delivers the result hash + URI; a request nobody answers is refundable by anyone after its deadline. No owner, no upgrade.",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonMech (devnet)",
+          "address": "0xab9e7F14D4521cc28be6d14bFBa4F8425b0C390A",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xc3409e5c1de5efa1659a047125f4d9396081d3dfa2f66b3101639d665aa68a60",
+            "block": 1163380
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-09-28",
+          "notes": "dUSDC escrow; prices grade 0.05, proof 0.01, agent 0.01; timeouts 120 s to 1 day; one worker (devnet key 36970)."
+        },
+        {
+          "chain": 36927,
+          "name": "TaifoonMech (devnet, first deploy)",
+          "address": "0xb227c63a0111daABE7A711C863DEA36007849483",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x7b560647c0d8ee048ac4c1fd140b16cffdf14260ba5397633be69b0079fc5049",
+            "block": 1163365
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-09-28",
+          "notes": "superseded 15 blocks later by 0xab9e7F14D4521cc28be6d14bFBa4F8425b0C390A (the constructor gained a price bound); never used."
+        }
+      ]
+    },
+    "hashproof": {
+      "owner": "third-party",
+      "description": "HashProof's credential registry on Celo: an ERC-8004 agent on Celo (Identity Registry agents 9669 and 1867) whose free MCP tool verify_credential the layer hires (class credential.verify.celo); code reads getRecord(id) here.",
+      "contracts": [
+        {
+          "chain": 42220,
+          "name": "HashProof CredentialRegistry",
+          "address": "0x7a1B759A602Aba72a70f99Dffd0a386d7504ce9B",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-09-29",
+          "notes": "Third party (HashProof). Source verified on celo.blockscout.com as CredentialRegistry (getRecord, register, revoke; events CredentialRegistered, CredentialRevoked). Read only."
+        }
+      ]
+    }
+  }
+}

@@ -33,6 +33,9 @@ const CASES = [
   ['no-endpoint-8453-95134', '8453:95134'],
   ['pilot-seller-8453-0xdca0', '8453:0xdca0f0166bbc52a94073781d3971d8aa1938ef20'],
   ['uncovered-chain-56-310070', '56:310070'],
+  ['olas-mech-8453-0xe535', '8453:0xe535d7acdeed905dddcb5443f41980436833ca2b'],
+  ['virtuals-seller-8453-0x4b33', '8453:0x4b33758d85678ea86cd875af8caf318462268ba8'],
+  ['agentverse-chat-word-counter', 'agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq'],
 ];
 
 for (const [name, ref] of CASES) {
@@ -109,11 +112,12 @@ test('re-runs: a ✓ under 10 minutes prints from the state file; ! is read agai
   assert.equal((again.out.match(/cached 1 min ago/g) ?? []).length, 4);
   assert.deepEqual(again.seen.map((s) => s.k.split(' ').slice(0, 2).join(' ')), ['GET /v1/agents/8453/95902/readiness', 'POST /v1/pools/quote']);
   snapshot('up-rerun-8453-95902.txt', again.out);
+  // 10 reads: the walk's 8 and, since tick 22 (_SELLER_PROBE_VIEW_v1_), one GET /v1/classes/sellers for each of the two classes that name 95902's endpoint
   const fresh = await run(['up', '8453:95902', '--fresh'], { fx, home, clock });
-  assert.equal(fresh.seen.length, 8);
+  assert.equal(fresh.seen.length, 10);
   clock.advance(11 * 60_000);
   const old = await run(['up', '8453:95902'], { fx, home, clock });
-  assert.equal(old.seen.length, 8);
+  assert.equal(old.seen.length, 10);
   assert.doesNotMatch(old.out, /cached/);
 });
 

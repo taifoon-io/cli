@@ -1,0 +1,46 @@
+→ through us · 2026-09-29 UTC · customers · ours
+                                 TODAY       YESTERDAY       7-DAY AVG
+  API CALLS                   30 · 271           0 · 0           0 · 0
+  UNIQUE CALLERS                 5 · 3           0 · 0           0 · 0
+  GATEWAY λ STEPS              15 · 36           0 · 0           0 · 0
+  HANDSHAKES                    1 · 42         35 · 36       6.4 · 8.4
+  HIRES SETTLED                 0 · 19          0 · 15         0 · 6.7
+  GRADES                        0 · 15          1 · 58          6 · 12
+  BRIDGES                        0 · 0           0 · 0           0 · 0
+  BRIDGED USDC                   0 · 0           0 · 0           0 · 0
+  FEES EARNED USDC               0 · 0        0 · 0.15      0 · 0.0214
+  WOULD HAVE CHARGED     0.015 · 0.034           0 · 0           0 · 0
+  ours = our own relayer keys (every operator-minted key not labelled customer:), the operator token, calls from our own boxes, wallets in the address registry, and every devnet buyer (public test keys)
+→ top routes today
+✓ GET /v1/agents/ledger                            47 · visitor · ours
+✓ GET /v1/proof/verifiable/:chain                  27 · visitor · ours
+✓ GET /v1/registry/agents                          27 · visitor · ours
+✓ GET /v1/agents/registered                        25 · visitor · ours
+✓ GET /v1/classes/sellers                          18 · key · ours
+✓ POST /v1/gw/steps                                15 · key · ours
+  channels: direct 30 · 271
+→ top customers today (hashed)
+✓ ip:a1e30ef9451540d9                25 calls · 15 gateway steps
+✓ ip:eae96e6e4b328131                 3 calls · 0 gateway steps
+✓ ip:008c17ee2f3ec8ec                 1 calls · 0 gateway steps
+✓ ip:339387c00d123729                 1 calls · 0 gateway steps
+→ fees (every path that carries one to us)
+✓ bridge     10 bps of the amount, floor 0.02 USDC; a named partner takes 50 % · earned 0 · 0 USDC
+  live: every /v1/transfer/plan routes through the router by default (route.via = cctp_fee_router)
+✓ evaluator  1 % of the price, floor 0.01 USDC, capped at 10 % by the hook; paid only when our decision stands · Taifoon Devnet: 0 · 0.02 dUSDC; Taifoon Devnet · GLMR line: 0 · 0.06 dGLMR
+  live on the devnet 36927; Base awaits the owner’s yes per component
+✓ gateway    0 charged until the owner sets a price; 0.001 USDC per settled call is accrued as WOULD HAVE CHARGED · would have charged 0.015 · 0.034 USDC · charged 0 · 0
+  accruing off-chain (coordd gwf:), no rail collects it yet
+✓ grades     0.15 USDC per block of 3 grades (at the oracle’s fallback peg) · earned 0 · 0.15 USDC
+  live on Base
+! x402       0.1–1 USDC per call to the vault · earned 0 · 0 USDC
+  not collecting: no facilitator is set (the owner’s choice)
+→ funnel (all time, through the layer)
+  discovered 48,871 → hireable 4,920 (10.1%) → handshaken 40 (0.8%) → hired 65 (162.5%) → graded 121 (186.2%) → settled 57 (47.1%) → paid 20 (35.1%)
+→ network (the hourly auto-connect run)
+! sellers online 13/18 classes · median 1,116 ms · p90 1,458 ms
+! grid 4/5 chains healthy · Base #51,958,266 · Arc ✗ · Celo #78,805,125 · Taifoon devnet #1,204,582 · Taifoon mainnet #318,249
+✓ route 8453 → 5042 · 1 USDC → 0.9629 · fee 0.02 (10 bps, floor 0.02 USDC) · cctp_fee_router
+✓ route 5042 → 8453 · 1 USDC → 0.9252 · fee 0.02 (10 bps, floor 0.02 USDC) · cctp_fee_router
+  run ac_a58fd10377c7 · 36 λ steps · 2 min ago · gateway today 50 steps
+  https://coord.taifoon.dev/v1/metrics · https://coord.taifoon.dev/v1/network

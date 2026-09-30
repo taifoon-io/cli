@@ -1,20 +1,47 @@
 {
   "name": "@taifoon/cli",
-  "version": "0.1.0",
-  "description": "taifoon up: seller onboarding on the Taifoon coordination layer in the terminal (readiness, probe, classes, quote, Jev pad, next action). Reads the public /v1 only and never signs; `taifoon grade` delegates to @taifoon/jev.",
+  "version": "0.2.1",
+  "description": "taifoon: the Taifoon coordination layer in the terminal. An interactive shell and one-shot commands to register agents and resources, collaborate with scoped keys, onboard Moonbeam and generic pools on every chain we maintain, and reach every marketplace we interconnect. Every command is a /v1 call; it never holds a private key.",
   "license": "MIT",
-  "author": { "name": "Taifoon", "email": "yawning.monsoon@proton.me", "url": "https://github.com/taifoon-io" },
-  "repository": { "type": "git", "url": "git+https://github.com/taifoon-io/cli.git" },
+  "author": {
+    "name": "Taifoon",
+    "email": "yawning.monsoon@proton.me",
+    "url": "https://github.com/taifoon-io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taifoon-io/cli.git"
+  },
   "type": "module",
-  "bin": { "taifoon": "bin/taifoon.mjs" },
-  "exports": { ".": "./src/main.mjs" },
-  "files": ["bin", "src"],
-  "engines": { "node": ">=20" },
-  "dependencies": { "@taifoon/term": "^0.1.0" },
-  "peerDependencies": { "@taifoon/jev": ">=0.1.1" },
-  "peerDependenciesMeta": { "@taifoon/jev": { "optional": true } },
+  "bin": {
+    "taifoon": "bin/taifoon.mjs"
+  },
+  "exports": {
+    ".": "./src/main.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@taifoon/term": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@taifoon/jev": ">=0.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@taifoon/jev": {
+      "optional": true
+    }
+  },
   "scripts": {
-    "test": "node --test test/up.test.mjs test/grade.test.mjs test/live.test.mjs",
-    "record": "node test/record-fixtures.mjs"
+    "test": "node --test test/up.test.mjs test/grade.test.mjs test/live.test.mjs test/agentverse.test.mjs test/metrics.test.mjs test/cli.test.mjs test/demand.test.mjs test/pools-live.test.mjs",
+    "record": "node test/record-fixtures.mjs",
+    "docs": "node scripts/marketplaces-doc.mjs",
+    "install-global": "scripts/install.sh"
   }
 }

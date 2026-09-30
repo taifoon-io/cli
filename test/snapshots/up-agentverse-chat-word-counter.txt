@@ -1,0 +1,39 @@
+taifoon up · agent 8453:agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq · 5 steps
+→ [1/5] readiness
+● GET coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+  ⎿ 200 · 7 ms
+✓ Fetch.ai agent · Almanac active · hosted · expires 2026-10-03T04:19:33.091082Z · 21 ms
+  The agent registered itself in the Fetch.ai Almanac and the record is active.
+→ the agent read (Almanac + manifests): https://coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+→ [2/5] probe
+● GET coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+  ⎿ 200 · 7 ms
+✓ chat protocol AgentChatProtocol 0.3.0: hired through Taifoon’s receiving agent, which the ChatMessage reply is sent to (https://api.taifoon.dev/uagent; not probed) · 21 ms
+  A chat agent acknowledges the envelope and sends its reply to the sender’s registered endpoint; Taifoon’s receiving agent is that sender and holds the reply.
+→ the agent read (Almanac + manifests): https://coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+→ [3/5] classes
+● GET coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/classes/sellers?class=chat.word_count
+  ⎿ 200 · 7 ms
+✓ chat.word_count · this agent is the named worker · chat.word_count: last probe 2026-09-29 04:41 UTC · uagents.almanac · answered in 47 ms · score 0.84 under SELLER_CHOICE_v2 · 35 ms
+  The class catalogue names this agent as a worker; code checks its reply before Jev is asked.
+→ the agent read (Almanac + manifests): https://coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+→ the class catalogue: https://coord.taifoon.dev/v1/classes
+→ [4/5] quote
+● GET coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+  ⎿ 200 · 7 ms
+! no cover quote: a Fetch.ai agent holds no EVM address; the devnet lane u settles with a seller of record standing in for it · 21 ms
+  The assurance layer quotes EVM sellers.
+→ the agent read (Almanac + manifests): https://coord.taifoon.dev/v1/agentverse/agents/agent1q0y3z6qzazcrdw896elntytp8h34wy94g3t5vdzdr7nxayw6klu7cgwj7qq
+→ [5/5] jev
+● GET coord.taifoon.dev/v1/judge/decisions?limit=1
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/judge/answers?limit=1
+  ⎿ 200 · 7 ms
+✓ 140 decisions recorded · 116 anchored on chain 36927 · 99 answers · 35 ms
+  Jev grades agent jobs, and every answer lands on chain. Code reads the job first: was anything delivered, and do the checks the evidence allows pass. A hard fail is a reject and Jev is not asked. Jev answers four closed questions about the delivery and returns the whole probability distribution, not a pass/fail cut. Code composes complete, reject or needs review under a published rubric. The decision is recorded with its digest and anchored on the Taifoon devnet. 140 decisions recorded, 116 anchored on chain 36927.
+→ grade: ask Jev to fill the quote pad (one of your 3 free Jev calls, or your key's)
+  no seller address was read for this agent, so there is no pad to fill
+→ the decisions: https://coord.taifoon.dev/v1/judge/decisions?limit=10
+done · 4 ✓ · 1 ! · 0 ✗ · 245 ms · taifoon curl prints the last step's calls

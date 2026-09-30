@@ -1,47 +1,47 @@
 {
- "recorded_at": "2026-09-29T05:11:49.918Z",
+ "recorded_at": "2026-09-29T05:12:10.502Z",
  "base": "https://coord.taifoon.dev",
- "agent": "8453:95902",
- "why": "hireable over MCP, not assured: thin record (2 settled), no pool",
+ "agent": "42220:9669",
+ "why": "an ERC-8004 agent on Celo (lane e): readiness is its Celo record, probe its MCP endpoint, class credential.verify.celo (a class naming its endpoint), no cover (Celo is not a covered chain)",
  "responses": {
-  "GET /v1/agents/8453/95902/readiness": {
+  "GET /v1/agents/42220/9669/readiness": {
    "status": 200,
    "json": {
     "ok": true,
     "readiness": {
      "schema": "taifoon.readiness.v1",
-     "agent_key": "erc8004:8453:95902",
-     "chain_id": 8453,
-     "agent_id": "95902",
-     "address": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
+     "agent_key": "erc8004:42220:9669",
+     "chain_id": 42220,
+     "agent_id": "9669",
+     "address": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
      "hireable": true,
      "covered": false,
      "assured": false,
      "verdict": "hireable",
      "words": [
-      "Hireable: the broker can send it a job over mcp at www.taifoon.io.",
-      "Not assured: no pool stands behind it."
+      "Hireable: the broker can send it a job over mcp at api.hashproof.dev.",
+      "Not assured: no settled record yet."
      ],
      "broker_target": {
-      "url": "https://www.taifoon.io/api/mcp",
+      "url": "https://api.hashproof.dev/mcp",
       "protocol": "mcp",
       "from": "card"
      },
      "next": {
-      "step": "calibrated",
+      "step": "record",
       "who": "buyer",
       "how": {
        "kind": "api",
        "method": "POST",
        "path": "/v1/pools/quote",
        "body": {
-        "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-        "chainId": 8453,
+        "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+        "chainId": 42220,
         "price_usdc": 1
        },
        "note": "Then POST /v1/jobs (or /v1/assurance/call fund-job) with the quoted terms; complete it to settle."
       },
-      "why": "n 2, width 0.658; needs n ≥ 5 and width ≤ 0.35: about 6 more clean paid jobs."
+      "why": "No paid job has ended with a ruling yet."
      },
      "steps": [
       {
@@ -52,11 +52,11 @@
        "who": null,
        "how": null,
        "evidence": {
-        "registration_tx": "0x12fdd5a4dc1501de80b86df2cf35e4add3b2b4cc9048f760e162d55edc51760c",
+        "registration_tx": "0x5b898a3892c6db0d7f38f2c4f9e4ffefc1daeffec4c9a750ddc42f6b25cf132b",
         "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
-        "owner": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b"
+        "owner": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6"
        },
-       "why": "Registered on chain 8453; owner 0x3574999dd4c96eb73bd6e11d4177010c83e14f5b."
+       "why": "Registered on chain 42220; owner 0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6."
       },
       {
        "id": "card",
@@ -66,9 +66,9 @@
        "who": null,
        "how": null,
        "evidence": {
-        "card_url": "https://www.taifoon.io/v1/our-cards?card=proof"
+        "card_url": "https://www.hashproof.dev/metadata.json"
        },
-       "why": "The registration card was read at https://www.taifoon.io/v1/our-cards?card=proof."
+       "why": "The registration card was read at https://www.hashproof.dev/metadata.json."
       },
       {
        "id": "endpoint",
@@ -80,13 +80,13 @@
        "evidence": {
         "endpoints": [
          {
-          "url": "https://www.taifoon.io/api/mcp",
-          "kind": "a2a",
+          "url": "https://api.hashproof.dev/mcp",
+          "kind": "mcp",
           "from": "card"
          }
         ]
        },
-       "why": "Endpoint published at www.taifoon.io (a2a; in the card)."
+       "why": "Endpoint published at api.hashproof.dev (mcp; in the card)."
       },
       {
        "id": "probe",
@@ -98,11 +98,11 @@
        "evidence": {
         "status": "ready",
         "protocol": "mcp",
-        "url": "https://www.taifoon.io/api/mcp",
-        "probed_at": 1790655033,
+        "url": "https://api.hashproof.dev/mcp",
+        "probed_at": 1790649757,
         "from": "harvester"
        },
-       "why": "Answered in mcp at 2026-09-29 04:10 UTC (harvester)."
+       "why": "Answered in mcp at 2026-09-29 02:42 UTC (harvester)."
       },
       {
        "id": "skills",
@@ -113,9 +113,9 @@
        "how": null,
        "evidence": {
         "skills": [
-         "proof-verify-v5",
-         "settlement-proof",
-         "superroot"
+         "workflow-automation",
+         "api-schema-understanding",
+         "blockchain-and-web3"
         ],
         "from": "card"
        },
@@ -131,14 +131,9 @@
        "evidence": {
         "classes": [
          {
-          "id": "proof.verify.v5",
+          "id": "credential.verify.celo",
           "how": "a named worker of the class",
-          "det": "output.blockHash == blob.blockHash && chainId/blockNumber match the task"
-         },
-         {
-          "id": "transfer.attest.cctp",
-          "how": "a named worker of the class",
-          "det": "reply.source.txHash == the task’s tx (and the chains it names) && the source receipt was found, succeeded and its block hash == the V5 proof’s under a superroot && the transfer is terminal (minted) with a mint tx on the chain its CCTP domain names"
+          "det": "the call carried the task’s id (task_bound) && the tool reported no error (no_tool_error) && the reply’s record is the one getRecord(id) returns on Celo (record_exact) && its status is the one that record gives (status_exact) && the pinned document hashes to the record’s CID and equals the reply’s (document_exact, raw-codec CIDs) && the transaction it names registered this id and CID (tx_exact, when it names one)"
          },
          {
           "id": "wire.reply",
@@ -147,7 +142,7 @@
          }
         ]
        },
-       "why": "Class proof.verify.v5, transfer.attest.cctp, wire.reply: its deterministic check judges the reply before Jev is asked."
+       "why": "Class credential.verify.celo, wire.reply: its deterministic check judges the reply before Jev is asked."
       },
       {
        "id": "graded",
@@ -157,35 +152,19 @@
        "who": null,
        "how": null,
        "evidence": {
-        "decisions": 28,
+        "decisions": 1,
         "first": {
-         "decision_id": "decision-1790441070967-908adcaa90",
-         "subject": "hs_d961e4544745f036b92fe6e8",
-         "anchor_tx": "0x5cbc3593c7a55c70d78659a22629142008c36aba919cf58b4011a6fecbed3c65"
+         "decision_id": "decision-1790649425428-4fbf436fd9",
+         "subject": "hs_5013b5ac09482733221acab9",
+         "anchor_tx": "0xdc84359f428fe546a448b95871957c946a66667dd412ab2d89737b097378d444"
         }
        },
-       "why": "28 graded deliveries on record."
+       "why": "1 graded delivery on record."
       },
       {
        "id": "record",
        "n": 8,
        "title": "A settled record",
-       "status": "ok",
-       "who": null,
-       "how": null,
-       "evidence": {
-        "n": 2,
-        "correct": 2,
-        "incorrect": 0,
-        "buyers": 1,
-        "source": "observatory seller record: 2 jobs, 2 correct, 0 incorrect, 0 undecided"
-       },
-       "why": "2 paid jobs ended with a ruling: 2 correct, 0 incorrect."
-      },
-      {
-       "id": "calibrated",
-       "n": 9,
-       "title": "A calibrated record",
        "status": "missing",
        "who": "buyer",
        "how": {
@@ -193,46 +172,66 @@
         "method": "POST",
         "path": "/v1/pools/quote",
         "body": {
-         "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-         "chainId": 8453,
+         "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+         "chainId": 42220,
          "price_usdc": 1
         },
         "note": "Then POST /v1/jobs (or /v1/assurance/call fund-job) with the quoted terms; complete it to settle."
        },
        "evidence": null,
-       "why": "n 2, width 0.658; needs n ≥ 5 and width ≤ 0.35: about 6 more clean paid jobs."
+       "why": "No paid job has ended with a ruling yet."
       },
       {
-       "id": "pool_eligible",
-       "n": 10,
-       "title": "The pool opening rule holds",
-       "status": "missing",
+       "id": "calibrated",
+       "n": 9,
+       "title": "A calibrated record",
+       "status": "blocked",
        "who": "buyer",
        "how": {
         "kind": "api",
         "method": "POST",
         "path": "/v1/pools/quote",
         "body": {
-         "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-         "chainId": 8453,
+         "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+         "chainId": 42220,
+         "price_usdc": 1
+        },
+        "note": "Then POST /v1/jobs (or /v1/assurance/call fund-job) with the quoted terms; complete it to settle."
+       },
+       "evidence": null,
+       "why": "Calibration needs settled jobs first."
+      },
+      {
+       "id": "pool_eligible",
+       "n": 10,
+       "title": "The pool opening rule holds",
+       "status": "blocked",
+       "who": "buyer",
+       "how": {
+        "kind": "api",
+        "method": "POST",
+        "path": "/v1/pools/quote",
+        "body": {
+         "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+         "chainId": 42220,
          "price_usdc": 1
         },
         "note": "Then POST /v1/jobs (or /v1/assurance/call fund-job) with the quoted terms; complete it to settle."
        },
        "evidence": {
-        "n": 2,
-        "width": 0.6576197724933469,
-        "fail": 0,
-        "buyers": 1,
+        "n": 0,
+        "width": null,
+        "fail": null,
+        "buyers": 0,
         "passes": {
          "n": false,
          "width": false,
-         "fail": true,
+         "fail": false,
          "buyers": false
         },
         "ok": false
        },
-       "why": "Not yet: n 2 < 8; width 0.658 > 0.35; 1 distinct buyer < 2; about 6 more clean paid jobs."
+       "why": "The opening rule reads the settled record; there is none yet."
       },
       {
        "id": "pool",
@@ -244,7 +243,7 @@
         "kind": "chain",
         "chain_id": 8453,
         "to": "0x317d55623c974197b6dd1c107cb0cfc3ef04f1eb",
-        "call": "createPool(0x3574999dd4c96eb73bd6e11d4177010c83e14f5b, 0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, name, symbol)",
+        "call": "createPool(0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6, 0x833589fcd6edb6e08f4c7c32d4f71b54bda02913, name, symbol)",
         "unsigned": {
          "method": "POST",
          "path": "/v1/assurance/call",
@@ -253,7 +252,7 @@
           "tenant": "taifoon",
           "action": {
            "kind": "create-pool",
-           "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
+           "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
            "asset": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
           }
          }
@@ -284,28 +283,28 @@
         "method": "POST",
         "path": "/v1/pools/quote",
         "body": {
-         "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-         "chainId": 8453,
+         "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+         "chainId": 42220,
          "price_usdc": 1
         },
         "note": "Terms are re-derived from the record and the vault on every call."
        },
        "evidence": {
         "why": [
-         "taifoon: premium 65.8% of price exceeds the 30.0% pool rule (interval 0.0%–65.8% over 2 graded) — no pool covers at that ratio; deposit-only terms",
-         "taifoon: thin record: 2 settled (< 20) — the interval is wide because the evidence is short, not because the seller failed",
+         "taifoon: not insurable: no settled job on record, so there is no rate to price a premium from — deposit-only terms",
          "taifoon: the seller has no pool on this chain/tenant",
-         "taifoon: auto-complete withheld: record not calibrated: 2 graded jobs (needs 5)"
+         "taifoon: auto-complete withheld: record not calibrated: 0 graded jobs (needs 5)",
+         "moonbeam: not insurable: no settled job on record, so there is no rate to price a premium from — deposit-only terms"
         ]
        },
-       "why": "Not guaranteed. taifoon: premium 65.8% of price exceeds the 30.0% pool rule (interval 0.0%–65.8% over 2 graded) — no pool covers at that ratio; deposit-only terms"
+       "why": "Not guaranteed. taifoon: not insurable: no settled job on record, so there is no rate to price a premium from — deposit-only terms"
       }
      ],
      "counts": {
-      "ok": 8,
-      "missing": 2,
+      "ok": 7,
+      "missing": 1,
       "pending": 0,
-      "blocked": 3
+      "blocked": 5
      },
      "rules": {
       "calibrated": {
@@ -332,68 +331,68 @@
     "assured": false,
     "verdict": "hireable",
     "words": [
-     "Hireable: the broker can send it a job over mcp at www.taifoon.io.",
-     "Not assured: no pool stands behind it."
+     "Hireable: the broker can send it a job over mcp at api.hashproof.dev.",
+     "Not assured: no settled record yet."
     ],
     "next": {
-     "step": "calibrated",
+     "step": "record",
      "who": "buyer",
      "how": {
       "kind": "api",
       "method": "POST",
       "path": "/v1/pools/quote",
       "body": {
-       "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-       "chainId": 8453,
+       "seller": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+       "chainId": 42220,
        "price_usdc": 1
       },
       "note": "Then POST /v1/jobs (or /v1/assurance/call fund-job) with the quoted terms; complete it to settle."
      },
-     "why": "n 2, width 0.658; needs n ≥ 5 and width ≤ 0.35: about 6 more clean paid jobs."
+     "why": "No paid job has ended with a ruling yet."
     },
     "unread": [],
     "sources": {
-     "registry": "https://api.taifoon.dev/registry/agents/8453/95902",
+     "registry": "https://api.taifoon.dev/registry/agents/42220/9669",
      "probe_causes": "https://api.taifoon.dev/coordination/probe-causes.json",
-     "enrich": "coordination store agent_enrich/8453:95902",
+     "enrich": "coordination store agent_enrich/42220:9669",
      "graded": "coordination store: handshakes × judge batches (decision-*)",
-     "record": "https://api.taifoon.dev/acp-observatory/providers?addr=0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-     "quotes": "POST /v1/pools/quote (seller 0x3574999dd4c96eb73bd6e11d4177010c83e14f5b, chain 8453, taifoon at 1 USDC, moonbeam at 1 GLMR)",
+     "record": "https://api.taifoon.dev/acp-observatory/providers?addr=0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+     "quotes": "POST /v1/pools/quote (seller 0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6, chain 8453, taifoon at 1 USDC, moonbeam at 1 GLMR)",
      "probe_rate": "the harvester's command line (--wire-limit, --wire-seconds, --interval) + its metrics file (last wire phase)"
     },
-    "read_at": 1790658703,
+    "read_at": 1790658727,
     "cache": "durable",
     "enrich": {
-     "path": "/v1/agents/8453/95902/enrich",
+     "path": "/v1/agents/42220/9669/enrich",
      "how": "GET it for the exact message to sign; POST { data, nonce, expires, signature } signed by the ERC-8004 owner"
     }
    }
   },
-  "GET /v1/registry/agents/8453/95902": {
+  "GET /v1/registry/agents/42220/9669": {
    "status": 200,
    "json": {
-    "agentId": 95902,
-    "agentUri": "https://www.taifoon.io/v1/our-cards?card=proof",
-    "cardHost": "www.taifoon.io",
-    "chainId": 8453,
-    "endpoint": "https://www.taifoon.io/api/mcp",
-    "endpointKind": "A2a",
-    "evidenceAsOf": 1790655033,
+    "agentId": 9669,
+    "agentUri": "https://www.hashproof.dev/metadata.json",
+    "cardHost": "api.hashproof.dev",
+    "chainId": 42220,
+    "endpoint": "https://api.hashproof.dev/mcp",
+    "endpointKind": "Mcp",
+    "evidenceAsOf": 1790654678,
     "filterReason": "None",
-    "firstSeen": 1790493477,
+    "firstSeen": 1790000634,
     "jobClasses": [
-     "proof.verify.v5"
+     "wire.reply"
     ],
-    "lastSeen": 1790493508,
-    "owner": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-    "proof": "/agents/8453/95902/proof",
-    "registrationTx": "0x12fdd5a4dc1501de80b86df2cf35e4add3b2b4cc9048f760e162d55edc51760c",
+    "lastSeen": 1790654678,
+    "owner": "0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6",
+    "proof": "/agents/42220/9669/proof",
+    "registrationTx": "0x5b898a3892c6db0d7f38f2c4f9e4ffefc1daeffec4c9a750ddc42f6b25cf132b",
     "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
     "skillCount": 3,
     "skills": [
-     "proof-verify-v5",
-     "settlement-proof",
-     "superroot"
+     "workflow-automation",
+     "api-schema-understanding",
+     "blockchain-and-web3"
     ],
     "skillsSource": "declared",
     "sources": [
@@ -413,9 +412,9 @@
      "teeServed": false
     },
     "wire": {
-     "probedAt": 1790655033,
+     "probedAt": 1790649757,
      "protocol": "mcp",
-     "readyAt": 1790655033,
+     "readyAt": 1790649757,
      "status": "ready"
     }
    }
@@ -1677,93 +1676,91 @@
     "note": "Every worker is an endpoint that already serves production traffic; DET is what code checks on the reply before the judge is asked; the grader is RUBRIC_v1 composed in code from Jev’s atomic answers."
    }
   },
-  "GET /v1/classes/sellers?class=transfer.attest.cctp": {
+  "GET /v1/classes/sellers?class=credential.verify.celo": {
    "status": 200,
    "json": {
     "ok": true,
-    "class": "transfer.attest.cctp",
+    "class": "credential.verify.celo",
     "input": null,
     "choice": {
      "rule": "SELLER_CHOICE_v2",
-     "class": "transfer.attest.cctp",
+     "class": "credential.verify.celo",
      "input": null,
      "filtered": [],
      "ranked": [
       {
-       "seller": "www.taifoon.io",
+       "seller": "api.hashproof.dev",
        "worker": {
         "kind": "mcp",
-        "endpoint": "https://www.taifoon.io/api/mcp",
-        "tool": "taifoon_transfer_attest",
+        "endpoint": "https://api.hashproof.dev/mcp",
+        "tool": "verify_credential",
         "args": {
-         "chain_id": "input.chainId",
-         "tx_hash": "input.txHash"
+         "id": "input.id"
         },
-        "card": "https://www.taifoon.io/v1/our-cards?card=proof"
+        "card": "https://www.taifoon.io/v1/registry/agents/42220/9669"
        },
-       "tried": 20,
-       "ready": 19,
-       "success": 0.91,
-       "median_latency_ms": 469,
-       "last_at": "2026-09-28T16:54:26.518Z",
+       "tried": 4,
+       "ready": 4,
+       "success": 0.84,
+       "median_latency_ms": 3662,
+       "last_at": "2026-09-29T02:36:49.586Z",
        "probes": {
         "tried": 1,
         "ok": 1,
-        "median_latency_ms": 429,
-        "last_at": "2026-09-29T04:41:33.249Z"
+        "median_latency_ms": 480,
+        "last_at": "2026-09-29T04:41:37.661Z"
        }
       }
      ],
      "chosen": {
-      "seller": "www.taifoon.io",
+      "seller": "api.hashproof.dev",
       "worker": {
        "kind": "mcp",
-       "endpoint": "https://www.taifoon.io/api/mcp",
-       "tool": "taifoon_transfer_attest",
+       "endpoint": "https://api.hashproof.dev/mcp",
+       "tool": "verify_credential",
        "args": {
-        "chain_id": "input.chainId",
-        "tx_hash": "input.txHash"
+        "id": "input.id"
        },
-       "card": "https://www.taifoon.io/v1/our-cards?card=proof"
+       "card": "https://www.taifoon.io/v1/registry/agents/42220/9669"
       },
-      "tried": 20,
-      "ready": 19,
-      "success": 0.91,
-      "median_latency_ms": 469,
-      "last_at": "2026-09-28T16:54:26.518Z",
+      "tried": 4,
+      "ready": 4,
+      "success": 0.84,
+      "median_latency_ms": 3662,
+      "last_at": "2026-09-29T02:36:49.586Z",
       "probes": {
        "tried": 1,
        "ok": 1,
-       "median_latency_ms": 429,
-       "last_at": "2026-09-29T04:41:33.249Z"
+       "median_latency_ms": 480,
+       "last_at": "2026-09-29T04:41:37.661Z"
       }
      },
-     "why": "www.taifoon.io (19/20 ready, probes 1/1 answered, score 0.91, median 469 ms, probe median 429 ms) is the only seller of transfer.attest.cctp that takes this input",
-     "read_at": "2026-09-29T05:11:46.285Z"
+     "why": "api.hashproof.dev (4/4 ready, probes 1/1 answered, score 0.84, median 3662 ms, probe median 480 ms) is the only seller of credential.verify.celo that takes this input",
+     "read_at": "2026-09-29T05:12:09.664Z"
     },
     "sellers": [
      {
-      "seller": "www.taifoon.io",
+      "seller": "api.hashproof.dev",
       "rule": "SELLER_CHOICE_v2",
-      "score": 0.91,
+      "score": 0.84,
       "rank": 1,
       "chosen": true,
       "hires": {
-       "tried": 20,
-       "ready": 19
+       "tried": 4,
+       "ready": 4
       },
       "last_probe": {
-       "at": "2026-09-29T04:41:33.249Z",
+       "at": "2026-09-29T04:41:37.661Z",
        "method": "mcp.tools_list",
        "answered": true,
-       "latency_ms": 429,
-       "why": "taifoon_transfer_attest listed; initialize + tools/list: taifoon 1.0.0 lists 38 tools"
+       "latency_ms": 480,
+       "why": "verify_credential listed; initialize + tools/list: hashproof 0.1.3 lists 6 tools"
       }
      }
     ],
     "evidence_read": {
-     "handshakes": 27,
-     "deliveries": 26,
+     "handshakes": 4,
+     "deliveries": 4,
      "window_days": 7,
      "per_seller": 20,
      "probes": 1
@@ -1771,167 +1768,10 @@
     "how": "rule SELLER_CHOICE_v2: the class’s workers that take this input (a worker’s only), one per independent seller (endpoint host, or uAgent address); ranked by the layer’s own records of the last 7 days: its dispatched handshakes (at most 20 per seller) and its zero-cost seller probes (GET /v1/classes/probes; the newest 12 per seller, each weighing 0.25 of a hire). Success score (ready + 0.25·probes answered + 1) / (tried + 0.25·probes + 2) high to low, then the median latency of the ready hires, then the median latency of the answered probes, then the class’s order. Send choice with POST /v1/handshake and the handshake keeps it."
    }
   },
-  "GET /v1/classes/sellers?class=proof.verify.v5": {
-   "status": 200,
+  "POST /v1/pools/quote {\"seller\":\"0x2170bc5e5eeb2bbf3172abf2716d8bbb729d2ab6\",\"chainId\":42220,\"price_usdc\":1}": {
+   "status": 400,
    "json": {
-    "ok": true,
-    "class": "proof.verify.v5",
-    "input": null,
-    "choice": {
-     "rule": "SELLER_CHOICE_v2",
-     "class": "proof.verify.v5",
-     "input": null,
-     "filtered": [],
-     "ranked": [
-      {
-       "seller": "www.taifoon.io",
-       "worker": {
-        "kind": "mcp",
-        "endpoint": "https://www.taifoon.io/api/mcp",
-        "tool": "taifoon_proof",
-        "args": {
-         "chain_id": "input.chainId",
-         "block_number": "input.blockNumber"
-        },
-        "card": "https://www.taifoon.io/v1/our-cards?card=proof"
-       },
-       "tried": 20,
-       "ready": 19,
-       "success": 0.91,
-       "median_latency_ms": 469,
-       "last_at": "2026-09-28T16:54:26.518Z",
-       "probes": {
-        "tried": 1,
-        "ok": 1,
-        "median_latency_ms": 429,
-        "last_at": "2026-09-29T04:41:33.249Z"
-       }
-      }
-     ],
-     "chosen": {
-      "seller": "www.taifoon.io",
-      "worker": {
-       "kind": "mcp",
-       "endpoint": "https://www.taifoon.io/api/mcp",
-       "tool": "taifoon_proof",
-       "args": {
-        "chain_id": "input.chainId",
-        "block_number": "input.blockNumber"
-       },
-       "card": "https://www.taifoon.io/v1/our-cards?card=proof"
-      },
-      "tried": 20,
-      "ready": 19,
-      "success": 0.91,
-      "median_latency_ms": 469,
-      "last_at": "2026-09-28T16:54:26.518Z",
-      "probes": {
-       "tried": 1,
-       "ok": 1,
-       "median_latency_ms": 429,
-       "last_at": "2026-09-29T04:41:33.249Z"
-      }
-     },
-     "why": "www.taifoon.io (19/20 ready, probes 1/1 answered, score 0.91, median 469 ms, probe median 429 ms) is the only seller of proof.verify.v5 that takes this input",
-     "read_at": "2026-09-29T05:11:47.009Z"
-    },
-    "sellers": [
-     {
-      "seller": "www.taifoon.io",
-      "rule": "SELLER_CHOICE_v2",
-      "score": 0.91,
-      "rank": 1,
-      "chosen": true,
-      "hires": {
-       "tried": 20,
-       "ready": 19
-      },
-      "last_probe": {
-       "at": "2026-09-29T04:41:33.249Z",
-       "method": "mcp.tools_list",
-       "answered": true,
-       "latency_ms": 429,
-       "why": "taifoon_proof listed; initialize + tools/list: taifoon 1.0.0 lists 38 tools"
-      }
-     }
-    ],
-    "evidence_read": {
-     "handshakes": 27,
-     "deliveries": 26,
-     "window_days": 7,
-     "per_seller": 20,
-     "probes": 1
-    },
-    "how": "rule SELLER_CHOICE_v2: the class’s workers that take this input (a worker’s only), one per independent seller (endpoint host, or uAgent address); ranked by the layer’s own records of the last 7 days: its dispatched handshakes (at most 20 per seller) and its zero-cost seller probes (GET /v1/classes/probes; the newest 12 per seller, each weighing 0.25 of a hire). Success score (ready + 0.25·probes answered + 1) / (tried + 0.25·probes + 2) high to low, then the median latency of the ready hires, then the median latency of the answered probes, then the class’s order. Send choice with POST /v1/handshake and the handshake keeps it."
-   }
-  },
-  "POST /v1/pools/quote {\"seller\":\"0x3574999dd4c96eb73bd6e11d4177010c83e14f5b\",\"chainId\":8453,\"price_usdc\":1}": {
-   "status": 200,
-   "json": {
-    "ok": true,
-    "seller": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
-    "chainId": 8453,
-    "chain": "Base",
-    "tenant": null,
-    "hook": "0x99Ab0C3756Ef3fd9b3Ce784cAE18d8f564b6B2f8",
-    "factory": "0x317D55623C974197B6dd1C107Cb0cfc3EF04f1eB",
-    "token": {
-     "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-     "symbol": "USDC",
-     "decimals": 6
-    },
-    "price": "1000000",
-    "price_usdc": 1,
-    "guaranteed": false,
-    "deposit": "2000000",
-    "deposit_rung": "2x",
-    "deposit_rule": "2 × price: interval width 65.8 pp > 30; the hook requires D > P",
-    "premium": "657620",
-    "premium_ratio": 0.6576197724933469,
-    "premium_label": "0.0%–65.8% · thin record (2 settled)",
-    "premium_rule": "π = the upper bound of the 95% Wilson interval on the seller’s incorrect rate × price (coordination-premium)",
-    "pool_id": null,
-    "pool_free": null,
-    "pool_rule": "cover only when a pool can carry the price and π ÷ P ≤ 30.0%; a named pool first, then the class pool under its per-worker cap, then the protocol vault; the buyer never picks the pool",
-    "auto_complete_eligible": false,
-    "auto_complete_rule": "price ≤ 50 USDC and a calibrated record (n ≥ 5, width ≤ 0.35)",
-    "record": {
-     "n": 2,
-     "settled": 2,
-     "incorrect": 0,
-     "wilson": [
-      0,
-      0.6576197724933469
-     ],
-     "width_pp": 65.76,
-     "calibrated": false,
-     "thin": true,
-     "insurable": true
-    },
-    "class": null,
-    "class_pool": null,
-    "rails": [
-     "taifoon-v5",
-     "jev-1.13.0"
-    ],
-    "why": [
-     "premium 65.8% of price exceeds the 30.0% pool rule (interval 0.0%–65.8% over 2 graded) — no pool covers at that ratio; deposit-only terms",
-     "thin record: 2 settled (< 20) — the interval is wide because the evidence is short, not because the seller failed",
-     "the seller has no pool on this chain/tenant",
-     "auto-complete withheld: record not calibrated: 2 graded jobs (needs 5)"
-    ],
-    "pool": {
-     "vault": null,
-     "free": null,
-     "total": null,
-     "encumbered": null,
-     "basis": null
-    },
-    "protocol_cover": null,
-    "record_source": "observatory verdicts over every ERC-8183 job this seller took (2): 2 correct (completed and paid), 0 incorrect (delivered then rejected, proven cheated, or paid and never delivered)",
-    "class_record_source": null,
-    "next": "POST /v1/settle with { chainId: 8453, seller, price: \"1000000\", deposit: \"2000000\" } — deposit-only terms, no pool",
-    "note": "Terms are re-derived from the record and the vault on every call; nothing here is reserved or signed. The buyer never picks a pool: cover is the seller’s pool when it can carry the price, the class pool when one is configured for the class and the worker is within the class failure budget (BACKLOG 20 — none configured today), the protocol vault when one is configured, else none."
+    "error": "chain 42220 is not a chain this layer covers"
    }
   },
   "GET /v1/judge/decisions?limit=1": {

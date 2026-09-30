@@ -17,7 +17,9 @@ test('the flags are jev run\'s, parsed the same way', () => {
   assert.deepEqual({ ...f, rest: f.rest }, { yes: false, json: true, noLayer: false, job: '8453:81100', evidence: undefined, answers: undefined, network: 'base', layer: 'https://l.example', protocol: 'bitagent', price: '2.5', rest: [] });
   assert.equal(parseGradeFlags([], false).yes, true, 'no TTY: --yes');
   assert.equal(parseGradeFlags(['--no-layer'], true).layer, false);
-  assert.equal(parseGradeFlags([], true).network, 'devnet');
+  assert.equal(parseGradeFlags([], true).network, 'none');                     // recording is opt-in
+  assert.equal(parseGradeFlags(['--record', 'base'], true).network, 'base');
+  assert.equal(parseGradeFlags(['--network', 'both'], true).network, 'both');   // --network stays an alias
 });
 
 test('grade hands the options to pipeline() and prints each step with the shared renderer', async () => {
@@ -30,7 +32,7 @@ test('grade hands the options to pipeline() and prints each step with the shared
   const o = jev.calls.at(-1);
   assert.equal(o.job, '8453:81100'); assert.equal(o.network, 'base'); assert.equal(o.priceUsdc, 3); assert.equal(o.layer, undefined);
   assert.deepEqual(o.evidence, { subject: 'x', state: 'task: y' });
-  assert.equal(o.key, 'ts_secret'); assert.equal(o.relayerKey, 'rk_secret'); assert.equal(o.trial, true);
+  assert.equal(o.key, 'ts_secret'); assert.equal(o.relayerKey, 'rk_secret'); assert.equal('trial' in o, false, 'no shared free path: the key is the caller\'s own');
   const text = out.text();
   assert.ok(!text.includes('ts_secret') && !text.includes('rk_secret'), 'keys are never printed');
   assert.equal(text, [
@@ -40,8 +42,8 @@ test('grade hands the options to pipeline() and prints each step with the shared
     '    {',
     '     "jobId": "81100"',
     '    }',
-    '→ [2/3] Grade it  ·  POST /v1/trial',
-    '✗ the trial answered 429 · 40 ms',
+    '→ [2/3] Grade it  ·  POST /v1/systemone',
+    '✗ TypeSafe answered 429 · 40 ms',
     '→ [3/3] Verify the record',
     '· nothing was recorded',
     'verdict needs_review · receipt 0xfeed',
@@ -52,11 +54,22 @@ test('grade hands the options to pipeline() and prints each step with the shared
 test('grade --json prints the trace only', async () => {
   const jev = await import(FAKE);
   const out = sink();
-  await main(['grade', '--no-layer', '--json'], { out, err: sink(), env: {}, stdin: notTTY, jev });
+  await main(['grade', '--no-layer', '--json'], { out, err: sink(), env: { TYPESAFE_KEY: 'ts_secret' }, stdin: notTTY, jev });
   const lines = out.text().trim().split('\n');
   assert.equal(lines.length, 1);
   assert.equal(JSON.parse(lines[0]).receipt.verdict, 'needs_review');
   assert.equal(jev.calls.at(-1).layer, false);
+});
+
+test('without your own TypeSafe key (and no --answers) grade stops before Jev is called (exit 2)', async () => {
+  const jev = await import(FAKE);
+  const before = jev.calls.length;
+  const out = sink(); const err = sink();
+  const code = await main(['grade', '--no-layer', '--yes'], { out, err, env: {}, stdin: notTTY, jev });
+  assert.equal(code, 2);
+  assert.equal(jev.calls.length, before, 'pipeline() is never called');
+  assert.match(out.text() + err.text(), /TYPESAFE_KEY.*console\.typesafe\.ai.*--answers/);
+  assert.doesNotMatch(out.text() + err.text(), /trial|free call/i);
 });
 
 test('@taifoon/jev is found from TAIFOON_JEV_SDK first; a missing one is a clear error (exit 3)', async () => {

@@ -1,0 +1,47 @@
+taifoon up · agent 8453:0xe535d7acdeed905dddcb5443f41980436833ca2b · 5 steps
+→ [1/5] readiness
+● GET coord.taifoon.dev/v1/agents/8453/0xe535d7acdeed905dddcb5443f41980436833ca2b/readiness
+  ⎿ 200 · 7 ms
+! not hireable · 0 ok · 3 missing · 0 pending · 10 blocked · 21 ms
+  Not hireable yet: no ERC-8004 identity on chain. Next step: identity. No ERC-8004 identity: 0xe535d7acdeed905dddcb5443f41980436833ca2b owns no agent on chain 8453. The layer dispatches to identities and registered cards only. Call: register(string agentURI) → agentId on 0x8004a169fb4a3325136eb29fa0ceb6d2e539a432.
+→ identity: owner signs register on 0x8004a169fb4a3325136eb29fa0ceb6d2e539a432 · the unsigned call is in https://coord.taifoon.dev/v1/agents/8453/0xe535d7acdeed905dddcb5443f41980436833ca2b/readiness
+→ [2/5] probe
+● GET coord.taifoon.dev/v1/virtuals/sellers?addr=0xe535d7acdeed905dddcb5443f41980436833ca2b
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/olas/mechs
+  ⎿ 200 · 7 ms
+✓ Olas Mech on Base · service 112 · native 100 wei per request · card short_maker, google_image_gen, stabilityai-stable-diffusion-xl-1024-v1-0, superforcaster · answering lately superforcaster, stabilityai-stable-diffusion-xl-1024-v1-0 (not probed: the marketplace hires it by a request transaction; its deliveries are public) · 35 ms
+  The mech answered lately with superforcaster, stabilityai-stable-diffusion-xl-1024-v1-0.
+→ the marketplace read: https://coord.taifoon.dev/v1/olas/mechs
+→ [3/5] classes
+● GET coord.taifoon.dev/v1/classes
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/virtuals/sellers?addr=0xe535d7acdeed905dddcb5443f41980436833ca2b
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/olas/mechs
+  ⎿ 200 · 7 ms
+✓ mech.compute (BUILDING) · Olas Mech on Base · service 112 · native 100 wei per request · card short_maker, google_image_gen, stabilityai-stable-diffusion-xl-1024-v1-0, superforcaster · answering lately superforcaster, stabilityai-stable-diffusion-xl-1024-v1-0 · 49 ms
+  Class mech.compute: code recomputes the arithmetic and a tool error is not an answer, before Jev is asked.
+→ the class catalogue: https://coord.taifoon.dev/v1/classes
+→ the marketplace read: https://coord.taifoon.dev/v1/olas/mechs
+→ [4/5] quote
+● GET coord.taifoon.dev/v1/agents/8453/0xe535d7acdeed905dddcb5443f41980436833ca2b/readiness
+  ⎿ 200 · 7 ms
+● POST coord.taifoon.dev/v1/pools/quote {"seller":"0xe535d7acdeed905dddcb5443f41980436833ca2b","chainId":8453,"price_usdc":1}
+  ⎿ 200 · 7 ms
+! not guaranteed · premium UNKNOWN · not insurable · deposit 2x · at 1 USDC · 35 ms
+  no interval yet: 0 settled (from /v1/pools/quote)
+  Not hireable yet: no ERC-8004 identity on chain. Next step: identity. No ERC-8004 identity: 0xe535d7acdeed905dddcb5443f41980436833ca2b owns no agent on chain 8453. The layer dispatches to identities and registered cards only. Call: register(string agentURI) → agentId on 0x8004a169fb4a3325136eb29fa0ceb6d2e539a432.
+→ the same quote at your price: POST /v1/pools/quote
+    $ curl -s -X POST https://coord.taifoon.dev/v1/pools/quote -H 'content-type: application/json' -d '{"seller":"0xe535d7acdeed905dddcb5443f41980436833ca2b","chainId":8453,"price_usdc":1}'
+→ [5/5] jev
+● GET coord.taifoon.dev/v1/judge/decisions?limit=1
+  ⎿ 200 · 7 ms
+● GET coord.taifoon.dev/v1/judge/answers?limit=1
+  ⎿ 200 · 7 ms
+✓ 116 decisions recorded · 92 anchored on chain 36927 · 77 answers · 35 ms
+  Jev grades agent jobs, and every answer lands on chain. Code reads the job first: was anything delivered, and do the checks the evidence allows pass. A hard fail is a reject and Jev is not asked. Jev answers four closed questions about the delivery and returns the whole probability distribution, not a pass/fail cut. Code composes complete, reject or needs review under a published rubric. The decision is recorded with its digest and anchored on the Taifoon devnet. 116 decisions recorded, 92 anchored on chain 36927.
+→ grade: ask Jev to fill the quote pad (one of your 3 free Jev calls, or your key's)
+    $ curl -s -X POST https://coord.taifoon.dev/v1/hire/pad -H 'content-type: application/json' -d '{"phase":"quote","chainId":8453,"seller":"0xe535d7acdeed905dddcb5443f41980436833ca2b"}'
+→ the decisions: https://coord.taifoon.dev/v1/judge/decisions?limit=10
+done · 3 ✓ · 2 ! · 0 ✗ · 287 ms · taifoon curl prints the last step's calls
