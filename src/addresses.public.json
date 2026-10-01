@@ -13,7 +13,7 @@
     "5042": {
       "name": "Arc",
       "explorers": {
-        "arc": "https://explorer.arc.network",
+        "arc": "https://explorer.arc.io",
         "etherscan": "https://arc.etherscan.io"
       }
     },
