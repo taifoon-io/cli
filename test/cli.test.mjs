@@ -242,6 +242,28 @@ test('login --free 0x…: a free key from POST /v1/register, checked with whoami
   assert.equal(bad.code, 2);
   const limited = await run(['login', '--free', W], { over: (path) => (path === '/v1/register' ? { status: 429, json: { ok: false, error: 'free keys: 3 a day per visitor', retry_after_seconds: 3600 } } : null) });
   assert.equal(limited.code, 1); assert.match(limited.err, /retry in 3600 s/); assert.equal(limited.exec.kc.size, 0);
+  // _REGISTER_ONE_CALL_v1_: no wallet at all — the register body is empty
+  const bare = await run(['login', '--free'], { over: (path, m, b, h) => {
+    if (path === '/v1/register' && m === 'POST') { assert.deepEqual(b, {}); return { status: 201, json: { api_key: FREE, tier: 'explorer', kind: 'free', key_prefix: FREE.slice(0, 14) } }; }
+    return over(path, m, b, h);
+  } });
+  assert.equal(bare.code, 0, bare.err);
+  assert.equal(bare.exec.kc.get('taifoon-cli|default'), FREE);  // _NO_KEYCHAIN_v1_: no `security` (Linux, a container): the key this run minted is shown once, never written to a file
+  const noKc = (cmd, args, input) => (cmd === 'security' ? { status: 127, stdout: '', stderr: '' } : fakeExec().exec(cmd, args, input));
+  const bareOver = (path, m, b, h) => (path === '/v1/register' && m === 'POST' ? { status: 201, json: { api_key: FREE, kind: 'free', key_prefix: FREE.slice(0, 14) } } : over(path, m, b, h));
+  const lin = await run(['login', '--free'], { over: bareOver, exec: { exec: noKc, kc: new Map(), calls: [] } });
+  assert.equal(lin.code, 0, lin.err);
+  assert.equal(lin.out.split(`export TAIFOON_API_KEY=${FREE}`).length, 2, 'shown exactly once, as an export line');
+  const cfgText = readFileSync(join(lin.home, 'config.json'), 'utf8');
+  assert.ok(!cfgText.includes(FREE), 'never in the config file'); assert.match(cfgText, /"store": "env"/);
+  const linJson = await run(['login', '--free', '--json'], { over: bareOver, exec: { exec: noKc, kc: new Map(), calls: [] } });
+  assert.equal(JSON.parse(linJson.out).api_key, FREE);
+  // a key the user brought is never shown: without a Keychain it is refused as before (they still hold it)
+  const own = await run(['login', '--key-stdin'], { over, exec: { exec: noKc, kc: new Map(), calls: [] }, stdin: Readable.from([`${FREE}\n`]) });
+  assert.equal(own.code, 1); assert.ok(!own.out.includes(FREE) && !own.err.includes(FREE));
+  // the status line names where the key is
+  const st = await run(['whoami', '--json'], { over: bareOver, home: lin.home, exec: { exec: noKc, kc: new Map(), calls: [] }, env: { TAIFOON_API_KEY: FREE } });
+  assert.equal(JSON.parse(st.out).valid, true);
 });
 
 test('collaborate invite → Keychain; ls; activity; revoke deletes the Keychain copy; the collaborator key is never shown', async () => {

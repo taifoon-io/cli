@@ -1,6 +1,6 @@
 {
   "name": "@taifoon/cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "taifoon: the Taifoon coordination layer in the terminal. An interactive shell and one-shot commands to register agents and resources, collaborate with scoped keys, onboard Moonbeam and generic pools on every chain we maintain, and reach every marketplace we interconnect. Every command is a /v1 call; it never holds a private key.",
   "license": "MIT",
   "author": {

@@ -5,8 +5,13 @@
 //   login --from-ssm <project>/<name>             read it through kms-access SSM (MFA session), keep it there (--store ssm)
 //   login --store ssm:<project>/<name>            keep the key in kms-access SSM instead of the Keychain
 //   login --guest               no key: the visitor budget (per IP, small), for reads and the public-by-design writes
-//   login --free 0x…            _FREE_KEY_v1_: get a free key (POST /v1/register, nothing signed, no payment) for that wallet label;
-//                               checked and stored like any key. Where every visitor 429 points (get_key.cli)
+//   login --free [0x…]          _FREE_KEY_v1_: get a free key (POST /v1/register, nothing signed, no payment); the wallet is an
+//                               optional label (_REGISTER_ONE_CALL_v1_: the layer needs none);
+//                               checked and stored like any key. Where every visitor 429 points (get_key.cli).
+//                               _NO_KEYCHAIN_v1_: where there is no macOS Keychain (Linux, a container, CI) and no --store ssm:,
+//                               the key this call just minted would be lost (the layer keeps only its sha256), so it is shown
+//                               ONCE as `export TAIFOON_API_KEY=…` (in --json: api_key) and the profile records store "env".
+//                               This is the only path that shows a key, and only one the CLI itself minted on this run.
 //   login --owner 0x…           the wallet you own agents with (EIP-191). The CLI never holds its key: it prints the exact
 //                               message to sign in your own wallet or hardware wallet (cast wallet sign --ledger), and you pass
 //                               the signature back with --signature.
@@ -44,8 +49,9 @@ async function login(ctx) {
   let key = null; let source = null;
   try {
     if (f.free !== undefined) {
-      if (!/^0x[0-9a-fA-F]{40}$/.test(String(f.free))) { ctx.fail('--free takes the 0x… wallet address the free key is for (a label; nothing is signed)'); return 2; }
-      const r = await ctx.call('/v1/register', { method: 'POST', body: { wallet_address: String(f.free) }, key: false });
+      const label = f.free === true || f.free === '' ? null : String(f.free);
+      if (label !== null && !/^0x[0-9a-fA-F]{40}$/.test(label)) { ctx.fail('--free takes no value, or the 0x… wallet address to label the key with (nothing is signed)'); return 2; }
+      const r = await ctx.call('/v1/register', { method: 'POST', body: label ? { wallet_address: label } : {}, key: false });
       if (!r.ok || typeof r.json?.api_key !== 'string') { ctx.fail(`no free key (${r.status ?? r.error}): ${r.json?.error ?? r.error ?? 'no answer'}${r.json?.retry_after_seconds ? `; retry in ${r.json.retry_after_seconds} s` : ''}. Nothing stored.`); return 1; }
       key = r.json.api_key; source = 'free';
     }
@@ -60,18 +66,31 @@ async function login(ctx) {
   const w = await ctx.call('/v1/relayer/whoami', { method: 'GET', headers: { 'x-api-key': key }, key: false });
   if (!w.ok) { ctx.fail(`the layer refused that key (${w.status}): ${w.json?.error ?? w.error}. Nothing stored.`); return 1; }
   // 3 store it
-  let store;
+  let store; let shownOnce = null;
   const ssmTarget = f.store && String(f.store).startsWith('ssm:') ? String(f.store).slice(4) : f['from-ssm'] ? String(f['from-ssm']) : null;
   try {
     if (ssmTarget) { const [pr, nm] = ssmTarget.split('/'); if (source !== `ssm ${pr}/${nm}`) ssm.set(ctx.exec, pr, nm, key); store = { store: 'ssm', ssm: { project: pr, name: nm } }; }
     else { keychain.set(ctx.exec, KEYCHAIN_SERVICE, name, key); store = { store: 'keychain', keychain: { service: KEYCHAIN_SERVICE, account: name } }; }
-  } catch (e) { ctx.fail(`${e.message}. Nothing stored.`); return e.code === 'MFA' ? 3 : 1; }
+  } catch (e) {
+    // _NO_KEYCHAIN_v1_: a key minted on this run has no other copy; refuse to lose it
+    if (source === 'free' && !ssmTarget) { store = { store: 'env' }; shownOnce = key; }
+    else { ctx.fail(`${e.message}. Nothing stored.`); return e.code === 'MFA' ? 3 : 1; }
+  }
   cfg.profiles[name] = { mode: 'key', ...store, key_prefix: w.json.key_prefix ?? prefixOf(key), label: w.json.label, kind: w.json.kind ?? null, per_minute: w.json.per_minute, ...(layer ? { layer } : {}), ...(owner ? { owner } : {}), since: new Date().toISOString() };
   cfg.profile = cfg.profile ?? name;
   saveConfig(cfg, ctx.env);
   key = null;
   const prof = cfg.profiles[name];
-  if (ctx.json) { ctx.emit({ ok: true, profile: name, mode: 'key', key_prefix: prof.key_prefix, label: prof.label, kind: prof.kind, store: storeText(prof) }); return 0; }
+  if (ctx.json) { ctx.emit({ ok: true, profile: name, mode: 'key', key_prefix: prof.key_prefix, label: prof.label, kind: prof.kind, store: storeText(prof), ...(shownOnce ? { api_key: shownOnce, shown_once: 'no Keychain here: set TAIFOON_API_KEY to this value; only its sha256 is kept by the layer' } : {}) }); return 0; }
+  if (shownOnce) {
+    ctx.line(panel(p, `logged in · profile ${name} · no Keychain on this system`, [
+      `${p.faint('key      ')} ${p.accent(prof.key_prefix)} ${p.faint(`· ${clip(prof.label ?? '', 40)}`)}   ${p.faint('rate')} ${p.ink(`${prof.per_minute}/min`)}`,
+      `${p.faint('shown once: keep it now (the layer keeps only its sha256; every command reads TAIFOON_API_KEY)')}`,
+    ]));
+    ctx.line(`export TAIFOON_API_KEY=${shownOnce}`);
+    shownOnce = null;
+    return 0;
+  }
   ctx.line(panel(p, `logged in · profile ${name}`, [
     `${p.faint('key      ')} ${p.accent(prof.key_prefix)} ${p.faint(`· ${clip(prof.label ?? '', 40)}`)}`,
     `${p.faint('kind     ')} ${pill(p, prof.kind ?? 'owner')}   ${p.faint('rate')} ${p.ink(`${prof.per_minute}/min`)}`,
@@ -116,7 +135,7 @@ export const loginCmd = {
     ['login', 'paste your relayer key (hidden), checked with /v1/relayer/whoami, stored in the macOS Keychain'],
     ['login --key-stdin | --from-keychain <svc[:acct]> | --from-ssm <project/name>', 'other ways in; --store ssm:<project/name> keeps it in SSM'],
     ['login --guest', 'no key: the visitor budget'],
-    ['login --free 0x…', 'get a free key (POST /v1/register: no payment, nothing signed) and store it: its own budget on demands and the gateways'],
+    ['login --free', 'get a free key in one call (POST /v1/register: no payment, nothing signed, no wallet) and store it: its own budget on demands and the gateways; --free 0x… labels it with a wallet'],
     ['login --owner 0x…', 'the wallet you sign owner steps with (the CLI prints the message; it never holds the key)'],
   ],
   valued: ['from-keychain', 'from-ssm', 'store', 'owner', 'free'],

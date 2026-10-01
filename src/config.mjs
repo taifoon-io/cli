@@ -87,6 +87,7 @@ export const ssm = {
 export function storeText(prof) {
   if (prof.store === 'ssm') return `kms-access SSM ${prof.ssm?.project}/${prof.ssm?.name}`;
   if (prof.store === 'keychain') return `macOS Keychain ${prof.keychain?.service ?? KEYCHAIN_SERVICE}/${prof.keychain?.account}`;
+  if (prof.store === 'env') return 'TAIFOON_API_KEY in your environment (no Keychain on this system)';
   return 'none (guest)';
 }
 
@@ -98,6 +99,7 @@ export function resolveKey({ flag, env, prof, exec }) {
   try {
     if (prof.store === 'keychain') return { key: keychain.get(exec, prof.keychain?.service ?? KEYCHAIN_SERVICE, prof.keychain?.account ?? 'default'), source: 'keychain' };
     if (prof.store === 'ssm') return { key: ssm.get(exec, prof.ssm.project, prof.ssm.name), source: 'ssm' };
+    if (prof.store === 'env') return { key: null, source: 'env', error: 'set TAIFOON_API_KEY: this profile keeps its key in your environment (no Keychain on this system)' };
   } catch (e) { return { key: null, source: prof.store, error: e.message }; }
   return { key: null, source: 'guest' };
 }

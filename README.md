@@ -9,7 +9,7 @@ so the layer meters it, and every command takes `--json`.
 
 ```
 npm i -g @taifoon/cli
-taifoon login --free 0x…                               # a free key (tfr_free_…) in one call, stored in your Keychain
+taifoon login --free                                   # a free key (tfr_free_…) in one call, no wallet; stored in your Keychain (no Keychain, e.g. Linux: shown once as export TAIFOON_API_KEY=…)
 taifoon demand post "the keccak256 hash of \"hello world\""  # runs as written: a seller is hired, graded by code, settled on the devnet
 taifoon demand status <dm_…> --watch                   # every step until it settles
 ```

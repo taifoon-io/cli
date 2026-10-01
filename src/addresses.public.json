@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated": "2026-09-29",
-  "checked_at": "2026-09-28T10:26:19.619Z",
+  "checked_at": "2026-10-01T07:30:55.464Z",
   "chains": {
     "56": {
       "name": "BNB Smart Chain",
@@ -2464,6 +2464,47 @@
           "status": "live",
           "since": "2026-09-29",
           "notes": "Third party (HashProof). Source verified on celo.blockscout.com as CredentialRegistry (getRecord, register, revoke; events CredentialRegistered, CredentialRevoked). Read only."
+        }
+      ]
+    },
+    "base-fee-inputs": {
+      "owner": "third-party",
+      "description": "Read-only inputs of the gas-priced fee quote on Base (job-level routing fee, docs/revenue/16): the ETH/USD price and the L1 data fee. Never in a path that moves value.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "Chainlink ETH/USD",
+          "address": "0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0xe6cba1851421e3edab2e3a3b20c517667b533deb9286ade9e3cebd3a82134ec9",
+            "block": 2092862
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2023-08-02",
+          "notes": "Chainlink ETH / USD price feed proxy on Base (8 decimals). The fee quote converts our gas cost to USDC with latestRoundData; display and quoting only."
+        },
+        {
+          "chain": 8453,
+          "name": "GasPriceOracle (OP Stack predeploy)",
+          "address": "0x420000000000000000000000000000000000000F",
+          "kind": "proxy",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": null,
+          "notes": "OP Stack predeploy: getL1FeeUpperBound(size) prices each leg's L1 data fee in the fee quote. The predeploy proxy is upgraded by OP Stack network upgrades; verify.mjs flags a new implementation.",
+          "implementation": "0x4f1db3c6AbD250ba86E0928471A8F7DB3AFd88F1"
         }
       ]
     }

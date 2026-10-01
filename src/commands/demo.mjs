@@ -67,9 +67,9 @@ export default {
       if (key) { ctx.line(`      ${p.ink(`your key ${ctx.keyInfo().prefix}…`)} ${p.faint(`(${ctx.keyInfo().source})`)}`); note('key', { source: ctx.keyInfo().source }); }
       else {
         const m = await mintFree(ctx, String(ctx.f.wallet ?? '0x' + '0'.repeat(40)));
-        if (m.error) { ctx.fail(`register: ${m.error} · or log in: taifoon login --free 0x…`); return 1; }
+        if (m.error) { ctx.fail(`register: ${m.error} · or log in: taifoon login --free`); return 1; }
         key = m.key;
-        ctx.line(`      ${p.ink(`a free key ${m.prefix}… for this run`)} ${p.faint(`tenant ${m.tenant} · not stored: keep one with taifoon login --free 0x…`)}`);
+        ctx.line(`      ${p.ink(`a free key ${m.prefix}… for this run`)} ${p.faint(`tenant ${m.tenant} · not stored: keep one with taifoon login --free`)}`);
         note('key', { minted: m.prefix, tenant: m.tenant });
       }
     }
