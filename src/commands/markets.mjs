@@ -107,6 +107,23 @@ async function connect(ctx, pos) {
  * plan, unsigned, on the devnet unless --chain base with --yes and --cap-usdc. Without --send it prints the handshake body and
  * stops: the handshake contacts a third party, so it goes only when you say so.
  */
+/** the x402 terms of a 402: the PAYMENT-REQUIRED header (v2, base64 JSON) or the body; the Base accept first. Pure. */
+export function x402Terms(header, body) {
+  let doc = null;
+  try { if (header) doc = JSON.parse(Buffer.from(header, 'base64').toString('utf8')); } catch { doc = null; }
+  if (!doc) { try { doc = JSON.parse(body); } catch { doc = null; } }
+  const accepts = Array.isArray(doc?.accepts) ? doc.accepts : [];
+  const a = accepts.find((x) => x?.network === 'eip155:8453' || x?.network === 'base') ?? accepts[0];
+  if (!a?.payTo) return null;
+  const cid = /^eip155:(\d+)$/.exec(String(a.network ?? ''))?.[1];
+  return { x402Version: doc.x402Version ?? 1, network: a.network, chainId: cid ? Number(cid) : (a.network === 'base' ? 8453 : null), asset: a.asset, amount: String(a.amount ?? a.maxAmountRequired), payTo: a.payTo, maxTimeoutSeconds: a.maxTimeoutSeconds ?? null, extra: a.extra ?? null };
+}
+
+/** a base64 x402 PaymentPayload, or null. Pure. */
+export function decodePayment(b64) {
+  try { const d = JSON.parse(Buffer.from(b64, 'base64').toString('utf8')); return /^0x[0-9a-fA-F]{40}$/.test(String(d?.payload?.authorization?.to ?? '')) ? d : null; } catch { return null; }
+}
+
 async function hire(ctx, pos) {
   const { p, t } = ctx;
   const m = market(pos[0]); const ref = pos[1];
@@ -148,7 +165,30 @@ async function hire(ctx, pos) {
   const task = String(ctx.f.task ?? '').trim();
   if (!task) { ctx.fail('describe the job: --task "<what the seller should do>" (and --class, --tool, --args \'{…}\' when the class needs them)'); return 2; }
   let args; try { args = ctx.f.args ? JSON.parse(String(ctx.f.args)) : undefined; } catch { ctx.fail('--args must be JSON'); return 2; }
-  const hs = { candidate: m.hire.candidate(ref), task, dispatch: true, ...(ctx.f.class ? { class: String(ctx.f.class) } : {}), ...(ctx.f.tool ? { tool: String(ctx.f.tool) } : {}), ...(args ? { args } : {}) };
+  // _X402_HIRE_BODY_v1_ (2026-10-08): an x402 hire is the buyer's own payment, relayed. Without --payment the CLI reads the seller's
+  // 402 and prints the authorization to sign (it never signs); with --payment it sends what POST /v1/handshake asks for:
+  // candidate.endpoint (the URL), candidate.address (the payTo the payment is signed to) and args.payment
+  let candidate = m.hire.candidate(ref);
+  if (m.id === 'x402') {
+    const pay = ctx.f.payment ? decodePayment(String(ctx.f.payment)) : null;
+    if (ctx.f.payment && !pay) { ctx.fail('--payment must be the base64 x402 PaymentPayload your wallet signed (payload.authorization.to = the seller\'s payTo)'); return 2; }
+    if (!pay) {
+      const r = await (ctx.io.fetch ?? globalThis.fetch)(String(ref), { headers: { 'user-agent': `taifoon-cli/${ctx.version}` }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
+      const terms = r && r.status === 402 ? x402Terms(r.headers.get('payment-required'), await r.text().catch(() => '')) : null;
+      if (!terms) { ctx.fail(`${ref} did not answer 402 with x402 terms (${r ? r.status : 'no answer'}): nothing to pay`); return 1; }
+      const auth = { from: '<your wallet>', to: terms.payTo, value: terms.amount, validAfter: '0', validBefore: String(Math.floor(Date.now() / 1000) + Math.min(terms.maxTimeoutSeconds ?? 300, 300)), nonce: '<32 random bytes>' };
+      if (ctx.json) { ctx.emit({ ok: true, market: m.id, sent: false, terms, sign: { primaryType: 'TransferWithAuthorization', domain: { name: terms.extra?.name ?? 'USD Coin', version: terms.extra?.version ?? '2', chainId: terms.chainId, verifyingContract: terms.asset }, message: auth } }); return 0; }
+      t.step(1, 4, 'the seller\'s terms (unpaid read; nothing is signed here)');
+      t.ok(`${terms.amount} units of ${terms.asset} on ${terms.network} to ${terms.payTo}`);
+      t.note(`sign EIP-3009 TransferWithAuthorization ${JSON.stringify(auth)} under the token's domain (name "${terms.extra?.name ?? 'USD Coin'}", version "${terms.extra?.version ?? '2'}"), wrap it as an x402 PaymentPayload, then:`);
+      t.cmd(`taifoon markets hire x402 ${ref} --task ${JSON.stringify(task)} --payment <base64 PaymentPayload> --send`);
+      t.note('the layer relays only Base USDC payments of at most 0.01 USDC today');
+      return 0;
+    }
+    candidate = { kind: 'x402', address: pay.payload?.authorization?.to, endpoint: String(ref) };
+    args = { ...(args ?? {}), payment: String(ctx.f.payment) };
+  }
+  const hs = { candidate, task, dispatch: true, ...(ctx.f.class ? { class: String(ctx.f.class) } : {}), ...(ctx.f.tool ? { tool: String(ctx.f.tool) } : {}), ...(args ? { args } : {}) };
   const steps = [];
   t.step(1, 4, 'handshake (dispatch to the seller)');
   if (!ctx.f.send) {
@@ -160,7 +200,15 @@ async function hire(ctx, pos) {
   const h = await ctx.post('/v1/handshake', hs);
   const hid = h.json?.handshake_id ?? h.json?.handshake?.id ?? null;
   steps.push({ step: 'handshake', status: h.status, id: hid, state: h.json?.state ?? null, target: h.json?.target ?? null });
-  if (!h.ok || !hid) { t.fail(`handshake refused: ${h.json?.error ?? h.status}`); if (ctx.json) ctx.emit({ ok: false, steps }); return 1; }
+  if (!h.ok || !hid) {
+    // the layer says what is wrong (problems) and what to send instead (next_step): both reach the user, never a bare word
+    const probs = Array.isArray(h.json?.problems) ? h.json.problems.filter((x) => typeof x === 'string') : [];
+    t.fail(`handshake refused: ${h.json?.error ?? h.status}${probs.length ? ` · ${probs.join('; ')}` : ''}`);
+    if (m.id === 'mcp-registry' && !ctx.f.tool) t.note(`an MCP server is hired on one of its tools: taifoon probe <its MCP url> lists them, then add --tool <name> --args '{…}'`);
+    else if (h.json?.next_step?.why) t.note(h.json.next_step.why);
+    steps[steps.length - 1].problems = probs;
+    if (ctx.json) ctx.emit({ ok: false, steps, next_step: h.json?.next_step ?? null }); return 1;
+  }
   t.ok(`handshake ${hid} · ${h.json.state ?? 'opened'} · ${h.json.target?.mode ?? ''}${h.json.target?.protocol ? ` over ${h.json.target.protocol}` : ''}${h.json.target?.url ? ` · ${h.json.target.url}` : ''}`, { ms: h.ms });
   t.step(2, 4, 'the delivery, held and digested');
   const d = await ctx.get(`/v1/handshake/${hid}`);
@@ -208,7 +256,7 @@ export default {
   ],
   subs: ['ls', 'search', 'connect', 'hire'],
   complete: (words) => (words.length >= 1 && ['connect', 'hire'].includes(words[0]) ? MARKETS.map((m) => m.id) : []),
-  valued: ['status', 'market', 'limit', 'task', 'class', 'tool', 'args', 'chain', 'cap-usdc', 'price-usdc', 'buyer', 'seller'],
+  valued: ['status', 'market', 'limit', 'task', 'class', 'tool', 'args', 'chain', 'cap-usdc', 'price-usdc', 'buyer', 'seller', 'payment'],
   async run(ctx, [sub = 'ls', ...rest]) {
     if (sub === 'ls' || sub === 'list') return ls(ctx);
     if (sub === 'search') return search(ctx, rest);

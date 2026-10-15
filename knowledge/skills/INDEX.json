@@ -1,0 +1,134 @@
+{
+ "schema": "taifoon.cli.knowledge.v1",
+ "source": "the Taifoon skill catalog (skills/catalog)",
+ "commit": "d920b0cae3d89db4055dba1f92006f71ceb00e67",
+ "note": "copied by scripts/knowledge-skills.mjs — do not edit; change the catalog and re-run",
+ "skills": [
+  {
+   "name": "back-a-seller",
+   "file": "back-a-seller.md",
+   "from": "skills/catalog/back-a-seller/SKILL.md",
+   "sha256": "677247642d416f40818c17d9c3f1dfd2904ea575b4f23a0410d7eeee199110ab"
+  },
+  {
+   "name": "bridge-with-proof",
+   "file": "bridge-with-proof.md",
+   "from": "skills/catalog/bridge-with-proof/SKILL.md",
+   "sha256": "8b238ee80bef58912991a9705b1aae1dea1c0dbb4ad32b871df2057a0b6cc995"
+  },
+  {
+   "name": "buy-access",
+   "file": "buy-access.md",
+   "from": "skills/catalog/buy-access/SKILL.md",
+   "sha256": "5a3580c8fab71533185ae41382ee3fbe1529c55e9a08195f546563fc94efa314"
+  },
+  {
+   "name": "contribute-definitions",
+   "file": "contribute-definitions.md",
+   "from": "skills/catalog/contribute-definitions/SKILL.md",
+   "sha256": "40d53846c34d678e77ab7bbd7df08798aa089abc1b0477516ffadc5c07d5b5dc"
+  },
+  {
+   "name": "earn-grid",
+   "file": "earn-grid.md",
+   "from": "skills/catalog/earn-grid/SKILL.md",
+   "sha256": "08626d6cc9b5edf78a0f2adbb869e5c8839fb00d6486e55da225d7c48624f4c8"
+  },
+  {
+   "name": "explore-chain",
+   "file": "explore-chain.md",
+   "from": "skills/catalog/explore-chain/SKILL.md",
+   "sha256": "35bc509779ae1427b9a733c0a9c0401e249e94a01d4eef99de1c3e754cf6a7be"
+  },
+  {
+   "name": "get-hired",
+   "file": "get-hired.md",
+   "from": "skills/catalog/get-hired/SKILL.md",
+   "sha256": "c7315327be8291715d3ab9408c4dcafc14f38ffdaa33359d956289732d0b73e0"
+  },
+  {
+   "name": "grade-the-stream",
+   "file": "grade-the-stream.md",
+   "from": "skills/catalog/grade-the-stream/SKILL.md",
+   "sha256": "b661674e4a6e77651f7ab4b60e7416d6128d6562ec7106d74f2cf098fe07b77e"
+  },
+  {
+   "name": "grade-with-jev",
+   "file": "grade-with-jev.md",
+   "from": "skills/catalog/grade-with-jev/SKILL.md",
+   "sha256": "5450f15631538ad02314c7819c381ae26ece787452b1d7f41cbbd382e4aa7d39"
+  },
+  {
+   "name": "help-onboard",
+   "file": "help-onboard.md",
+   "from": "skills/catalog/help-onboard/SKILL.md",
+   "sha256": "3014d31f2898136e15392c934b1ed49aac921ca10218e71e6c02f66f37210f00"
+  },
+  {
+   "name": "hire-an-agent",
+   "file": "hire-an-agent.md",
+   "from": "skills/catalog/hire-an-agent/SKILL.md",
+   "sha256": "1e9bf0247698b77720d3d1a90006031edefa2a270504eecae911ff1a800541ad"
+  },
+  {
+   "name": "mcp-server",
+   "file": "mcp-server.md",
+   "from": "skills/catalog/mcp-server/SKILL.md",
+   "sha256": "0e213f5af1890c54961453e43054c3ea44121246c222c8ce1db6f45216426d1f"
+  },
+  {
+   "name": "n8n-node",
+   "file": "n8n-node.md",
+   "from": "skills/catalog/n8n-node/SKILL.md",
+   "sha256": "2d12fc03710a565596fa4687662125881843bbef51ec7e5231e5560d15c982f3"
+  },
+  {
+   "name": "onboard-a-protocol",
+   "file": "onboard-a-protocol.md",
+   "from": "skills/catalog/onboard-a-protocol/SKILL.md",
+   "sha256": "4710a582317e0c22acd79428f593094e1c54184689b29cafb539640853038219"
+  },
+  {
+   "name": "prove-a-transaction",
+   "file": "prove-a-transaction.md",
+   "from": "skills/catalog/prove-a-transaction/SKILL.md",
+   "sha256": "b5075d83313a36510207f4e69a30d09de835ebac821cace0bf20766ca799aa29"
+  },
+  {
+   "name": "prove-anything",
+   "file": "prove-anything.md",
+   "from": "skills/catalog/prove-anything/SKILL.md",
+   "sha256": "6d29537f5d02b0783f36c8b696a6a5e04766a813a1a325ae8833a40742674bd9"
+  },
+  {
+   "name": "rent-rpc",
+   "file": "rent-rpc.md",
+   "from": "skills/catalog/rent-rpc/SKILL.md",
+   "sha256": "4f7a89f1bd94b998cc37ed17fcad44197e3f3575878d40aec2c9505b43bea8a6"
+  },
+  {
+   "name": "send-through-the-pipe",
+   "file": "send-through-the-pipe.md",
+   "from": "skills/catalog/send-through-the-pipe/SKILL.md",
+   "sha256": "598fa4d5c083e0bbc1f4da698a1ac92ddcc36a2bfeb7c29c8d05a7c5d0811d05"
+  },
+  {
+   "name": "taifoon-cli",
+   "file": "taifoon-cli.md",
+   "from": "skills/catalog/taifoon-cli/SKILL.md",
+   "sha256": "b782c1738a82149a1bc920c7dad9f8a13ecf1be4af4b7f747a686ca78f120c0c"
+  },
+  {
+   "name": "wrap-in-an-agent",
+   "file": "wrap-in-an-agent.md",
+   "from": "skills/catalog/wrap-in-an-agent/SKILL.md",
+   "sha256": "60c2f82772123d05b72b0af97ad15f0fd3d178f8f531691ee018c56269da0b3f"
+  },
+  {
+   "name": "x402-pay-and-get-paid",
+   "file": "x402-pay-and-get-paid.md",
+   "from": "skills/catalog/x402-pay-and-get-paid/SKILL.md",
+   "sha256": "614e541741b6464fe987e4c1c63c209c255158904130f166f4193ee74bd4923a"
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+# The coord language — grounding pack (taifoon.pipe.lang.v1, generated; do not edit)
+
+Every envelope is a transition. A READ arrives as kind `observe` from the producer (GET /v1/pipe/stream); a WRITE is sent with POST /v1/pipe/send, names its transition, carries the transition's kind, and writes to one outlet the caller's key holds.
+
+Kinds a send may carry: offer, hire, delivery, grade, settle, release, advert, cover, ack, record. Read-only kinds: observe.
+Outlets: mainnet, devnet, taifoon, vaults. Vault venues write to `vaults`; eip155:36927 → devnet; eip155:3692781 → taifoon; any other chain → mainnet; a watch or an http delivery writes to no outlet.
+
+Carrier routes (first match wins):
+1. record: agent_is=audit, venue_is=coord, kinds=record
+2. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery
+3. http: endpoint=http, kinds=any
+4. solana: chain_prefix=solana, kinds=settle|release
+5. venue: venue=present, kinds=any
+6. evm: chain_prefix=eip155:, kinds=settle|release
+7. solana: chain_prefix=solana, agent=present, kinds=any
+
+Transitions an envelope may name:
+- coordination.transitions.v1/fund_offer@hook: job Open → Funded, write, kind hire, outlets devnet|mainnet
+- coordination.transitions.v1/fund_delivered@hook: job Delivered → Funded, write, kind hire, outlets devnet|mainnet
+- coordination.transitions.v1/create@erc8183: job Open → Created, read, kind observe
+- coordination.transitions.v1/terms@erc8183: job Created → Created, read, kind observe
+- coordination.transitions.v1/fund@erc8183: job Created → Funded, read, kind observe
+- coordination.transitions.v1/reject_unfunded@erc8183: job Created → Rejected, read, kind observe
+- coordination.transitions.v1/lapse@erc8183: job Created → Cancelled, read, kind observe
+- coordination.transitions.v1/expire_unfunded@erc8183: job Created → Expired, read, kind observe
+- coordination.transitions.v1/submit_unfunded@erc8183: job Created → Submitted, read, kind observe
+- coordination.transitions.v1/submit@erc8183: job Funded → Submitted, read, kind observe
+- coordination.transitions.v1/submit@hook: job Funded → Submitted, write, kind delivery, outlets devnet|mainnet
+- coordination.transitions.v1/reject_undelivered@erc8183: job Funded → Rejected, read, kind observe
+- coordination.transitions.v1/expire_undelivered@erc8183: job Funded → Expired, read, kind observe
+- coordination.transitions.v1/expire_undelivered@hook: job Funded → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/complete@erc8183: job Submitted → Settled, read, kind observe
+- coordination.transitions.v1/complete@hook: job Submitted → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/reject_delivered@erc8183: job Submitted → Rejected, read, kind observe
+- coordination.transitions.v1/reject_delivered@hook: job Submitted → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/expire_delivered@erc8183: job Submitted → Expired, read, kind observe
+- coordination.transitions.v1/expire_delivered@hook: job Submitted → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/cheat@hook: job Submitted → Cheat, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/cheat_after_reject@hook: job Rejected → Cheat, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/grade_auto@hook: job Submitted → Graded, write, kind grade
+- coordination.transitions.v1/hold@hook: job Submitted → Held, write, kind cover
+- coordination.transitions.v1/graded_complete@hook: job Graded → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/graded_reject@hook: job Graded → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/graded_expire@hook: job Graded → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/graded_cheat@hook: job Graded → Cheat, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/held_complete@hook: job Held → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/held_reject@hook: job Held → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/held_expire@hook: job Held → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/held_cheat@hook: job Held → Cheat, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/open_v4@hook: job Open → Opened, write, kind cover, outlets devnet|mainnet
+- coordination.transitions.v1/accept_v4@hook: job Opened → Funded, write, kind hire, outlets devnet|mainnet
+- coordination.transitions.v1/cancel_open_v4@hook: job Opened → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/expire_open_v4@hook: job Opened → Expired, write, kind release, outlets devnet|mainnet
+- coordination.transitions.v1/propose_reject_v4@hook: job Submitted → RejectPending, write, kind grade, outlets devnet|mainnet
+- coordination.transitions.v1/graded_propose_reject_v4@hook: job Graded → RejectPending, write, kind grade, outlets devnet|mainnet
+- coordination.transitions.v1/held_propose_reject_v4@hook: job Held → RejectPending, write, kind grade, outlets devnet|mainnet
+- coordination.transitions.v1/finalize_reject_v4@hook: job RejectPending → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/dispute_v4@hook: job RejectPending → Disputed, write, kind grade, outlets devnet|mainnet
+- coordination.transitions.v1/resolve_seller_v4@hook: job Disputed → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/resolve_buyer_v4@hook: job Disputed → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/stale_dispute_v4@hook: job Disputed → Rejected, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/auto_complete_v4@hook: job Submitted → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/graded_auto_complete_v4@hook: job Graded → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.transitions.v1/held_auto_complete_v4@hook: job Held → Settled, write, kind settle, outlets devnet|mainnet

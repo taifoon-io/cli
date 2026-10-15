@@ -28,7 +28,7 @@ export function tokenize(line) {
   return out;
 }
 
-const BUILTIN = ['help', 'exit', 'quit', 'clear', 'status', 'up', 'curl', 'grade'];
+const BUILTIN = ['help', 'exit', 'quit', 'clear', 'status', 'up', 'curl', 'grade', 'reset'];
 
 /** Completion candidates for a partial line. Pure over the command table. */
 export function completer(table, line) {
@@ -66,7 +66,7 @@ export async function shell(argv, io = {}) {
   const table = await commands();
   const exec = io.exec ?? defaultExec;
   // the global flags given to `taifoon` ride on every line (a value flag keeps its value)
-  const { f: gf } = parseFlags(argv);
+  const { f: gf } = parseFlags(argv, ['provider', 'model', 'max-turns']);
   const pass = Object.entries(gf).filter(([k]) => ['layer', 'key', 'profile', 'no-color', 'verbose'].includes(k)).flatMap(([k, v]) => (v === true ? [`--${k}`] : [`--${k}`, String(v)]));
   const session = () => {
     const cfg = io.cfg ?? loadConfig(env); const profile = env.TAIFOON_PROFILE ?? cfg.profile ?? 'default'; const prof = profileOf(cfg, profile);
@@ -85,10 +85,26 @@ export async function shell(argv, io = {}) {
       ['owner', s.owner ? p.you(s.owner) : p.faint('none')],
       ['version', p.faint(VERSION)],
     ]) + '\n\n');
-    out.write(`  ${p.faint('help for commands · tab completes · exit to leave')}\n\n`);
+    out.write(`  ${p.faint('help for commands · tab completes · anything else is a question for the agent · reset forgets it · exit to leave')}\n\n`);
   }
   const histFile = join(homeDir(env), 'history');
   const remember = (line) => { if (/tfr_/.test(line)) return; try { mkdirSync(homeDir(env), { recursive: true, mode: 0o700 }); appendFileSync(histFile, line + '\n', { mode: 0o600 }); } catch { /* history is a convenience */ } };
+
+  // the agent (src/agent/session.mjs): its own context, so its tool calls are metered with this session's key and flags
+  let agent = null;
+  const agentLines = Boolean(input.isTTY) || argv.includes('--agent');
+  const askAgent = async (text) => {
+    const { makeContext } = await import('./context.mjs');
+    const { createSession } = await import('./agent/session.mjs');
+    const { printer, confirmer } = await import('./commands/studio.mjs');
+    const ctx = makeContext({ ...io, exec }, { ...gf, ...(argv.includes('--readonly') ? { readonly: true } : {}) }, VERSION);
+    try {
+      if (!agent) { agent = await createSession(ctx, { onEvent: printer(ctx), confirmAndRun: confirmer(ctx) }); ctx.session = agent; out.write(`  ${p.faint(`agent: ${agent.provider.name} ${agent.provider.model} · role ${agent.who.role} · ${agent.tools.length} tools`)}\n`); }
+      ctx.session = agent;
+      const r = await agent.ask(text);
+      out.write(`\n${r.text}\n`);
+    } catch (e) { out.write(`  ${p.miss('✗')} ${e?.message ?? e}\n`); }
+  };
 
   /** one line → one main() run. false ends the session. */
   const handle = async (raw) => {
@@ -97,6 +113,10 @@ export async function shell(argv, io = {}) {
     const words = tokenize(line);
     if (['exit', 'quit', 'q'].includes(words[0])) return false;
     if (words[0] === 'clear') { out.write('\u001bc'); return true; }
+    if (words[0] === 'reset') { agent?.reset(); out.write(`  ${p.faint('the agent forgot this conversation')}\n\n`); return true; }
+    // _ONE_PRODUCT_v1_: a line that is not a command is a question for the agent (the session is made on first use)
+    // (interactive only, or with --agent; a single unknown word is still a typo, not a question)
+    if (agentLines && words.length > 1 && !BUILTIN.includes(words[0]) && !table.has(words[0]) && !/^-/.test(words[0])) { await askAgent(line); out.write('\n'); return true; }
     const code = await main([...words, ...pass], { ...io, noShell: true, exec });
     if (code !== 0 && code !== undefined) out.write(`  ${p.faint(`exit ${code}`)}\n`);
     if (['login', 'logout'].includes(words[0])) s = session();

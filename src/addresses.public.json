@@ -1,14 +1,57 @@
 {
   "version": 1,
-  "updated": "2026-09-29",
-  "checked_at": "2026-10-01T07:30:55.464Z",
+  "updated": "2026-10-12",
+  "checked_at": "2026-10-01T10:42:20.521Z",
   "chains": {
+    "1": {
+      "name": "Ethereum",
+      "explorers": {
+        "etherscan": "https://etherscan.io"
+      },
+      "note": "third-party reads only (the Olas bridger of the canonical ERC-8004 registry)"
+    },
+    "10": {
+      "name": "OP Mainnet",
+      "explorers": {
+        "optimistic-etherscan": "https://optimistic.etherscan.io"
+      },
+      "note": "third-party reads only (the Olas Mech marketplace)"
+    },
     "56": {
       "name": "BNB Smart Chain",
       "explorers": {
         "bscscan": "https://bscscan.com"
       },
       "note": "third-party reads only"
+    },
+    "100": {
+      "name": "Gnosis",
+      "explorers": {
+        "gnosisscan": "https://gnosisscan.io",
+        "blockscout": "https://gnosis.blockscout.com"
+      },
+      "note": "third-party reads only (the Olas Mech marketplace: most of its traffic)"
+    },
+    "137": {
+      "name": "Polygon PoS",
+      "explorers": {
+        "polygonscan": "https://polygonscan.com"
+      },
+      "note": "third-party reads only (the Olas Mech marketplace)"
+    },
+    "143": {
+      "name": "Monad",
+      "explorers": {
+        "monadscan": "https://monadscan.com"
+      },
+      "note": "third-party reads only; sellers on Monad take x402 payment in USDC here"
+    },
+    "4663": {
+      "name": "Robinhood Chain",
+      "explorers": {
+        "blockscout": "https://robinhoodchain.blockscout.com"
+      },
+      "note": "third-party reads only (razor gas inputs, the Olas Mech marketplace)"
     },
     "5042": {
       "name": "Arc",
@@ -30,6 +73,13 @@
         "taifoon": "https://www.taifoon.io/scan/36927"
       }
     },
+    "42161": {
+      "name": "Arbitrum One",
+      "explorers": {
+        "arbiscan": "https://arbiscan.io"
+      },
+      "note": "third-party reads (razor gas inputs) and our settle-through-us V4 line (2026-10-01)"
+    },
     "42220": {
       "name": "Celo",
       "explorers": {
@@ -37,6 +87,11 @@
         "celoscan": "https://celoscan.io"
       },
       "note": "third-party reads only"
+    },
+    "3692781": {
+      "name": "Taifoon mainnet",
+      "explorers": {},
+      "note": "our own chain; public RPC https://mainnet.taifoon.dev; no public explorer yet"
     }
   },
   "systems": {
@@ -1301,6 +1356,23 @@
         },
         {
           "chain": 36927,
+          "name": "DevnetX402USDC (dxUSDC, x402 test token)",
+          "address": "0x9c7f46114658dA1b175F80CDC1ba03cB4ba50AC9",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xb6b369973985e32f3798e979c127d78050231fdabc8a988ca8e0c910b917f03b",
+            "block": 1490368
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "_DEMAND_X402_v1_: the x402 pay token of a paid demand on the devnet (the devnet dUSDC has no EIP-3009): ERC-20, 6 decimals, open mint, EIP-3009 transferWithAuthorization under the USDC domain (USD Coin, version 2); no owner, refuses any chain but 36927. Source protocols/ours/assurance-v4/devnet/src/DevnetX402USDC.sol (Paris build). Deployed by anvil #0."
+        },
+        {
+          "chain": 36927,
           "name": "AssuranceHook V4 (proxy, devnet, dUSDC)",
           "address": "0x9DE1E23445685a4fcF18CfF491ADad76A806c54d",
           "kind": "proxy",
@@ -1597,6 +1669,1743 @@
           "status": "devnet-only",
           "since": "2026-09-28",
           "notes": "The named evaluator of settle-through-us jobs on the GLMR-line V4 devnet hook; forwards every evaluator fee the hook pays it to the treasury fixed at deployment (the coordination signer's address)."
+        },
+        {
+          "chain": 36927,
+          "name": "JevArbiter (devnet, V4 dUSDC hook)",
+          "address": "0xB22795697B94617F4C695e0175bc3Aa787E8e9c4",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x08219e116805bad2f0fb86cc768b7c017c0e667bde3588a17f760dc41074174c",
+            "block": 1304815
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-02",
+          "notes": "The arbiter seat of the V4 dUSDC hook 0x9DE1 (hook.setArbitrator tx 0x8aafde64ff10a8da6f9c9fe639abd8c1c0443a42564d511f2a1971999d76248a): rule(jobId, sellerWins, answersDigest) / findCheated(jobId, loss, answersDigest) only with an answers digest already recorded by a trusted recorder on JevAnswerLog (devnet); one digest rules one job. Ownerless; ruler fixed at construction = KMS taifoon/tfBase-evaluator."
+        },
+        {
+          "chain": 36927,
+          "name": "V4OutcomeSource (devnet, V4 dUSDC hook)",
+          "address": "0x7Cb7f1E83917bd8B1f58C9B44c34af4aDB4855A4",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x5c2992ed18c7a25f02dfd926b4004a6ce784040b726a8c28d7823b0f1f068172",
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the V4 dUSDC hook 0x9DE1 for the assurance market. Ownerless."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceMarket (devnet, V4 dUSDC line)",
+          "address": "0xAD81f2535ef4Fd839d1eF7267B1cb72E890C013B",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x77f0648f6b9c8d8176ee88e00d8e755c23a5b2d7928b979436efa4b7bcf6321e",
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance (FOR / AGAINST / COVER) on the devnet V4 dUSDC line: source V4OutcomeSource 0x7Cb7, evaluator = the V4 fee-forwarding JudgeAdapter, treasury = KMS vault, devnet params. Its owner (a set of KMS keys) may only pause, unpause or shut it down."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceMarket (devnet, V4 dUSDC line, coverage)",
+          "address": "0x1a7bec7EFacAe10F657B1C930f6473574B2aa3A6",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xa5d2b476fecc7172d3b16f533bb0ebeba52c31d979840ef8b7a61032ba1d3477",
+            "block": 1306866
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-02",
+          "notes": "The coverage market: the scenario script of the assurance machine runs here and ends with the kill switch (S10). Same source, asset, evaluator, treasury and params as the public devnet line. Its owner (a set of KMS keys) may only pause, unpause or shut it down."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceHook V4 (proxy, Base, USDC)",
+          "address": "0x93122A47d1824afFA3bAa5751aacf4919F67eb25",
+          "kind": "proxy",
+          "implementation": "0xF2C201eaaEAcd3047F33A436426CF6d4d588e6Bd",
+          "deploy": {
+            "tx": "0xd6b34cf6f6f407b9d379a5e6c1789e41eb79161c8847e5790e6746d513843aa5",
+            "block": 52026814
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceHook V4 (implementation, Base, USDC)",
+          "address": "0xF2C201eaaEAcd3047F33A436426CF6d4d588e6Bd",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x7f94de465d05d0f94435307bfaba20ad6ff897b3e00b3854768a9ece0bc2e64f",
+            "block": 52026813
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V4 (implementation, Base)",
+          "address": "0xc878A09cdDF42838Ba6552D507C94d0cA73d08B7",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xede48f577d9fd4f551e644457edd1f9f0a94ae7ba4156cdde33c548d083aa4fd",
+            "block": 52026834
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory V4 (implementation, Base)",
+          "address": "0x54127F856a7a04e2a63De8920bAE752E6782dc5b",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x48ba43b62fc0355b1894092b297dc0179303b25d6ed170fb672e3f6de122b98b",
+            "block": 52026836
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "PoolFactory V4 (proxy, Base)",
+          "address": "0xAF3F4F2221bb3D7E1a7306B7901dDf52d17A4cCA",
+          "kind": "proxy",
+          "implementation": "0x54127F856a7a04e2a63De8920bAE752E6782dc5b",
+          "deploy": {
+            "tx": "0x70fbfdbf4042bc296d9d68b12b04429b3fe72f971e2d0cd936889192bb5d1fa8",
+            "block": 52026838
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "JudgeAdapter V4 fee-forwarding (Base)",
+          "address": "0x676DC5f5ed7Ea76520e1B6f6Aa3a4EeFE806F5ce",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x04453e7b46b6535a2dfccef8fc2435c65c4bf6438cac401d1b45f47a96937ccf",
+            "block": 52026839
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Base (Assurance V4, JOB_ASSET = USDC, Cancun build of protocols/ours/assurance-v4 at ecd02615). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (evaluator key taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer (docs/revenue/16-base-settle-and-doer-pay.md)."
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V4 (Base, stand-in seller tfBase-standin)",
+          "address": "0x77fefc8E2c23eAAD68CDb2cF6ac56F3993077C84",
+          "kind": "pool",
+          "implementation": "0xc878A09cdDF42838Ba6552D507C94d0cA73d08B7",
+          "deploy": {
+            "tx": "0x1ba393fde63422af6713eefb0f42ea54812e4432cc37aaf906c50b9b98ab7ac0",
+            "block": 52027048
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "The V4 Base line's first pool (share tfSIC): covers jobs whose seller of record is the KMS stand-in taifoon/tfBase-standin; asset USDC; backed with 0.30 USDC by the KMS ops signer. Premiums accrue here (premiumsReceived). First premium 114 units from job 0x44c87c866e84cd6a8acfcc522de775d843ac835b0701a5448c36bcb093318ab5.",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        },
+        {
+          "chain": 42161,
+          "name": "AssuranceHook V4 (proxy, Arbitrum, USDC)",
+          "address": "0x6423B2250d41Cf0F786F5e4F8b962b03c8483A0B",
+          "kind": "proxy",
+          "implementation": "0x21485D8619ea2FEC37516C2CE0C949070303c80c",
+          "deploy": {
+            "tx": "0x2d228084534dac21883dd2725184a69fe05b89e562606ef632e3d63634b54738",
+            "block": 510607085
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer."
+        },
+        {
+          "chain": 42161,
+          "name": "AssuranceHook V4 (implementation, Arbitrum, USDC)",
+          "address": "0x21485D8619ea2FEC37516C2CE0C949070303c80c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xe15457c50ab607769054a9238b3aad3534ff404300aba7f923de8be2e7f2d2e7",
+            "block": 510607065
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer."
+        },
+        {
+          "chain": 42161,
+          "name": "CoveragePool V4 (implementation, Arbitrum)",
+          "address": "0x8cD18c4a1982080208a755563F84ba0055706508",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xf0340abb183aee22b22f306c016b6645ab02778443c93303cb6631cc176aeeaa",
+            "block": 510607102
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer."
+        },
+        {
+          "chain": 42161,
+          "name": "PoolFactory V4 (implementation, Arbitrum)",
+          "address": "0x1DdcA89bb913d3843968F9df458D15364B531B32",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x09647e48513040113e9d2f6a9f6342b68628272ac7e388f3df7f4c9f4474c2ee",
+            "block": 510607118
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer."
+        },
+        {
+          "chain": 42161,
+          "name": "PoolFactory V4 (proxy, Arbitrum)",
+          "address": "0x7D93c3B6Cca19581010bA2543e39F3DD231965eb",
+          "kind": "proxy",
+          "implementation": "0x1DdcA89bb913d3843968F9df458D15364B531B32",
+          "deploy": {
+            "tx": "0x0f00aca5454105787b7b0462cfb61f068b5fcd4a9f92fb0541e4d7405cd8f667",
+            "block": 510607138
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer. Same address as the Arc CctpFeeRouterV3 (the ops signer's nonce 24 on both chains); different chains, different contracts."
+        },
+        {
+          "chain": 42161,
+          "name": "JudgeAdapter V4 fee-forwarding (Arbitrum)",
+          "address": "0x0F2700f7F4E68412d0f451243dCbB57cc5C33851",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xfc53f4637e9774c8fb2c2406151646bc1d4822cea4c897a27a06e9918b6f4f6f",
+            "block": 510607153
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "Settle-through-us line on Arbitrum One (Assurance V4, JOB_ASSET = Circle USDC, the same Cancun build as Base). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-01 by the KMS ops signer."
+        },
+        {
+          "chain": 42161,
+          "name": "CoveragePool V4 (Arbitrum, stand-in seller tfBase-standin)",
+          "address": "0x82Da7419ff4f8A603aC7Ffa840d83e575029194D",
+          "kind": "pool",
+          "implementation": "0x8cD18c4a1982080208a755563F84ba0055706508",
+          "deploy": {
+            "tx": "0x1b08e2919b435ffaefd58705096ed6ecd4e02ac9eae58544fab7e30e9bfb8cb7",
+            "block": 510634126
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-01",
+          "notes": "The V4 Arbitrum line's first pool (share tfSIC): covers jobs whose seller of record is the KMS stand-in taifoon/tfBase-standin; asset USDC; backed with 0.60 USDC by the KMS ops signer. Premiums accrue here (premiumsReceived). First premium 155 units from job 0x0eaa3e2c23573cd2d0fb46f2cbfe3f6155671bacefa4f00d4b439cd28cc9f48f.",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        },
+        {
+          "chain": 5042,
+          "name": "CoveragePool V4 (Arc, stand-in seller tfBase-standin)",
+          "address": "0x1bfE12a16B08bC5AC90AEbF7588f1dF4274705F4",
+          "kind": "pool",
+          "implementation": "0x6Fd05a0A9a1375B9a5B72B09390b77982EaC1912",
+          "deploy": {
+            "tx": "0x6811f6272d54e6e6db8d95187ee594429d39aeedb2c3bec474e1c5756f5f8ca2",
+            "block": 24101120
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "The V4 Arc line's first pool (share tfSIC): covers jobs whose seller of record is the KMS stand-in taifoon/tfBase-standin; asset USDC (the Arc ERC-20 facade); backed with 0.10 USDC by the KMS ops signer (approve 0xfa1b3282bbfb1fee66b88a2a9228cb1279d9fb4a8c7bd5b45a1392916bd4936a, deposit 0x65392f34666953bf8e44d67bf58310bd52549d4cc19d29f10f50951221e52d02). Premiums accrue here (premiumsReceived).",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        },
+        {
+          "chain": 4663,
+          "name": "CoveragePool V4 (Robinhood, stand-in seller tfBase-standin)",
+          "address": "0x38ec555Ff1415CdE031F6b40759aF1F462cDe3DA",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0x66f2d08a5984d9c190dd92c827f628bf24923277314c82b8030d5a0d3d08baf1",
+            "block": 79341341
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "The V4 Robinhood line's first pool (share tfSIC): covers jobs whose seller of record is the KMS stand-in taifoon/tfBase-standin; asset USDG; backed with 0.30 USDG by the KMS ops signer (approve 0xc8bcf184a1708e7756125d5fe433117b636c40c45e9ef25bf9826a7e78261deb, deposit 0xace759a70b58324a76f00e8c920fa2ae9a76bf0e89a899f2aa2ad0b212778822). Premiums accrue here (premiumsReceived).",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V4 (Base, seller 0x4b33758d)",
+          "address": "0x819c18FB2A54dFFCF1b6a3CF84E4cD38ccEF429A",
+          "kind": "pool",
+          "implementation": "0xc878A09cdDF42838Ba6552D507C94d0cA73d08B7",
+          "deploy": {
+            "tx": "0x9f668246fdae4389794e8ad6a2de972edc442091d44e2d8054cb98c2f2bf3cfc",
+            "block": 52199216
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Base pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 8453,
+          "name": "CoveragePool V4 (Base, seller 0x4e368C8D)",
+          "address": "0x5303e0F9F0F69b93fD26Ff7Eda96563C28042229",
+          "kind": "pool",
+          "implementation": "0xc878A09cdDF42838Ba6552D507C94d0cA73d08B7",
+          "deploy": {
+            "tx": "0x88509886e0965c873d28bc1ae0ebba1fe555f54687a8cfe33c08a13c362247a9",
+            "block": 52199218
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Base pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 42161,
+          "name": "CoveragePool V4 (Arbitrum, seller 0x4b33758d)",
+          "address": "0x242AA9F50b28465c6Aed6852e0723dad599131d0",
+          "kind": "pool",
+          "implementation": "0x8cD18c4a1982080208a755563F84ba0055706508",
+          "deploy": {
+            "tx": "0x635f21845b8219c525b83c9bfaa07ff5607d7a800730424c5d601d535ff10054",
+            "block": 511864941
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Arbitrum pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 42161,
+          "name": "CoveragePool V4 (Arbitrum, seller 0x4e368C8D)",
+          "address": "0x3393Ac17Ec2B71Dc7ffE9a92498f7da1420A105C",
+          "kind": "pool",
+          "implementation": "0x8cD18c4a1982080208a755563F84ba0055706508",
+          "deploy": {
+            "tx": "0x3d6aa41e0c9aad7096b61c836be36ee2407d9466f04b07712ee1f089b23bf349",
+            "block": 511864959
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Arbitrum pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 5042,
+          "name": "CoveragePool V4 (Arc, seller 0x4b33758d)",
+          "address": "0x523457a6998Cc0E4b7CA2fDd1F10314918326886",
+          "kind": "pool",
+          "implementation": "0x6Fd05a0A9a1375B9a5B72B09390b77982EaC1912",
+          "deploy": {
+            "tx": "0x3707031c3ad0906b23a7dc9db913bf59102efd3e5b01cc2722f1a7350a32522b",
+            "block": 24359778
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Arc pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 5042,
+          "name": "CoveragePool V4 (Arc, seller 0x4e368C8D)",
+          "address": "0x5c71bD336988d1Cd848dcCfe46418738794eC73F",
+          "kind": "pool",
+          "implementation": "0x6Fd05a0A9a1375B9a5B72B09390b77982EaC1912",
+          "deploy": {
+            "tx": "0x45bf09020bcbd652665f4401372eca68c8100b9b59efe0b6d0435f4a9d3e3be1",
+            "block": 24359789
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Arc pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 4663,
+          "name": "CoveragePool V4 (Robinhood, seller 0x4b33758d)",
+          "address": "0xd6A4F262FCF3326905fa5048854f7128d82fE553",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0xaebd9f77d138adae290bdddb77340a3e43131d5eed261992379192bb46adf1cf",
+            "block": 80634028
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Robinhood pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDG. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 4663,
+          "name": "CoveragePool V4 (Robinhood, seller 0x4e368C8D)",
+          "address": "0x375A5aC6620e5818CAbFc8E906cB49DD14c39F61",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0xea1db7d13946b24494132689d71302ad299c9a3026bf309575d490bee2439db7",
+            "block": 80634337
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Robinhood pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDG. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 143,
+          "name": "CoveragePool V4 (Monad, stand-in seller tfBase-standin)",
+          "address": "0x38ec555Ff1415CdE031F6b40759aF1F462cDe3DA",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0x403eaed96e9caaa6391fe805ca688676e7b455b46eebad842417375a4f31e57f",
+            "block": 110701080
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "The V4 Monad line's stand-in pool (share tCOVER): covers jobs whose seller of record is the KMS stand-in taifoon/tfBase-standin; asset USDC. Opened empty by the KMS ops signer on 2026-10-05 so the five V4 lines hold the same pools; no deposit was made.",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        },
+        {
+          "chain": 143,
+          "name": "CoveragePool V4 (Monad, seller 0x4b33758d)",
+          "address": "0xd6A4F262FCF3326905fa5048854f7128d82fE553",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0x0fa8dedbec0b25842437e3ea150354bf48f92955dc26cb6f4e302a63ed93c3d4",
+            "block": 110701102
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Monad pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4b33758d85678Ea86cD875AF8caF318462268Ba8"
+        },
+        {
+          "chain": 143,
+          "name": "CoveragePool V4 (Monad, seller 0x4e368C8D)",
+          "address": "0x375A5aC6620e5818CAbFc8E906cB49DD14c39F61",
+          "kind": "pool",
+          "implementation": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "deploy": {
+            "tx": "0x50d473fb06d34a8bed60c07c532cf6350679e86ba0d10308fbc0dfdbae914571",
+            "block": 110701111
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "A V4 Monad pool behind an outside seller that meets the pool rule on its observatory record (share tCOVER); asset USDC. Opened empty by the KMS ops signer on 2026-10-05 (createPool is permissionless and deposits nothing) so the five V4 lines hold the same pools; no deposit was made. The seller holds no role here.",
+          "seller": "0x4e368C8D099d68a6B87aa616e3dB4940e0721D60"
+        },
+        {
+          "chain": 8453,
+          "name": "V4OutcomeSource (Base, V4 USDC hook)",
+          "address": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x0c95a86c95501721959c94d656c375fed61843d93b704bff2d7642707cffddea",
+            "block": 52085401
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": true,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the Base V4 USDC hook 0x93122A47d1824afFA3bAa5751aacf4919F67eb25 for the assurance market. Ownerless."
+        },
+        {
+          "chain": 8453,
+          "name": "AssuranceMarket (Base, V4 USDC line)",
+          "address": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x56d2089e39399febfd8a028432bb579c38d4e7813711f181d45149985349f3b6",
+            "block": 52085402
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": true,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance (FOR / AGAINST / COVER) on the Base V4 USDC line. Caps: COVER <= 1x price, AGAINST <= 0.5x, fee max(49 bps, 0.02 USDC), no senior backing below 5 distinct buyers. Its owner (a set of KMS keys) may only pause, unpause or shut it down. No arbiter seat yet."
+        },
+        {
+          "chain": 42161,
+          "name": "V4OutcomeSource (Arbitrum, V4 USDC hook)",
+          "address": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x7fae6ba0ffd4de81934b9769a4887178495f0c262742b8bbf6475e80bc9cbff7",
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the Arbitrum V4 USDC hook 0x6423B2250d41Cf0F786F5e4F8b962b03c8483A0B for the assurance market. Ownerless."
+        },
+        {
+          "chain": 42161,
+          "name": "AssuranceMarket (Arbitrum, V4 USDC line)",
+          "address": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x72d6b075815ea75ab59f3c210ae738dcf2ef23194d612eeef8d3a3c896f9c151",
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance on the Arbitrum V4 USDC line; the same caps as Base. Its owner (a set of KMS keys) may only pause, unpause or shut it down. No arbiter seat yet."
+        },
+        {
+          "chain": 5042,
+          "name": "AssuranceHook V4 (proxy, Arc, USDC)",
+          "address": "0x1c7c44e1A43d661675A7f1E583d351adfD48F872",
+          "kind": "proxy",
+          "implementation": "0x599e4294dEe6b536126282a9394bFB370caC872c",
+          "deploy": {
+            "tx": "0xa529e6b139354112e2f9df144f1827b6310a390784b1051a48fb2605f212d54e",
+            "block": 23920092
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "AssuranceHook V4 (implementation, Arc, USDC)",
+          "address": "0x599e4294dEe6b536126282a9394bFB370caC872c",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x77500455a36b4842f65a6f77767f9fc39fbee291f57d080f2b4c46c85c89b7e5",
+            "block": 23920088
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "CoveragePool V4 (implementation, Arc)",
+          "address": "0x6Fd05a0A9a1375B9a5B72B09390b77982EaC1912",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x6d08a884661db254944f7508a9ed1049817c416c597a0dc49295f35bee37b432",
+            "block": 23920096
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "PoolFactory V4 (implementation, Arc)",
+          "address": "0x0d886FFb3719966ec4b44A9F85552759bEA04554",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x0dcb9f5debea4dcf5b210d39d74809584d3a374bfac86f5abeb82c366676aa4a",
+            "block": 23920100
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "PoolFactory V4 (proxy, Arc)",
+          "address": "0x146bfb0eBef9E647Ddd1152d744A47087E8D3086",
+          "kind": "proxy",
+          "implementation": "0x0d886FFb3719966ec4b44A9F85552759bEA04554",
+          "deploy": {
+            "tx": "0x220fb7fb005fdb54c7988916a34a840efb3a570d2425389e7d2ef91c52da6cef",
+            "block": 23920104
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "JudgeAdapter V4 fee-forwarding (Arc)",
+          "address": "0x8dd1b8978328443E53f8FcEbA2d835eb09321C0a",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x494b70dc38ee71554479f559e60c6a136a14033494d3f5e3fe8dac3e5df93519",
+            "block": 23920109
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Arc (Assurance V4, JOB_ASSET = USDC, the ERC-20 facade 0x3600… of Arc native USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 5042,
+          "name": "V4OutcomeSource (Arc, V4 USDC hook)",
+          "address": "0x9CCef4d57c32E9AFA04949e9C3c06DCc1895B0Bc",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x75c3c8d05c45e8ae9cd89d89f935e0a2195c28b1aba98a2b0a72fd1ab2fa2c81",
+            "block": 23921173
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the Arc V4 USDC hook 0x1c7c44e1A43d661675A7f1E583d351adfD48F872 for the assurance market. Ownerless."
+        },
+        {
+          "chain": 5042,
+          "name": "AssuranceMarket (Arc, V4 USDC line)",
+          "address": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xf3521adb85d2eb33333ad6b1a0f64c1cb94b357fafe1bc3a919098b8614fa92b",
+            "block": 23921177
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance on the Arc V4 USDC line; the same caps as Base. Its owner (a set of KMS keys) may only pause, unpause or shut it down. No arbiter seat yet."
+        },
+        {
+          "chain": 4663,
+          "name": "AssuranceHook V4 (proxy, Robinhood, USDG)",
+          "address": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+          "kind": "proxy",
+          "implementation": "0x71FA11e54718B6F409a892e78AE9077eB44f23D3",
+          "deploy": {
+            "tx": "0xeae30da25ef73af3a0abd70d3701533c67ea9bcf7ce543e56bdd0c5831c882d2",
+            "block": 78454142
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "AssuranceHook V4 (implementation, Robinhood, USDG)",
+          "address": "0x71FA11e54718B6F409a892e78AE9077eB44f23D3",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x6bf4eb817937ec4a3a107b6dcc5a279733970a2341dc60073f7171b3db563e4d",
+            "block": 78454091
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "CoveragePool V4 (implementation, Robinhood)",
+          "address": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xf359818a6dbdb0d101ac7aaca9e6757106757311eacf4388aa05b948ddcbc411",
+            "block": 78454189
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "PoolFactory V4 (implementation, Robinhood)",
+          "address": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xec09e5750d971e4449a0d6b07d70bdbb2f5ee2309dcc937df9abe724a344e73e",
+            "block": 78454246
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "PoolFactory V4 (proxy, Robinhood)",
+          "address": "0x785F4701C681dCBa8762FcfaF18db4048215c0ca",
+          "kind": "proxy",
+          "implementation": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "deploy": {
+            "tx": "0xa16eb283a1755501e75453595dce87bb1636c4611c41b9a13eea0d66891d7fb0",
+            "block": 78454295
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "JudgeAdapter V4 fee-forwarding (Robinhood)",
+          "address": "0x75940b85cA942Bb592A9eB60973e0d05ce3985D2",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x0c8e358776733caa4b0929e32633d97954bcecf220fc15836c67e32607e23166",
+            "block": 78454349
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Robinhood Chain (Assurance V4, JOB_ASSET = USDG, Global Dollar). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "AssuranceHook V4 (proxy, Monad, USDC)",
+          "address": "0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c",
+          "kind": "proxy",
+          "implementation": "0x71FA11e54718B6F409a892e78AE9077eB44f23D3",
+          "deploy": {
+            "tx": "0x5a99ced28a2c68d1a977a67deb2d7741f66c09c9fdd2f9ce07ffe6f5c467af25",
+            "block": 109968745
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "AssuranceHook V4 (implementation, Monad, USDC)",
+          "address": "0x71FA11e54718B6F409a892e78AE9077eB44f23D3",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xe0d8a9ba851cdd18c120ef9250ad8f44e84e2cb0b1385bf0287215f2a9e4239e",
+            "block": 109968739
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "CoveragePool V4 (implementation, Monad)",
+          "address": "0x1471dEE3174dBEB1121d84bbC105E782ADe8ed96",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xd640535e54ce2ef801c29d0f5e5627b9357cae4a024e5df98d6fa03bc9c70c2f",
+            "block": 109968751
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "PoolFactory V4 (implementation, Monad)",
+          "address": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xd6f5330d14dad74f4dea638691f197853a578326ddfd9b123603f722fa61071c",
+            "block": 109968757
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "PoolFactory V4 (proxy, Monad)",
+          "address": "0x785F4701C681dCBa8762FcfaF18db4048215c0ca",
+          "kind": "proxy",
+          "implementation": "0xf51dA7f863596F00A866475d4879c6dc7DF48aff",
+          "deploy": {
+            "tx": "0x6da4c6da43adc4944794a9ab7efa06b6666a110b3036fc9480df5a9b62f8a4c8",
+            "block": 109968763
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 143,
+          "name": "JudgeAdapter V4 fee-forwarding (Monad)",
+          "address": "0x75940b85cA942Bb592A9eB60973e0d05ce3985D2",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xd32c16db56aaf4e877e53b03801f257c7f59df245710e666f33dbe6c8254c57b",
+            "block": 109968769
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Settle-through-us line on Monad (Assurance V4, JOB_ASSET = Circle USDC). Owned by Taifoon governance (3 of 5 KMS keys). Jobs name the fee-forwarding JudgeAdapter as evaluator (the same KMS evaluator key as Base, taifoon/tfBase-evaluator); its fee goes to the KMS vault. No arbitrator. Deployed 2026-10-02 by the KMS ops signer."
+        },
+        {
+          "chain": 4663,
+          "name": "V4OutcomeSource (Robinhood, V4 USDG hook)",
+          "address": "0x9CCef4d57c32E9AFA04949e9C3c06DCc1895B0Bc",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xc4edebc51ad736ed8dd99eaa11ba6d98286fe0b12237ca9d7fed4a9ded564f7e",
+            "block": 78462403
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the Robinhood V4 USDG hook 0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c for the assurance market. Ownerless."
+        },
+        {
+          "chain": 4663,
+          "name": "AssuranceMarket (Robinhood, V4 USDG line)",
+          "address": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x8523595c4189820476b78b218e6517af3d056e7c51e8381529a5324369b24ff6",
+            "block": 78462423
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance on the Robinhood V4 USDG line; the same caps as Base. Its owner (a set of KMS keys) may only pause, unpause or shut it down. No arbiter seat yet."
+        },
+        {
+          "chain": 143,
+          "name": "V4OutcomeSource (Monad, V4 USDC hook)",
+          "address": "0x47F48A3C9188547c988eeCE1052a022bA843E6a7",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x37b24e65443a2d92f19d31fda946f6fac99d68602dedecee5017d49fba67e2de",
+            "block": 109972315
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Read-only job outcome source over the Monad V4 USDC hook 0xBf4283b791d5a5541F01BC93ef5DD9B9dC8f334c for the assurance market. Ownerless."
+        },
+        {
+          "chain": 143,
+          "name": "AssuranceMarket (Monad, V4 USDC line)",
+          "address": "0xAfc864dBb0B100581F9fcFF64969E57A0F063Ef3",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x65528f5c01714a7f884ddee410ff65c65e3d87936d3a0532b31b600d3c8f46e9",
+            "block": 109972321
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Two-sided job assurance on the Monad V4 USDC line; the same caps as Base. Its owner (a set of KMS keys) may only pause, unpause or shut it down. No arbiter seat yet."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (proxy, devnet, dUSDC, partner bond)",
+          "address": "0xd65d173cd4f83Dc1663C845269E57703FaC61979",
+          "kind": "proxy",
+          "implementation": "0x9fF4608bAEb3a055CcBBa85c2Aabaf6EF5c50120",
+          "deploy": {
+            "tx": "0xfed3bcbe8d94e8d2dd6c548e391794559cbe30b78a65f1b76c17f3575ed0af78",
+            "block": 1388104
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Partner-bond devnet stack (_PARTNER_BOND_WIRING_v1_, units/7-enterprise-namespace): a FRESH Assurance V4 hook with the partner-bond wiring (openJobWithBond; on a finding the buyer is paid from the deposit, then the partner bond up to the job's reservation, then the pool), job asset dUSDC, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Deployed by anvil #0; public dev keys, nothing has value. The existing devnet hooks were not touched. partnerBond = 0x36E030CAC080DF6B62f45Ea3f20BE06758a5Da03."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, devnet, dUSDC, partner bond)",
+          "address": "0x9fF4608bAEb3a055CcBBa85c2Aabaf6EF5c50120",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xe5c9fb796ef7d0938b62727aaedd34b16eba0f5cde96d3f46302f17afb704d79",
+            "block": 1388102
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Partner-bond devnet stack (_PARTNER_BOND_WIRING_v1_, units/7-enterprise-namespace): a FRESH Assurance V4 hook with the partner-bond wiring (openJobWithBond; on a finding the buyer is paid from the deposit, then the partner bond up to the job's reservation, then the pool), job asset dUSDC, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Deployed by anvil #0; public dev keys, nothing has value. The existing devnet hooks were not touched. Devnet windows (_DEVNET_SHORT_WINDOWS_v1_): MIN_WINDOW 60 s, ARBITRATION_WINDOW 120 s."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (proxy, devnet, partner bond)",
+          "address": "0x000BAA8B47BCc1Ea1B047d747979eC5716835F88",
+          "kind": "proxy",
+          "implementation": "0x4B7Bf41ff55f97e7901eeC06b171Df1c7EA71EF4",
+          "deploy": {
+            "tx": "0xe16971e4ce999360492e97b76f478945532f0b89eac64dd5cf901f6fd0afb2eb",
+            "block": 1388111
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Partner-bond devnet stack (_PARTNER_BOND_WIRING_v1_, units/7-enterprise-namespace): a FRESH Assurance V4 hook with the partner-bond wiring (openJobWithBond; on a finding the buyer is paid from the deposit, then the partner bond up to the job's reservation, then the pool), job asset dUSDC, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Deployed by anvil #0; public dev keys, nothing has value. The existing devnet hooks were not touched."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (implementation, devnet, partner bond)",
+          "address": "0x4B7Bf41ff55f97e7901eeC06b171Df1c7EA71EF4",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x672409d8da6f6b22bebd22aff4546fb9846c97596a6596623ef391701277ec16",
+            "block": 1388108
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Partner-bond devnet stack (_PARTNER_BOND_WIRING_v1_, units/7-enterprise-namespace): a FRESH Assurance V4 hook with the partner-bond wiring (openJobWithBond; on a finding the buyer is paid from the deposit, then the partner bond up to the job's reservation, then the pool), job asset dUSDC, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Deployed by anvil #0; public dev keys, nothing has value. The existing devnet hooks were not touched."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (implementation, devnet, partner bond)",
+          "address": "0xfe10B1B5d0f5E5C71C62B038615C92AAdc2F6400",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x41065d7063c544e1dacf42699910e2f2ef183f27e045a6fa61d6c7ec86105e71",
+            "block": 1388106
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Partner-bond devnet stack (_PARTNER_BOND_WIRING_v1_, units/7-enterprise-namespace): a FRESH Assurance V4 hook with the partner-bond wiring (openJobWithBond; on a finding the buyer is paid from the deposit, then the partner bond up to the job's reservation, then the pool), job asset dUSDC, Paris bytecode with a storage reentrancy guard, NOT bytecode-identical to a Cancun build. Deployed by anvil #0; public dev keys, nothing has value. The existing devnet hooks were not touched."
+        },
+        {
+          "chain": 36927,
+          "name": "PartnerBond (devnet, dUSDC)",
+          "address": "0x36E030CAC080DF6B62f45Ea3f20BE06758a5Da03",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x0779c10bd79f2241b859fb9a123741dcf468257fcaf610cb9763140074b1905c",
+            "block": 1388114
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "protocols/ours/partner-bond PartnerBond: ASSET dUSDC 0x31854D915F31A1FBe57c2b06B5b60cbbD7D42D5b, HOOK the partner-bond devnet hook 0xd65d173cd4f83Dc1663C845269E57703FaC61979 (both immutable). No owner, no admin. Namespace keccak256(\"acme-devnet\") enrolled by anvil #3 with a 50 dUSDC bond, member anvil #2 with a 30 dUSDC cap. Public dev keys, nothing has value."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (devnet, partner-bond member)",
+          "address": "0x780f902fb2445Ed996106E92602217eeecea2a2b",
+          "kind": "pool",
+          "implementation": "0xfe10B1B5d0f5E5C71C62B038615C92AAdc2F6400",
+          "deploy": {
+            "tx": "0x75ac2c8f9ce2fa158c214e1ebf3021a1674350174b0730712460f17b51761f22",
+            "block": 1388137
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-04",
+          "notes": "Opened by the partner-bond devnet factory 0x000BAA8B47BCc1Ea1B047d747979eC5716835F88 on the member (anvil #2, seller 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC); asset dUSDC; backed by anvil #0. Public dev keys, nothing has value.",
+          "seller": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (proxy, devnet, dUSDC, V5 economy)",
+          "address": "0xE7e7660f51c221f3223EA58b42738037cdf048b3",
+          "kind": "proxy",
+          "implementation": "0x72A6F46225f6c3d9Ec00Ec5a7054c41421b32746",
+          "deploy": {
+            "tx": "0x59ff2a83fc27f1fc83985458dbc2680b0c87205a742576af5e5579c70d5cb8a9",
+            "block": 1443501
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "V5.1 (2026-10-06): upgraded in place to the V5.1 implementation 0x72A6F46225f6c3d9Ec00Ec5a7054c41421b32746 (upgradeToAndCall tx 0xecd9ecb4e9b841e9126dfcf0dd69af720bb717079aaeb27c8a6ec094013846c6, block 1482218) with economy bounds 3000 / 1000 and the same payee; every job's terms now come from jev-wilson quoteEconomy (openJobWithEconomy); ledger protocols/ours/assurance-v4/devnet/deployments/36927-v5.1-economy.json. Assurance V5 devnet stack (the economy, 2026-10-05): a FRESH V4-line hook with premiumSplitBps 8000 (proposed), noShowCompBps 2500 (proposed) and layer payee = the KMS vault, fixed once at initializeWithEconomy; Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. One job per ending of transitions.json: protocols/ours/assurance-v4/devnet/deployments/36927-v5-economy.json."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V5 (implementation, devnet, dUSDC, economy)",
+          "address": "0x6681C50B83ebF1f47E0b473eE8fcf6f8B8b6E985",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xaa92980cc02d9214f4ec0f770f56b7b339017eeb4270628c13f0cbdcaeecb9c6",
+            "block": 1443499
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-05",
+          "notes": "Superseded on 2026-10-06 by the V5.1 implementation 0x72A6F46225f6c3d9Ec00Ec5a7054c41421b32746 behind the same proxy. Assurance V5 devnet stack (the economy, 2026-10-05): a FRESH V4-line hook with premiumSplitBps 8000 (proposed), noShowCompBps 2500 (proposed) and layer payee = the KMS vault, fixed once at initializeWithEconomy; Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. One job per ending of transitions.json: protocols/ours/assurance-v4/devnet/deployments/36927-v5-economy.json."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V5.1 (implementation, devnet, dUSDC, economy from the record)",
+          "address": "0x72A6F46225f6c3d9Ec00Ec5a7054c41421b32746",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x32fc2878850df052ec07d39f6c79b249e09107e154f2bd06a3e523d540122d05",
+            "block": 1482215
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "Assurance V5.1 devnet implementation behind 0xE7e7660f51c221f3223EA58b42738037cdf048b3: per-job economy terms from jev-wilson quoteEconomy committed at openJobWithEconomy, owner bounds only (setEconomyBounds), compensation on a no-show and on a standing rejection. Paris via-IR variant (devnet/make-devnet.sh), NOT bytecode-identical to a Cancun build. Created by taifoon/deployer through kms-access."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (proxy, devnet, V5 economy)",
+          "address": "0xa6edB2922eF9981375c1bcF069Aa874A71038F14",
+          "kind": "proxy",
+          "implementation": "0xC5dbb74bF3a7798165A8a887b89Be25C8E2A0F14",
+          "deploy": {
+            "tx": "0x5046188c81a228df8873e3660c914ce883b4b01ac2b8732eb4ef5f8c69d60ecd",
+            "block": 1443508
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Assurance V5 devnet stack (the economy, 2026-10-05): a FRESH V4-line hook with premiumSplitBps 8000 (proposed), noShowCompBps 2500 (proposed) and layer payee = the KMS vault, fixed once at initializeWithEconomy; Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. One job per ending of transitions.json: protocols/ours/assurance-v4/devnet/deployments/36927-v5-economy.json."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (implementation, devnet, V5 economy)",
+          "address": "0xC5dbb74bF3a7798165A8a887b89Be25C8E2A0F14",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xc437cf691944594768a48119b10b4756565c6e37cca8249f197c159618e552ef",
+            "block": 1443506
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Assurance V5 devnet stack (the economy, 2026-10-05): a FRESH V4-line hook with premiumSplitBps 8000 (proposed), noShowCompBps 2500 (proposed) and layer payee = the KMS vault, fixed once at initializeWithEconomy; Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. One job per ending of transitions.json: protocols/ours/assurance-v4/devnet/deployments/36927-v5-economy.json."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V5 (implementation, devnet, V5 economy)",
+          "address": "0x3dDFBcA4D854CEDEbb3dB950Cc48938331E2A2Ef",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x490d7c3ad302af92ead72ba43bc1467439cee222837907a09487f602be649668",
+            "block": 1443504
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Assurance V5 devnet stack (the economy, 2026-10-05): a FRESH V4-line hook with premiumSplitBps 8000 (proposed), noShowCompBps 2500 (proposed) and layer payee = the KMS vault, fixed once at initializeWithEconomy; Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. One job per ending of transitions.json: protocols/ours/assurance-v4/devnet/deployments/36927-v5-economy.json. This pool implementation was built from the assurance-economy branch before it merged external cover slice 1: the same storage (isCoverer at slot 13) and the same hook-facing calls, with that branch's own coverer namespacing; no coverer is set on it."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter V4 fee-forwarding (devnet, V5 economy)",
+          "address": "0x8474c7b165243e49A44A86b6f303C58924778928",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xa07fd0224da0b0860e3234d3387effd3a2a5ef9ff84a85b230813ce3d5a0e60a",
+            "block": 1443510
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "The named evaluator of the V5 economy devnet hook; forwards every evaluator fee to the treasury fixed at deployment (the KMS vault)."
+        },
+        {
+          "chain": 36927,
+          "name": "RestrictedGridMock (GRID line asset)",
+          "address": "0x584BB6d2b479eb24bF794C57342e86c1e3475C84",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x44c78e5f44cd540f56b88d92ed025671e15b6c06ff166367f24ec87114048904",
+            "block": 1489288
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "A MOCK of the token capability the GRID line asks the GRID owners for (protocols/ours/assurance-v4/test/grid/RestrictedGrid.sol): 18 decimals, mint by the settler only, burn by an approved service, and GRID moves only into an assurance contract on the holder's signature (approve/transferFrom or EIP-3009 to a listed contract) and out of one as a refund, payout or withdrawal; never between people. Not GridCredit. Owner and settler = the devnet deployer KMS key."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (proxy, GRID line, V5.1 economy)",
+          "address": "0x42b77b4cDC2855F2605aEbc23FcF2B0D057065c7",
+          "kind": "proxy",
+          "implementation": "0xc80227984dFBf18A9ED2023349A8Fe23334C666e",
+          "deploy": {
+            "tx": "0xad3c0773b71d3c4358aa0f7ad4156de32639f445541ff8d829b316dce7be1c51",
+            "block": 1489294
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID line (_GRID_LINE_v1_), built and proven here; the product line is GRID on Taifoon mainnet 3692781 and opens when GRID can be deposited into pools (docs/assurance/GRID-LINE-REQUEST.md). Assurance V5.1 source with JOB_ASSET = the restricted-transfer GRID mock, economy bounds 3,000 / 100, Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. Ledger protocols/ours/assurance-v4/devnet/deployments/36927-grid-line.json."
+        },
+        {
+          "chain": 36927,
+          "name": "AssuranceHook V4 (implementation, GRID line, V5.1 economy)",
+          "address": "0xc80227984dFBf18A9ED2023349A8Fe23334C666e",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x41ade97b38166386c3422bc63c33e33265214415bb6444783036f8a1f5173158",
+            "block": 1489291
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID line (_GRID_LINE_v1_), built and proven here; the product line is GRID on Taifoon mainnet 3692781 and opens when GRID can be deposited into pools (docs/assurance/GRID-LINE-REQUEST.md). Assurance V5.1 source with JOB_ASSET = the restricted-transfer GRID mock, economy bounds 3,000 / 100, Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. Ledger protocols/ours/assurance-v4/devnet/deployments/36927-grid-line.json."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (proxy, GRID line)",
+          "address": "0x701774EA5212041eEB92205Ff9c39dD1d17f3CD9",
+          "kind": "proxy",
+          "implementation": "0xC2bf94cd8A98e36D0Bf5cEfa1A3B02B1E9134380",
+          "deploy": {
+            "tx": "0x9a25c319c2fb66ceb472420c605d28a7c38bea6db1c4f240f94375917ef56537",
+            "block": 1489303
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID line (_GRID_LINE_v1_), built and proven here; the product line is GRID on Taifoon mainnet 3692781 and opens when GRID can be deposited into pools (docs/assurance/GRID-LINE-REQUEST.md). Assurance V5.1 source with JOB_ASSET = the restricted-transfer GRID mock, economy bounds 3,000 / 100, Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. Ledger protocols/ours/assurance-v4/devnet/deployments/36927-grid-line.json. Listed on the GRID mock as an assurance factory: every pool it creates for GRID may receive GRID (community pools need no owner action)."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory V4 (implementation, GRID line)",
+          "address": "0xC2bf94cd8A98e36D0Bf5cEfa1A3B02B1E9134380",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x59c79305f60cfaa8c5a78a4e6e759c8cbcddfe5cfec8468d70b6b0ac52d57cdf",
+            "block": 1489301
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID line (_GRID_LINE_v1_), built and proven here; the product line is GRID on Taifoon mainnet 3692781 and opens when GRID can be deposited into pools (docs/assurance/GRID-LINE-REQUEST.md). Assurance V5.1 source with JOB_ASSET = the restricted-transfer GRID mock, economy bounds 3,000 / 100, Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. Ledger protocols/ours/assurance-v4/devnet/deployments/36927-grid-line.json."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (implementation, GRID line)",
+          "address": "0x57F6FdD78770170F3Aa9D30E11C7E1E5fFc943F1",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x56e8b7cdf466ffe748dd00667cdb9953a984d9d250563cbaa7152eb10ac52e75",
+            "block": 1489299
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID line (_GRID_LINE_v1_), built and proven here; the product line is GRID on Taifoon mainnet 3692781 and opens when GRID can be deposited into pools (docs/assurance/GRID-LINE-REQUEST.md). Assurance V5.1 source with JOB_ASSET = the restricted-transfer GRID mock, economy bounds 3,000 / 100, Paris via-IR bytecode with a storage reentrancy guard and 60 s / 120 s windows, NOT bytecode-identical to a Cancun build. Ledger protocols/ours/assurance-v4/devnet/deployments/36927-grid-line.json."
+        },
+        {
+          "chain": 36927,
+          "name": "JudgeAdapter V4 fee-forwarding (GRID line)",
+          "address": "0xf7C9A39EA3Dc76d3AFE8e340c5f31A8b1Ab0C47A",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x70448018e2b243eda5920ab618d1c629f927b0a249c5726d12cfe1432c2663b5",
+            "block": 1489305
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The named evaluator of GRID-line jobs; forwards every evaluator fee (in GRID) to the treasury fixed at deployment (the Taifoon vault). Listed on the GRID mock as an assurance contract. Evaluator seat: KMS taifoon/tfBase-evaluator."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V4 (GRID line, stand-in seller)",
+          "address": "0x80fD21795c89187213cb44da283f58B5af93509d",
+          "kind": "pool",
+          "implementation": "0x57F6FdD78770170F3Aa9D30E11C7E1E5fFc943F1",
+          "deploy": {
+            "tx": "0x5fd6b7af79fe1b3ea11f56864b0bd5799723a06e78c63466b91b2b0da16612c7",
+            "block": 1489347
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-06",
+          "notes": "The GRID pool behind the stand-in seller (KMS taifoon/tfBase-standin), opened through the GRID-line factory (permissionless createPool) and backed with 1,000 GRID (mock) by the devnet deployer key; share symbol tfSIG.",
+          "seller": "0xDd9B2e8CEE41f66590f38214B6819B78eE8a0674"
+        }
+      ]
+    },
+    "external-cover": {
+      "owner": "ours",
+      "description": "External cover (protocols/ours/external-cover): cover on agent jobs funded in another market's escrow, paid by CoveragePools that named ExternalCover a coverer. Devnet only; a mainnet deployment waits on the owner's yes (MAINNET-PLAN.md).",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "ExternalCover (devnet)",
+          "address": "0xA085bB99A42188Ce279CA6E57a92379Eab295818",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xe07198bd9a72268a280905723e61f7c808593ce65e65a037b6e3756509a09cd4",
+            "block": 1445077
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Cover on agent jobs escrowed in another market (gas-trimmed build). Owner: the devnet deployer (anvil-mnemonic index 37109); attestors: anvil-mnemonic 37105-37107, threshold 2; the class and seller pools name it a coverer. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "ExternalCover (devnet, second deploy)",
+          "address": "0xf586A67145C2167147a1c1aaC374159A533F1D30",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xc8aab0907ede26c443bafc069354c534c82e385ed25ef43d09f2ad09229dab98",
+            "block": 1443882
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-05",
+          "notes": "Superseded the same day by ExternalCover (devnet): the gas-trimmed build (policy in four slots, no quoteUsed or openCover mapping; buyCover 525k → 457k gas). Its 14-case devnet run is devnet/LEDGER-r1-0xf586.json. The pools no longer name it a coverer."
+        },
+        {
+          "chain": 36927,
+          "name": "ExternalCover (devnet, first deploy)",
+          "address": "0xC49A470301068dC02Ce7f7425305895E28FD3854",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xb730b2284920ac50a683d90d34e2dd5b65d19c2197c13dbe5b30efd4db1d1d75",
+            "block": 1443684
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-05",
+          "notes": "Superseded the same day by ExternalCover (devnet): its memo-ACP stand-in paid x402 jobs outside the PaymentManager (wrong: mainnet job 1003558150 shows x402-paid memo jobs are escrowed and refunded). Never used for a policy."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (proxy, devnet, external cover)",
+          "address": "0x8D7238ccCe9485f729CC79c18D182245dEe90d7a",
+          "kind": "proxy",
+          "implementation": "0x8De343438fa00De425F73C9d67bA98dC08771D93",
+          "deploy": {
+            "tx": "0xd40dcf9d9edc082c09845b0ad0169bd8c5076c4eef76e913b96b1f67ae0fd4b3",
+            "block": 1443876
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "A fresh factory on CoveragePool V5 (the coverer role); its hook is 0x000000000000000000000000000000000000dEaD (nobody holds it). Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "PoolFactory (implementation, devnet, external cover)",
+          "address": "0x8De343438fa00De425F73C9d67bA98dC08771D93",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0x42175f8c75f8b3267af09802a7ff3ece3d8b955b978fb7de51f4c3d739f8469b",
+            "block": 1443872
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool V5 (implementation, devnet)",
+          "address": "0x4790d8De57d64fF473E201C3A9096656C9722559",
+          "kind": "implementation",
+          "deploy": {
+            "tx": "0xe5f156816c880bccb4d7039d679e85e82cc5e869c66137def807a13afc56f7d1",
+            "block": 1443874
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "CoveragePool with setCoverer / coverKey namespaces (_POOL_COVERERS_v1_). Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool (devnet, external cover, class)",
+          "address": "0x29094Dbba7124B49D4ABE0BeB6270F9787FBB8C2",
+          "kind": "pool",
+          "implementation": "0x4790d8De57d64fF473E201C3A9096656C9722559",
+          "deploy": {
+            "tx": "0x32c8077adf9af843b84f6bdecf88cccdfd92dc25bed352a7e6c87893cad4495b",
+            "block": 1443878
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Class pool (seller of record = the sentinel 0x55eFc91AE4f6f9d81Cd66dd8b176Ec27d42F3481, class-pools-design); ExternalCover is its coverer and marks it a class pool. dUSDC. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "CoveragePool (devnet, external cover, seller)",
+          "address": "0x58627774D35918ec14903a31F86B954cDD69f026",
+          "kind": "pool",
+          "implementation": "0x4790d8De57d64fF473E201C3A9096656C9722559",
+          "deploy": {
+            "tx": "0x8e2ce335cb577b567cced393078ba1ca31dc48708a15e7905015b4f5c852d9c6",
+            "block": 1443880
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "One seller's own pool (anvil-mnemonic 37102); ExternalCover is its coverer. dUSDC. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockAgenticCommerce (devnet stand-in, ERC-8183 v3)",
+          "address": "0xcd3433BeB61A95205F40608B33973245019Ea4E1",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x9bc3d84bff98e0326fd6b43798d3dedb46496f31b2f4030d88f29302cfb19219",
+            "block": 1443913
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Emits Virtuals ACP v3 events (same signatures and indexed fields); reject refunds, claimRefund after expiredAt. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockBitAgent (devnet stand-in)",
+          "address": "0x39f675d0131E3C84bb09885192915B9EA53A14e5",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xaafaf5bff4f6cb15db01592210523504598c3850246cfc89c40fe9db057072e1",
+            "block": 1443915
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "BitAgent shapes: renamed BudgetSet/ProviderSet, Settled, operator forceSettle. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockMemoJobManager (devnet stand-in, memo-ACP)",
+          "address": "0x03eAea0e889b6020041b4919a1FC592C46D9a5e8",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x83cacfe630513ddfd62f55c633106628aa9c3e5418af57c64b987d431529f967",
+            "block": 1443917
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "memo-ACP JobManager phases; its PaymentManager emits PaymentRefunded. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockMemoPaymentManager (devnet stand-in, memo-ACP)",
+          "address": "0xFf3e70a846a9470b680819623ee14a477fd3b4CA",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x83cacfe630513ddfd62f55c633106628aa9c3e5418af57c64b987d431529f967",
+            "block": 1443917
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "Created by MockMemoJobManager in its constructor. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockOlasMarketplace (devnet stand-in)",
+          "address": "0xE5BFBdB79b78616B3c6355e87cbE9f57Fec8Cb21",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x977704dc876c6f1a10068a804afba343ee159ffe9f978699b6f7fce461330d19",
+            "block": 1443919
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "MarketplaceRequest / MarketplaceDelivery shapes; the fee is taken at request time. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockX402Token (devnet stand-in)",
+          "address": "0x917054D712eA5B99E4a0dC4202Ff3573A212eBF5",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x128cc0cbfc6009a0fc7501e3f4ca1a94eba4e00ff9763e0fc6fc75c65834167a",
+            "block": 1443884
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "dxUSDC, 6 decimals, open mint: payWithNonce emits EIP-3009 AuthorizationUsed + Transfer. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
+        },
+        {
+          "chain": 36927,
+          "name": "MockGatewayRecord (devnet stand-in)",
+          "address": "0xf659D0FAE76A9B11a51471714D863641884f2E92",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xb0956a2b5a4eb7346564e5d14b7e8b3cdf64a8ded0a24c82159479c60acf2ba9",
+            "block": 1443921
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-05",
+          "notes": "The gateway call record (Served(nonce, delivered, replyDigest)) as an event, for the x402 lane. Taifoon devnet 36927 only (Paris build, devnet windows: GRACE 60 s, CLAIM_WINDOW 600 s, MIN_LEAD 30 s, MAX_TERM 1 h, BUY_WINDOW 600 s). protocols/ours/external-cover/devnet."
         }
       ]
     },
@@ -1705,6 +3514,120 @@
           "status": "devnet-only",
           "since": "2026-09-23",
           "notes": "Immutable, append-only grade stamps."
+        },
+        {
+          "chain": 42161,
+          "name": "JevDecisionLog",
+          "address": "0x1aC6266b9926cB3E206D5dc0c9d1B7c873aa150a",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xdd972d4e556aacd4421119e73d0919022079f126a2cd3f22c1d23d78998bc088",
+            "block": 511340188
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records judge decisions (Decided) on Arbitrum. The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer."
+        },
+        {
+          "chain": 42161,
+          "name": "JevAnswerLog",
+          "address": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xa64d7d5b52786f3ef9ded98a824a5dbacdee10f297228be6a8083d64649ccd7c",
+            "block": 511340178
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records Jev answers (JevAnswered) on Arbitrum; one trusted recorder fixed in the constructor (the KMS recorder). The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer. The address is the deployer's nonce on this chain: another chain has a different contract at the same address, so read it with its chain id."
+        },
+        {
+          "chain": 5042,
+          "name": "JevDecisionLog",
+          "address": "0x863db7dAc69CC614a98822082cbe884F1f3b55cA",
+          "kind": "log",
+          "deploy": {
+            "tx": "0x877e36c34b6b300384965c5adaf85baa8af7c6f82ab72e1edd0544fdd51138ec",
+            "block": 24071074
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records judge decisions (Decided) on Arc. The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer."
+        },
+        {
+          "chain": 5042,
+          "name": "JevAnswerLog",
+          "address": "0x45214361A8cADb8aEe6302cd5653E119E5a89839",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xe4ad2a17c1e20a1363235ddbdab5fd29b5c18d1e9e95bf7138734d593d338f7d",
+            "block": 24071071
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records Jev answers (JevAnswered) on Arc; one trusted recorder fixed in the constructor (the KMS recorder). The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer. The address is the deployer's nonce on this chain: another chain has a different contract at the same address, so read it with its chain id."
+        },
+        {
+          "chain": 143,
+          "name": "JevDecisionLog",
+          "address": "0x1aC6266b9926cB3E206D5dc0c9d1B7c873aa150a",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xf93ebccfe4827f4a71dcd355cd4ac201e0e58a6cf9389886620b01deb13c3203",
+            "block": 110216093
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records judge decisions (Decided) on Monad. The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer."
+        },
+        {
+          "chain": 143,
+          "name": "JevAnswerLog",
+          "address": "0x29fEEc116e0CAbbaf38e9EBF2BBf65d82D672104",
+          "kind": "log",
+          "deploy": {
+            "tx": "0xee55ae9394c3d92d509a8aa5bcbd5516e45dcdd067233384961cfd19905d57c5",
+            "block": 110216088
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Records Jev answers (JevAnswered) on Monad; one trusted recorder fixed in the constructor (the KMS recorder). The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer. The address is the deployer's nonce on this chain: another chain has a different contract at the same address, so read it with its chain id."
         }
       ]
     },
@@ -2079,12 +4002,64 @@
           "status": "live",
           "since": null,
           "notes": "ERC-20 facade over native USDC on Arc, 6 decimals."
+        },
+        {
+          "chain": 143,
+          "name": "USDC",
+          "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Circle USDC on Monad, 6 decimals; EIP-712 domain name \"USDC\", version \"2\" (read on chain 2026-10-01: name(), version(), DOMAIN_SEPARATOR() = chainId 143); EIP-3009 transferWithAuthorization (authorizationState present)."
+        },
+        {
+          "chain": 4663,
+          "name": "USDG (Robinhood Chain)",
+          "address": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Global Dollar (USDG, Paxos), 6 decimals, on Robinhood Chain: the address docs.robinhood.com/chain/contracts lists as USDG (read 2026-10-02); on chain name() \"Global Dollar\", symbol() USDG, decimals() 6, EIP-1967 proxy (implementation 0x68184c449e1a8f34fa18d289737129fd27b66f8f), supply 702.3M USDG on 2026-10-02. A second token 0x0A3B763d66c0e8c7555c986A3701E1DC1Bf3954F also answers symbol() USDG (name \"Paxos USDG\", supply 1,100): it is NOT the listed one. Circle has no USDC on Robinhood Chain."
+        },
+        {
+          "chain": 42161,
+          "name": "USDC (Arbitrum One)",
+          "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "kind": "token",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": true
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Circle USDC on Arbitrum One, 6 decimals; the job asset of the Arbitrum settle-through-us line. Named apart from \"USDC\" so it is not an x402 pay network (lib/x402-any-chain takes tokens named exactly USDC)."
         }
       ]
     },
     "standards-erc8004": {
       "owner": "third-party",
-      "description": "ERC-8004 identity and reputation registries (canonical deployments), plus our devnet mirrors.",
+      "description": "ERC-8004 identity and reputation registries (canonical deployments), plus our devnet mirrors; and the Olas IdentityRegistryBridger per chain (Olas service id -> ERC-8004 agent id).",
       "contracts": [
         {
           "chain": 8453,
@@ -2195,12 +4170,148 @@
           "since": "2026-09-23",
           "notes": "Ours: mirror feedback for mainnet agents and ERC-8183 sellers.",
           "implementation": "0x58fd26E37e02D2c4EbF324504Fcd87DC82Adb74F"
+        },
+        {
+          "chain": 100,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x6e8F740F23f07cE129Daa59786926fecA8C2D2F3",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0x1e9d56730530e9fD9446aBb2eC2E68Dbb3356435 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). Source: autonolas-registries scripts/deployment/l2/globals_gnosis_mainnet.json."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x67722c823010CEb4BED5325fE109196C0f67D053",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0xb0228CA253A88Bc8eb4ca70BCAC8f87b381f4700 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). Source: autonolas-registries scripts/deployment/l2/globals_base_mainnet.json."
+        },
+        {
+          "chain": 137,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x6F121552765424f0B2331B541C0938480cA314Db",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0xf78b3C22A204Da5d9a0B080C5D3d695AF4918886 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). Source: autonolas-registries scripts/deployment/l2/globals_polygon_mainnet.json."
+        },
+        {
+          "chain": 10,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x7fc0ddf4DFB61CfA5519db2A5eE7B2Eb02De0140",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0x88943F63E29cd436B62cFfE332aD54De92AdCE98 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). Source: autonolas-registries scripts/deployment/l2/globals_optimism_mainnet.json."
+        },
+        {
+          "chain": 4663,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0xE49CB081e8d96920C38aA7AB90cb0294ab4Bc8EA",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0xa4799B083E0068732456EF45ff9fe5c683658327 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). Source: autonolas-registries scripts/deployment/l2/globals_robinhood_mainnet.json."
+        },
+        {
+          "chain": 1,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x461A76074596F080dfba414532Ab51280611B8e6",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0x6bC86C3d44a8b2EF9993E1DA53152293Fa1fF6ec in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). The harvester recognises the agents it owns as Olas (harvesters/agents/harvester/olas.py). Source: autonolas-registries scripts/deployment/globals_mainnet.json."
+        },
+        {
+          "chain": 42161,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x22bE6fDcd3e29851B29b512F714C328A00A96B83",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0x379451B13e4900C7005Bf57467770b2EE4e62a86 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). The harvester recognises the agents it owns as Olas (harvesters/agents/harvester/olas.py). Source: autonolas-registries scripts/deployment/l2/globals_arbitrum_mainnet.json."
+        },
+        {
+          "chain": 42220,
+          "name": "Olas IdentityRegistryBridger",
+          "address": "0x7fc0ddf4DFB61CfA5519db2A5eE7B2Eb02De0140",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: mapServiceIdAgentIds(serviceId) gives the ERC-8004 agent id of an Olas service on the canonical Identity Registry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432 (proxy; implementation 0x88943F63E29cd436B62cFfE332aD54De92AdCE98 in its PROXY_IDENTITY_REGISTRY_BRIDGER slot). The harvester recognises the agents it owns as Olas (harvesters/agents/harvester/olas.py). Source: autonolas-registries scripts/deployment/l2/globals_celo_mainnet.json."
         }
       ]
     },
     "standards-erc8183": {
       "owner": "third-party",
-      "description": "ERC-8183 job contracts and the other agent-commerce protocols we index.",
+      "description": "ERC-8183 job contracts and the other agent-commerce protocols we index (the Olas Mech marketplace on every chain it runs on, with its service metadata and balance trackers).",
       "contracts": [
         {
           "chain": 8453,
@@ -2218,6 +4329,43 @@
           "status": "live",
           "since": "2026-04-08",
           "notes": "Job lifecycle contract of Virtuals ACP v3.",
+          "implementation": "0x8e86FbEf4a4c927561cb6447cEd77ffFbf3B77BC"
+        },
+        {
+          "chain": 5042,
+          "name": "Virtuals ACP v3 (ERC-8183)",
+          "address": "0x238E541BfefD82238730D00a2208E5497F1832E0",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x2219cc60870c07903c6cb1aa8ff37266892421816704e3a3e75b108a7f9edfa7",
+            "block": 21968256
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": null
+          },
+          "status": "live",
+          "since": "2026-09-21",
+          "notes": "Job lifecycle contract of Virtuals ACP v3 on Arc: the same proxy address and implementation as on Base (acp-node-v2 src/core/constants.ts ACP_CONTRACT_ADDRESSES).",
+          "implementation": "0x8e86FbEf4a4c927561cb6447cEd77ffFbf3B77BC"
+        },
+        {
+          "chain": 4663,
+          "name": "Virtuals ACP v3 (ERC-8183)",
+          "address": "0x238E541BfefD82238730D00a2208E5497F1832E0",
+          "kind": "proxy",
+          "deploy": {
+            "tx": "0x795a67b4f4db59d9560aa040cd4f18e859b3f2d676808a8665e63ebac0f07368",
+            "block": 260430
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-06-27",
+          "notes": "Job lifecycle contract of Virtuals ACP v3 on Robinhood Chain: the same proxy address and implementation as on Base (acp-node-v2 src/core/constants.ts ACP_CONTRACT_ADDRESSES).",
           "implementation": "0x8e86FbEf4a4c927561cb6447cEd77ffFbf3B77BC"
         },
         {
@@ -2344,6 +4492,465 @@
           "status": "live",
           "since": "2025-02-20",
           "notes": "Olas Mech: public requests and deliverables."
+        },
+        {
+          "chain": 100,
+          "name": "Olas Mech Marketplace",
+          "address": "0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech: public requests and deliverables (proxy; implementation 0xE035dcD99F7A8cE0b1d72C3141f100C5B0E9e3bd in its own MECH_MARKETPLACE_PROXY slot). Source: autonolas-marketplace scripts/deployment/globals_gnosis_mainnet.json."
+        },
+        {
+          "chain": 137,
+          "name": "Olas Mech Marketplace",
+          "address": "0x343F2B005cF6D70bA610CD9F1F1927049414B582",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech: public requests and deliverables (proxy; implementation 0xE85791B18F5df42163092Acc5C9da1c479AFEa9d in its own MECH_MARKETPLACE_PROXY slot). Source: autonolas-marketplace scripts/deployment/globals_polygon_mainnet.json."
+        },
+        {
+          "chain": 10,
+          "name": "Olas Mech Marketplace",
+          "address": "0x46C0D07F55d4F9B5Eed2Fc9680B5953e5fd7b461",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech: public requests and deliverables (proxy; implementation 0x8Bc0a5c5B1612A16983B01ecd7ae130E728390CB in its own MECH_MARKETPLACE_PROXY slot). Source: autonolas-marketplace scripts/deployment/globals_optimism_mainnet.json."
+        },
+        {
+          "chain": 4663,
+          "name": "Olas Mech Marketplace",
+          "address": "0xa45E64d13A30a51b91ae0eb182e88a40e9b18eD8",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech: public requests and deliverables (proxy; implementation 0x526E064cB694E8f5B7DB299158e17F33055B3943 in its own MECH_MARKETPLACE_PROXY slot). Source: autonolas-marketplace scripts/deployment/globals_robinhood_mainnet.json."
+        },
+        {
+          "chain": 100,
+          "name": "Olas ComplementaryServiceMetadata",
+          "address": "0x0598081D48FB80B0A7E52FAD2905AE9beCd6fC69",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: tokenURI(serviceId) names the mech's card on IPFS (name, description, tools, toolMetadata input/output schemas, url, termsUrl). Source: mech-client mech_client/configs/mechs.json."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas ComplementaryServiceMetadata",
+          "address": "0x28C1edC7CEd549F7f80B732fDC19f0370160707d",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: tokenURI(serviceId) names the mech's card on IPFS (name, description, tools, toolMetadata input/output schemas, url, termsUrl). Source: mech-client mech_client/configs/mechs.json."
+        },
+        {
+          "chain": 137,
+          "name": "Olas ComplementaryServiceMetadata",
+          "address": "0xDC175E77d11246c79B23D7088750eb59160DD6b7",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: tokenURI(serviceId) names the mech's card on IPFS (name, description, tools, toolMetadata input/output schemas, url, termsUrl). Source: mech-client mech_client/configs/mechs.json."
+        },
+        {
+          "chain": 10,
+          "name": "Olas ComplementaryServiceMetadata",
+          "address": "0x11949cBC85d8793B360029E26b18ae759708e28b",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: tokenURI(serviceId) names the mech's card on IPFS (name, description, tools, toolMetadata input/output schemas, url, termsUrl). Source: mech-client mech_client/configs/mechs.json."
+        },
+        {
+          "chain": 4663,
+          "name": "Olas ComplementaryServiceMetadata",
+          "address": "0xD1155408D58293BE0743225bcDe28b9FD0C12378",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas: tokenURI(serviceId) names the mech's card on IPFS (name, description, tools, toolMetadata input/output schemas, url, termsUrl). Source: mech-client mech_client/configs/mechs.json."
+        },
+        {
+          "chain": 100,
+          "name": "Olas balance tracker (native)",
+          "address": "0x21cE6799A22A3Da84B7c44a814a9c79ab1d2A50D",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 100,
+          "name": "Olas balance tracker (olas)",
+          "address": "0x53Bd432516707a5212A70216284a99A563aAC1D1",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType olas) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 100,
+          "name": "Olas balance tracker (native-nvm)",
+          "address": "0x7D686bD1fD3CFF6E45a40165154D61043af7D67c",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native-nvm) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas balance tracker (native)",
+          "address": "0xB3921F8D8215603f0Bd521341Ac45eA8f2d274c1",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas balance tracker (olas)",
+          "address": "0x43fB32f25dce34EB76c78C7A42C8F40F84BCD237",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType olas) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas balance tracker (usdc)",
+          "address": "0x0443C55e151dBA13fae079518F9dd01ff9c21CB2",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas balance tracker (native-nvm)",
+          "address": "0x3d79737f05966c5925a04d1b04110006F5a072bE",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native-nvm) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 8453,
+          "name": "Olas balance tracker (usdc-nvm)",
+          "address": "0xaaFBeef195BDAb1Bb6f3Dc9cEbA875Cd72499230",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc-nvm) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 137,
+          "name": "Olas balance tracker (native)",
+          "address": "0xc096362fa6f4A4B1a9ea68b1043416f3381ce300",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 137,
+          "name": "Olas balance tracker (olas)",
+          "address": "0x1521918961bDBC9Ed4C67a7103D5999e4130E6CB",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType olas) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 137,
+          "name": "Olas balance tracker (usdc)",
+          "address": "0x5C50ebc17d002A4484585C8fbf62f51953493c0B",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 137,
+          "name": "Olas balance tracker (usdc-nvm)",
+          "address": "0xd00Cb760Bf30183EAFE67f0E590BEeE190F35Cf3",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc-nvm) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 10,
+          "name": "Olas balance tracker (native)",
+          "address": "0x4Cd816ce806FF1003ee459158A093F02AbF042a8",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 10,
+          "name": "Olas balance tracker (olas)",
+          "address": "0x70A0D93fb0dB6EAab871AB0A3BE279DcA37a2bcf",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType olas) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 10,
+          "name": "Olas balance tracker (usdc)",
+          "address": "0xA123748Ce7609F507060F947b70298D0bde621E6",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 10,
+          "name": "Olas balance tracker (usdc-nvm)",
+          "address": "0x1a0bFCC27051BCcDDc444578f56A4F5920e0E083",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc-nvm) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 4663,
+          "name": "Olas balance tracker (native)",
+          "address": "0x1d79e0a600B61FAC1B8F40c27347e48962Ed2f23",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType native) on this chain's marketplace (read on chain 2026-10-04)."
+        },
+        {
+          "chain": 4663,
+          "name": "Olas balance tracker (usdc)",
+          "address": "0xEB5638eefE289691EcE01943f768EDBF96258a80",
+          "kind": "settlement",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Olas Mech marketplace: mapPaymentTypeBalanceTrackers(paymentType usdc) on this chain's marketplace (read on chain 2026-10-04)."
         }
       ]
     },
@@ -2505,6 +5112,1161 @@
           "since": null,
           "notes": "OP Stack predeploy: getL1FeeUpperBound(size) prices each leg's L1 data fee in the fee quote. The predeploy proxy is upgraded by OP Stack network upgrades; verify.mjs flags a new implementation.",
           "implementation": "0x4f1db3c6AbD250ba86E0928471A8F7DB3AFd88F1"
+        }
+      ]
+    },
+    "razor-gas-inputs": {
+      "owner": "third-party",
+      "description": "Read-only inputs of razor, the gas-price API on top of warmbed (ops/razor): native USD prices (SOL on Base, MON on Monad) and the L1 data price of Arbitrum-model chains. Never in a path that moves value; ETH/USD and the OP GasPriceOracle come from base-fee-inputs.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "Chainlink SOL/USD",
+          "address": "0x975043adBb80fc32276CbF9Bbcfd4A601a12462D",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0xc80cb97c26cdd89857510fa4c03cb1233e1a2d47d9387131da2690c874cc6085",
+            "block": 2404224
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": true
+          },
+          "status": "live",
+          "since": "2023-08-09",
+          "notes": "Chainlink SOL / USD price feed proxy on Base (8 decimals; description() read 2026-10-01). razor prices Solana fees in USD with latestRoundData."
+        },
+        {
+          "chain": 42161,
+          "name": "ArbGasInfo (precompile)",
+          "address": "0x000000000000000000000000000000000000006C",
+          "kind": "oracle",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "etherscan": false
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Arbitrum Nitro precompile: getPricesInWei() gives the per-tx and per-calldata-byte L1 price razor bills each Arbitrum transaction."
+        },
+        {
+          "chain": 4663,
+          "name": "ArbGasInfo (precompile)",
+          "address": "0x000000000000000000000000000000000000006C",
+          "kind": "oracle",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Robinhood Chain is Arbitrum Nitro (Orbit): the same precompile answers. Its parent-chain data price moves (0 at 08:20 UTC, 244,284,480 wei per calldata byte at 08:50 UTC on 2026-10-01); razor reads getPricesInWei every tick."
+        },
+        {
+          "chain": 143,
+          "name": "Chainlink MON/USD",
+          "address": "0xBcD78f76005B7515837af6b50c7C52BCf73822fb",
+          "kind": "oracle",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Chainlink MON / USD price feed proxy on Monad (8 decimals, heartbeat 3,600 s, deviation 2 %; description() and decimals() read 2026-10-01). The jev-wilson calibration and razor price Monad gas (MON) in USD with latestRoundData."
+        }
+      ]
+    },
+    "market-reference-feeds": {
+      "owner": "third-party",
+      "description": "Read-only references of the market.candles class check (docs/revenue line 21): the last close of a bar window is compared with the Chainlink feed on Base for that asset. ETH/USD is read from base-fee-inputs and SOL/USD from razor-gas-inputs. Never in a path that moves value.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "Chainlink BTC/USD",
+          "address": "0x64c911996D3c6aC71f9b455B1E8E7266BcbD848F",
+          "kind": "oracle",
+          "deploy": {
+            "tx": "0x9224b000a4907afcefd075ec54cc92d46bd94dfd58c6e1ebf8997498ebcd7224",
+            "block": 13289536
+          },
+          "verified": {
+            "blockscout": true,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2024-04-17",
+          "notes": "Chainlink BTC / USD price feed proxy on Base (EACAggregatorProxy, 8 decimals; description() read 2026-10-04). The market.candles check reads latestRoundData."
+        }
+      ]
+    },
+    "icp-light-client": {
+      "owner": "ours",
+      "description": "Internet Computer light client: ICPChainKeyVerifier checks NNS-signed certificates of the ICP ledger (BLS12-381 via EIP-2537) and proves ledger blocks. No owner, no admin; same address on every chain via the deterministic deployment proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C, salt keccak256(\"taifoon-icp-v1\"). Deployed 2026-10-02 by the KMS deployer; record in taifoon-eco deploy/icp/DEPLOYED.md. The deposit gates (ICPDepositGate) mint WrappedICP against a proven ledger deposit and burn for a release by the custody canister dkafq-4aaaa-aaaaj-a6ysq-cai on the Internet Computer; they start paused and are owned by the Taifoon council (3-of-5). Deployed 2026-10-02 evening; record in taifoon-eco deploy/icp/DEPLOYED.md. The V2 gate and token were retired on 2026-10-05 (minting paused, redeem open) for the fixed-supply tICP: ICPReleaseGate releases a fixed supply held by a working vault and two reserves instead of minting; record in taifoon-eco deploy/icp/DEPLOYED.md.",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "ICPChainKeyVerifier",
+          "address": "0x518A7cddF565A2c36D9e58C18CE1e2a19EEd5F5C",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x664468d272d648ef54b31097191a9147f597513c1c0227fdecca8ade0bbd8a45",
+            "block": 52087589
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "ICP ledger light client; constructor pins the NNS root key and ledger canister ryjl3-tyaaa-aaaaa-aaaba-cai. A real certificate (ledger tip 38,756,677) was verified on this chain the same day.",
+          "verification_note": "Sourcify exact match (2026-10-02)"
+        },
+        {
+          "chain": 5042,
+          "name": "ICPChainKeyVerifier",
+          "address": "0x518A7cddF565A2c36D9e58C18CE1e2a19EEd5F5C",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x0c8c9cf9fc1dd2390c399796186dc6dd7be131f53485f10c56a70d73e344907a",
+            "block": 23919928
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "ICP ledger light client; constructor pins the NNS root key and ledger canister ryjl3-tyaaa-aaaaa-aaaba-cai. A real certificate (ledger tip 38,756,677) was verified on this chain the same day.",
+          "verification_note": "Sourcify exact match (2026-10-02)"
+        },
+        {
+          "chain": 4663,
+          "name": "ICPChainKeyVerifier",
+          "address": "0x518A7cddF565A2c36D9e58C18CE1e2a19EEd5F5C",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0xcde884aa5bca5ee661befde7341208768bf6d29656996b77109d5e9b5d13bd13",
+            "block": 78440734
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "ICP ledger light client; constructor pins the NNS root key and ledger canister ryjl3-tyaaa-aaaaa-aaaba-cai. A real certificate (ledger tip 38,756,677) was verified on this chain the same day.",
+          "verification_note": "Sourcify verification submitted 2026-10-02"
+        },
+        {
+          "chain": 3692781,
+          "name": "ICPChainKeyVerifier",
+          "address": "0x518A7cddF565A2c36D9e58C18CE1e2a19EEd5F5C",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x5b5680ae97d36c987832af4c86959ca248bce6b5326288979fd692fb02fe4ca7",
+            "block": 399294
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "ICP ledger light client; constructor pins the NNS root key and ledger canister ryjl3-tyaaa-aaaaa-aaaba-cai. A real certificate (ledger tip 38,756,677) was verified on this chain the same day.",
+          "verification_note": "no explorer; bytecode identical to the Base deployment (same CREATE2 init code)"
+        },
+        {
+          "chain": 8453,
+          "name": "ICPDepositGate",
+          "address": "0x0B55d43D956b70edC19B45c196db3843F231f7eF",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xeef18eb384f63657c98ddbb46cc1b314aea553bc18f3888a8824c8b4ea7117bd",
+            "block": 52126449
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "V2 gate, deployed 2026-10-03. Not upgradeable. Mints the wrapped ICP token against an ICP-ledger deposit the light client has proven; burns it for a release. Owner: a 300 s delay contract the council proposes to and executes; the council can pause minting at once and cannot unpause. Replaces the first gate 0x7C320974a8dC8f8180bD5C1094E133Eb2F1B2E84 (2026-10-02), whose holdings were redeemed and whose minting is paused. Retired 2026-10-05: minting paused by the council; redeem stays open for the holders of the V2 token. Replaced by the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836.",
+          "verification_note": "Sourcify exact match (2026-10-03); verified on Basescan"
+        },
+        {
+          "chain": 8453,
+          "name": "WrappedICP",
+          "address": "0xa3B2eB502006369581eDD898d22ca559e64f8c07",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xeef18eb384f63657c98ddbb46cc1b314aea553bc18f3888a8824c8b4ea7117bd",
+            "block": 52126449
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, created by the V2 gate, which is its only minter for good. Not upgradeable. The council can freeze an account at once; unfreezing and burning a frozen balance wait out the 300 s delay. Replaces 0x5781B3f5Ee3B58f2c6d605d39F257Dc6D4BD35FF. Retired 2026-10-05: no longer minted; holders can still redeem it for ICP at the V2 gate. Replaced by the fixed-supply tICP 0x60CaC3229c022dcc059e1F4352695127Dc96bC0d.",
+          "verification_note": "Sourcify exact match (2026-10-03); verified on Basescan"
+        },
+        {
+          "chain": 5042,
+          "name": "ICPDepositGate",
+          "address": "0x0B55d43D956b70edC19B45c196db3843F231f7eF",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xfa371d11510ac064a647d5c37b4d78343114c1592df8838851830775efdf8862",
+            "block": 24072876
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "V2 gate, deployed 2026-10-03. Not upgradeable. Mints the wrapped ICP token against an ICP-ledger deposit the light client has proven; burns it for a release. Owner: a 300 s delay contract the council proposes to and executes; the council can pause minting at once and cannot unpause. Replaces the first gate 0x7C320974a8dC8f8180bD5C1094E133Eb2F1B2E84 (2026-10-02), whose holdings were redeemed and whose minting is paused. Retired 2026-10-05: minting paused by the council; redeem stays open for the holders of the V2 token. Replaced by the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836.",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 5042,
+          "name": "WrappedICP",
+          "address": "0xa3B2eB502006369581eDD898d22ca559e64f8c07",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xfa371d11510ac064a647d5c37b4d78343114c1592df8838851830775efdf8862",
+            "block": 24072876
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, created by the V2 gate, which is its only minter for good. Not upgradeable. The council can freeze an account at once; unfreezing and burning a frozen balance wait out the 300 s delay. Replaces 0x5781B3f5Ee3B58f2c6d605d39F257Dc6D4BD35FF. Retired 2026-10-05: no longer minted; holders can still redeem it for ICP at the V2 gate. Replaced by the fixed-supply tICP 0x60CaC3229c022dcc059e1F4352695127Dc96bC0d.",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 4663,
+          "name": "ICPDepositGate",
+          "address": "0x0B55d43D956b70edC19B45c196db3843F231f7eF",
+          "kind": "router",
+          "deploy": {
+            "tx": "0x83a68b6343cb1289d09e123d3cb295f9198aa0c572ce691097a5691716c5db61",
+            "block": 79199603
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "V2 gate, deployed 2026-10-03. Not upgradeable. Mints the wrapped ICP token against an ICP-ledger deposit the light client has proven; burns it for a release. Owner: a 300 s delay contract the council proposes to and executes; the council can pause minting at once and cannot unpause. Replaces the first gate 0x7C320974a8dC8f8180bD5C1094E133Eb2F1B2E84 (2026-10-02), whose holdings were redeemed and whose minting is paused. Retired 2026-10-05: minting paused by the council; redeem stays open for the holders of the V2 token. Replaced by the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836.",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 4663,
+          "name": "WrappedICP",
+          "address": "0xa3B2eB502006369581eDD898d22ca559e64f8c07",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x83a68b6343cb1289d09e123d3cb295f9198aa0c572ce691097a5691716c5db61",
+            "block": 79199603
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, created by the V2 gate, which is its only minter for good. Not upgradeable. The council can freeze an account at once; unfreezing and burning a frozen balance wait out the 300 s delay. Replaces 0x5781B3f5Ee3B58f2c6d605d39F257Dc6D4BD35FF. Retired 2026-10-05: no longer minted; holders can still redeem it for ICP at the V2 gate. Replaced by the fixed-supply tICP 0x60CaC3229c022dcc059e1F4352695127Dc96bC0d.",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 3692781,
+          "name": "ICPDepositGate",
+          "address": "0xbe50518009bf0D04716c1b69E4b4d3138A7B8590",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xd4b7354ff205d04c347863c317853750ed6ddfaaf9beae5127c99b42f75f5227",
+            "block": 400353
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "ICP deposit gate; starts paused for minting; owner is the Taifoon council, 3-of-5, at 0x923B674b9F107481B1EfD5C1Ab0902A4Ba3c9dD8; custodian = canister dkafq-4aaaa-aaaaj-a6ysq-cai; mint cap 1,000 ICP, minimum 0.1 ICP, redeem floor 0.1 ICP (immutable)."
+        },
+        {
+          "chain": 3692781,
+          "name": "WrappedICP",
+          "address": "0xF9245Ab96Dfd49c67b5efE855936F2283835a0fe",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xd4b7354ff205d04c347863c317853750ed6ddfaaf9beae5127c99b42f75f5227",
+            "block": 400353
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-02",
+          "notes": "Wrapped ICP (tICP, 8 decimals) minted only by its gate against a proven ledger deposit; created by the gate's constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "ICPGateOwner",
+          "address": "0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xae8f9cd79ead651f58c0cb7be54df2a5b1870ff3f4107492248d9299dceb5a2a",
+            "block": 52126446
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Delay contract (300 s) that owns the V2 ICP gate. The council proposes to it and executes after the delay; nobody else can. It is the only address that can unpause minting, move the mint cap, unfreeze an account or burn a frozen balance. Since 2026-10-05 it also owns the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836 (and through it the reserves).",
+          "verification_note": "Sourcify exact match (2026-10-03); verified on Basescan"
+        },
+        {
+          "chain": 5042,
+          "name": "ICPGateOwner",
+          "address": "0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xf9e9b4b7add1801af355a08bd9be62cc049fe8e1b5f64a2a30b3937e41706255",
+            "block": 24072866
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Delay contract (300 s) that owns the V2 ICP gate. The council proposes to it and executes after the delay; nobody else can. It is the only address that can unpause minting, move the mint cap, unfreeze an account or burn a frozen balance. Since 2026-10-05 it also owns the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836 (and through it the reserves).",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 4663,
+          "name": "ICPGateOwner",
+          "address": "0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xfc2566f125cb283f9cd65c903175cf352272e1b2a8479ece6ea8bd4e341b8c5a",
+            "block": 79199466
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-03",
+          "notes": "Delay contract (300 s) that owns the V2 ICP gate. The council proposes to it and executes after the delay; nobody else can. It is the only address that can unpause minting, move the mint cap, unfreeze an account or burn a frozen balance. Since 2026-10-05 it also owns the fixed-supply release gate 0x80515ff2d899244da6bcB96A9Fa228304c19a836 (and through it the reserves).",
+          "verification_note": "Sourcify exact match (2026-10-03)"
+        },
+        {
+          "chain": 8453,
+          "name": "tICP/WETH pair (Uniswap v2)",
+          "address": "0x1C0745548c44Ad4B4691787A12898CCa6cF4ec2F",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x6489c71c75a92451a7451b39d36db334618922808d39fe3ca8a5180243c3e842",
+            "block": 52136502
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "Uniswap v2 pair of tICP and WETH (the pair contract is itself the share token), created 2026-10-03 at the live ICP price as a price marker (0.0003 ETH a side). Every share is held by our ICP bridge liquidity key (its address is in the private registry, not in this public file). Too small to be read as a price source. Abandoned 2026-10-04: our liquidity was withdrawn; it pairs the retired V2 token.",
+          "verification_note": "standard Uniswap v2 pair created by the factory"
+        },
+        {
+          "chain": 4663,
+          "name": "tICP/WETH pair (Uniswap v2)",
+          "address": "0x7CD00449bDeC502eE0f91faD8cB2d4f22bc90B87",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x50cf0fe05736e9f6447e7f50599412c860a3cf1ada7dde61e0f635dd232789cf",
+            "block": 79398646
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "superseded",
+          "since": "2026-10-03",
+          "notes": "Uniswap v2 pair of tICP and WETH (the pair contract is itself the share token), created 2026-10-03 at the live ICP price as a price marker (0.0003 ETH a side). Every share is held by our ICP bridge liquidity key (its address is in the private registry, not in this public file). Too small to be read as a price source. Abandoned 2026-10-04: our liquidity was withdrawn; it pairs the retired V2 token.",
+          "verification_note": "standard Uniswap v2 pair created by the factory"
+        },
+        {
+          "chain": 8453,
+          "name": "ICPReleaseGate",
+          "address": "0x80515ff2d899244da6bcB96A9Fa228304c19a836",
+          "kind": "router",
+          "deploy": {
+            "tx": "0x16dd98aa543197df64cae67e6ef2e742052994e900cb6f3efac95da4be3c1a19",
+            "block": 52206127
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Release gate of the fixed-supply tICP, deployed 2026-10-05 in one transaction with the token and its three reserves (CREATE2, salt keccak256(\"taifoon-icp-release-gate-v1\"), same address on Base, Arc and Robinhood Chain). Not upgradeable. A deposit the light client has proven RELEASES tICP from the working vault (nothing is minted); a redeem returns it to the vault and asks the custody canister dkafq-4aaaa-aaaaj-a6ysq-cai to pay the ICP. Owner: the 300 s delay contract 0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3; pauser: the council (pause and block only). Releasing is open; redeem pays out once the canister's guardians point its entry for the chain at this gate.",
+          "verification_note": "Sourcify exact match (2026-10-05); verified on Basescan"
+        },
+        {
+          "chain": 8453,
+          "name": "FixedSupplyToken",
+          "address": "0x60CaC3229c022dcc059e1F4352695127Dc96bC0d",
+          "kind": "token",
+          "deploy": {
+            "tx": "0x16dd98aa543197df64cae67e6ef2e742052994e900cb6f3efac95da4be3c1a19",
+            "block": 52206127
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, fixed supply of 613,000,000 created once and split between the working vault, the cold reserve and the surplus reserve. No owner, no minting, no freezing. What is in circulation equals the ICP in custody. Replaces the V2 token 0xa3B2eB502006369581eDD898d22ca559e64f8c07.",
+          "verification_note": "Sourcify exact match (2026-10-05); verified on Basescan"
+        },
+        {
+          "chain": 8453,
+          "name": "ReserveVault",
+          "address": "0xE9dE4d1bfaBacd2495D585BE2290c296A765226A",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x16dd98aa543197df64cae67e6ef2e742052994e900cb6f3efac95da4be3c1a19",
+            "block": 52206127
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Working vault of the fixed-supply tICP (starts with 1,000,000). Releases only to the release gate's proven claims, within a daily allowance that refills; takes redeemed tICP back.",
+          "verification_note": "Sourcify exact match (2026-10-05); verified on Basescan"
+        },
+        {
+          "chain": 8453,
+          "name": "ColdReserve",
+          "address": "0xeBC30502f9dFcC3d1C297c5A7f4d8ac19dC009a5",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x16dd98aa543197df64cae67e6ef2e742052994e900cb6f3efac95da4be3c1a19",
+            "block": 52206127
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Cold reserve of the fixed-supply tICP (starts with 556,203,525). Can only feed the working vault, in bounded tranches, when the gate's owner asks; a new destination waits out a rotation delay that a separate canceller can stop.",
+          "verification_note": "Sourcify exact match (2026-10-05); verified on Basescan"
+        },
+        {
+          "chain": 8453,
+          "name": "ColdReserve (surplus)",
+          "address": "0x91d37b663877025bc5D3f91fD2Cf0e5c9804BC5C",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x16dd98aa543197df64cae67e6ef2e742052994e900cb6f3efac95da4be3c1a19",
+            "block": 52206127
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Surplus reserve of the fixed-supply tICP (starts with 55,796,475). Can only feed the cold reserve, in bounded tranches, under the same rules.",
+          "verification_note": "Sourcify exact match (2026-10-05); verified on Basescan"
+        },
+        {
+          "chain": 5042,
+          "name": "ICPReleaseGate",
+          "address": "0x80515ff2d899244da6bcB96A9Fa228304c19a836",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xcb89b71be2aebece8f4e0b0affa4504f5085845ac5e690c3a363f92d2442c764",
+            "block": 24387520
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Release gate of the fixed-supply tICP, deployed 2026-10-05 in one transaction with the token and its three reserves (CREATE2, salt keccak256(\"taifoon-icp-release-gate-v1\"), same address on Base, Arc and Robinhood Chain). Not upgradeable. A deposit the light client has proven RELEASES tICP from the working vault (nothing is minted); a redeem returns it to the vault and asks the custody canister dkafq-4aaaa-aaaaj-a6ysq-cai to pay the ICP. Owner: the 300 s delay contract 0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3; pauser: the council (pause and block only). Releasing is open; redeem pays out once the canister's guardians point its entry for the chain at this gate.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 5042,
+          "name": "FixedSupplyToken",
+          "address": "0x60CaC3229c022dcc059e1F4352695127Dc96bC0d",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xcb89b71be2aebece8f4e0b0affa4504f5085845ac5e690c3a363f92d2442c764",
+            "block": 24387520
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, fixed supply of 613,000,000 created once and split between the working vault, the cold reserve and the surplus reserve. No owner, no minting, no freezing. What is in circulation equals the ICP in custody. Replaces the V2 token 0xa3B2eB502006369581eDD898d22ca559e64f8c07.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 5042,
+          "name": "ReserveVault",
+          "address": "0xE9dE4d1bfaBacd2495D585BE2290c296A765226A",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xcb89b71be2aebece8f4e0b0affa4504f5085845ac5e690c3a363f92d2442c764",
+            "block": 24387520
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Working vault of the fixed-supply tICP (starts with 1,000,000). Releases only to the release gate's proven claims, within a daily allowance that refills; takes redeemed tICP back.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 5042,
+          "name": "ColdReserve",
+          "address": "0xeBC30502f9dFcC3d1C297c5A7f4d8ac19dC009a5",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xcb89b71be2aebece8f4e0b0affa4504f5085845ac5e690c3a363f92d2442c764",
+            "block": 24387520
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Cold reserve of the fixed-supply tICP (starts with 556,203,525). Can only feed the working vault, in bounded tranches, when the gate's owner asks; a new destination waits out a rotation delay that a separate canceller can stop.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 5042,
+          "name": "ColdReserve (surplus)",
+          "address": "0x91d37b663877025bc5D3f91fD2Cf0e5c9804BC5C",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xcb89b71be2aebece8f4e0b0affa4504f5085845ac5e690c3a363f92d2442c764",
+            "block": 24387520
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Surplus reserve of the fixed-supply tICP (starts with 55,796,475). Can only feed the cold reserve, in bounded tranches, under the same rules.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 4663,
+          "name": "ICPReleaseGate",
+          "address": "0x80515ff2d899244da6bcB96A9Fa228304c19a836",
+          "kind": "router",
+          "deploy": {
+            "tx": "0xbbc4657faba0e16c77fbd5b053a38e1c68467943fdf2ace76c6e5cb88447673f",
+            "block": 80796240
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Release gate of the fixed-supply tICP, deployed 2026-10-05 in one transaction with the token and its three reserves (CREATE2, salt keccak256(\"taifoon-icp-release-gate-v1\"), same address on Base, Arc and Robinhood Chain). Not upgradeable. A deposit the light client has proven RELEASES tICP from the working vault (nothing is minted); a redeem returns it to the vault and asks the custody canister dkafq-4aaaa-aaaaj-a6ysq-cai to pay the ICP. Owner: the 300 s delay contract 0xF8d784D0eb72CdEDa7FB599955716cEbb51897c3; pauser: the council (pause and block only). Releasing is open; redeem pays out once the canister's guardians point its entry for the chain at this gate.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 4663,
+          "name": "FixedSupplyToken",
+          "address": "0x60CaC3229c022dcc059e1F4352695127Dc96bC0d",
+          "kind": "token",
+          "deploy": {
+            "tx": "0xbbc4657faba0e16c77fbd5b053a38e1c68467943fdf2ace76c6e5cb88447673f",
+            "block": 80796240
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "tICP (\"ICP Taifoon\"), 8 decimals, fixed supply of 613,000,000 created once and split between the working vault, the cold reserve and the surplus reserve. No owner, no minting, no freezing. What is in circulation equals the ICP in custody. Replaces the V2 token 0xa3B2eB502006369581eDD898d22ca559e64f8c07.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 4663,
+          "name": "ReserveVault",
+          "address": "0xE9dE4d1bfaBacd2495D585BE2290c296A765226A",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xbbc4657faba0e16c77fbd5b053a38e1c68467943fdf2ace76c6e5cb88447673f",
+            "block": 80796240
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Working vault of the fixed-supply tICP (starts with 1,000,000). Releases only to the release gate's proven claims, within a daily allowance that refills; takes redeemed tICP back.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 4663,
+          "name": "ColdReserve",
+          "address": "0xeBC30502f9dFcC3d1C297c5A7f4d8ac19dC009a5",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xbbc4657faba0e16c77fbd5b053a38e1c68467943fdf2ace76c6e5cb88447673f",
+            "block": 80796240
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Cold reserve of the fixed-supply tICP (starts with 556,203,525). Can only feed the working vault, in bounded tranches, when the gate's owner asks; a new destination waits out a rotation delay that a separate canceller can stop.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        },
+        {
+          "chain": 4663,
+          "name": "ColdReserve (surplus)",
+          "address": "0x91d37b663877025bc5D3f91fD2Cf0e5c9804BC5C",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xbbc4657faba0e16c77fbd5b053a38e1c68467943fdf2ace76c6e5cb88447673f",
+            "block": 80796240
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-05",
+          "notes": "Surplus reserve of the fixed-supply tICP (starts with 55,796,475). Can only feed the cold reserve, in bounded tranches, under the same rules.",
+          "verification_note": "Sourcify exact match (2026-10-05)"
+        }
+      ]
+    },
+    "taifoon-scheduler": {
+      "owner": "ours",
+      "description": "TaifoonScheduler (_SCHEDULER_v1_): the on-chain schedule of the coordination layer. A job is due every N blocks; a driver (services/scheduler-driver) executes due jobs each block: CALL jobs call a target under a gas cap, OP jobs emit JobDue and the executor of record reports the result digest. Budgets are prepaid in the native coin; not upgradeable.",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonScheduler (devnet)",
+          "address": "0x688858bFB37bc272505a7B12d23Bb7FD8940Bcc0",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x12a237751472d79914ee2dcacd17b25f308d6abd94cbb689a78b5c776f4f4dba",
+            "block": 1594783
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "devnet-only",
+          "since": "2026-10-09",
+          "notes": "owner: the devnet test owner (anvil #0); driver and executor of record: devnet key 36980 (0x4cd8AD148eFaa8021E61E01E586e72Dda46cBCCe). Three OP jobs: dataflow:venues every 600 blocks, GET /v1/landscape/phases?phase=0 every 300, dataflow:reseller-pipeline every 1800."
+        }
+      ]
+    },
+    "agent-bonds": {
+      "owner": "third-party",
+      "description": "Bond contracts an ERC-8004 agent's owner posts a stake on, read by the readiness pass for the displayed fact \"has a live bond\" (weight 0: no readiness step reads it). Read only: bonds(agentId).",
+      "contracts": [
+        {
+          "chain": 143,
+          "name": "Sclera V2 (agent bonds)",
+          "address": "0xB4d641f016f53C683c409F271eE85e136041FE3f",
+          "kind": "registry",
+          "deploy": {
+            "tx": "0x191531adca3754d20961b021233828341053cbd7d1c7174d796d19d03c2b189c",
+            "block": 112106633
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": true
+          },
+          "status": "live",
+          "since": "2026-10-12",
+          "notes": "Third party (Kanmani). ScleraV2, an exact match on sourcify.dev (creation and runtime); no proxy. bonds(uint256 agentId) returns struct Bond { agent, postedAt (block), state (None, Active, Slashed, Released), token, windowBlocks, amount, minTruthRateBps, minSampleSize, lastNonce }; postBond requires the caller to be ownerOf(agentId) on the ERC-8004 Identity Registry. Read only."
+        },
+        {
+          "chain": 143,
+          "name": "Sclera (agent bonds)",
+          "address": "0x57aF4e4B482Ab1bb4f9d1aeb5206258a7Def0eaf",
+          "kind": "registry",
+          "deploy": {
+            "tx": null,
+            "block": null
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": false
+          },
+          "status": "live",
+          "since": "2026-10-12",
+          "notes": "Third party (Kanmani). The first Sclera deployment: not verified on sourcify.dev; bonds(uint256) answers the same nine words as Sclera.sol in the verified ScleraV2 sources, and the layout is taken from there. Read only."
+        }
+      ]
+    },
+    "coord-settlement": {
+      "owner": "ours",
+      "description": "The TSUL split on chain (TsulDonut, protocols/ours/tsul-donut): settle() splits the fee it receives 70 % contributor / 20 % reviewers / 10 % treasury into pull balances and emits Settled with every leg. Owner and treasury = the Taifoon governance account, reviewers = the coordination vault; one settler (the stand-in seller key). The same address on every EVM chain (CREATE2 through the deterministic deployment proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C, salt keccak256(\"taifoon/coord-settlement/TsulDonut/v1\")). Native coin only.",
+      "contracts": [
+        {
+          "chain": 100,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xb88919c99ad588c0ec986135a663dae534a14dd8eac461ebe01632e85998b11b",
+            "block": 48737128
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-13",
+          "notes": "TSUL 70/20/10 split on Gnosis (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 36927,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xbc6d7e1a45fe21ca79ea7a9416fa4e92637218492fe1ac8c021caac00a4d79ab",
+            "block": 1822454
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "TSUL 70/20/10 split on Taifoon devnet (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 3692781,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xfceb9705e1758e2b821156dda46ec8dd4ba7c1eb465baf5583dbca426c8cbc4b",
+            "block": 1192160
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "TSUL 70/20/10 split on Taifoon mainnet (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x26dac561f999a77f06f191b79791ca28e20ccc62c55bca4f89ef3998cf82806b",
+            "block": 52629333
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "TSUL 70/20/10 split on Base (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        }
+      ]
+    },
+    "olas-mech-ours": {
+      "owner": "ours",
+      "description": "Our mechs on the Olas Mech marketplaces (mech/base/olas-mech-base.mjs): created by the marketplace’s fixed-price factory and operated by the Olas service account of the stand-in seller key; the service NFT belongs to the Taifoon governance account. Outside requesters pay the mech; the operator forwards the earnings into TsulDonut (coord-settlement).",
+      "contracts": [
+        {
+          "chain": 8453,
+          "name": "Taifoon mech (Olas service 774)",
+          "address": "0x155D085eD00FF6B78924F54668BE7F0685bD8525",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x1be45c439836dd1151b71f825f33bb6804161c7f6733815ef12e9c6950aee49d",
+            "block": 52556367
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-13",
+          "notes": "Fixed price 50000 units of USDC a request on Base (the marketplace keeps 15 %); one tool per class wall on its card; registered by the reseller operator (mech/deployments/8453-olas.json)."
+        },
+        {
+          "chain": 100,
+          "name": "Taifoon mech (Olas service 3833)",
+          "address": "0xe89965Cd7EeDC4bF463C309e5fdDdC48A2E3F822",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0xd083a1b2ede7b6f1d0b1bec20d9b990d8268307dbb06ca34bf2a03fcb460ecd3",
+            "block": 48737136
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null
+          },
+          "status": "live",
+          "since": "2026-10-13",
+          "notes": "Fixed price 10000000000000000 units of the chain’s payment coin a request on Gnosis; operated through the Olas service account of the stand-in seller key."
+        }
+      ]
+    },
+    "superroot-anchor": {
+      "owner": "ours",
+      "description": "The superroot anchor (TaifoonSuperrootAnchor, protocols/ours/superroot-anchor): which superroots of the proof plane are genuinely Taifoon's on this chain. The relayer pushes the live superroot (pushSuperroot); a ring of 256 recent roots stays known (isKnownSuperroot), current() is the freshest root and its age. Owner = the Taifoon governance account. The same address on every EVM chain (CREATE2 through the deterministic deployment proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C, salt keccak256(\"taifoon/superroot-anchor/TaifoonSuperrootAnchor/v1\")).",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0xd40f2d6f3eed57a7797fa75239898022ed63acd11a500d39fd425614af17221f",
+            "block": 1822433
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Superroot anchor on Taifoon devnet: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 3692781,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0x57323058be03da3076e78f12096bc8fdca0cf49034034d34976e80dd66323847",
+            "block": 1192136
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Superroot anchor on Taifoon mainnet: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0xbc251407008cb2e6cbdf3bca94dffd1d88b4e1b8f0d293f620934ee2f8981610",
+            "block": 52629310
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Superroot anchor on Base: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        }
+      ]
+    },
+    "protocol-verifier": {
+      "owner": "ours",
+      "description": "A protocol's transitions proven under the superroot, on this chain (TaifoonProtocolVerifier, protocols/ours/protocol-verifier, from the spinner's contracts): verifyTransitions / verifyOrderState against the chain's superroot anchor (system superroot-anchor), checkAttestation re-checks an attested step's EIP-712 signature, executeVerifiedTransition acts on a proven step once through an allowed vendor. TaifoonCoordLambda is the rule for every move of the coordination layer's own protocol taifoon_coord (12 hops × 5 outcomes). Owner = the Taifoon governance account. The same addresses on every EVM chain (CREATE2 through the deterministic deployment proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C, salts keccak256(\"taifoon/protocol-verifier/TaifoonCoordLambda/v1\") and keccak256(\"taifoon/protocol-verifier/TaifoonProtocolVerifier/v1\")).",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0x1ab126e740b95f4a6baa458cd0d57dc8962c49e04010e23cbb590bb736dc04b9",
+            "block": 1822436
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "The taifoon_coord lambda on Taifoon devnet: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 36927,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x2f828529678de0f86813ac2a4979f5bc8e3c4c426bf2c794fb150cbc48e8f9a4",
+            "block": 1822439
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Protocol verifier on Taifoon devnet: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 3692781,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0x7a56920caf975e7c9524541a628fa15976646a830c1de831b42fe2a3881fc540",
+            "block": 1192139
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "The taifoon_coord lambda on Taifoon mainnet: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 3692781,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0xacf2852c9ba8384c99adb6d51cca1251d19a99ebad9aaf411c51ea33a0270820",
+            "block": 1192142
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Protocol verifier on Taifoon mainnet: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0x4edcd1fbfeee18daa05dc3485f5a2274fcaa0aa8d4630083b136300cf06c402c",
+            "block": 52629314
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "The taifoon_coord lambda on Base: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x4aab6d70fc0e7ca37a6440766258bd459adab40109f722f163c8e9141c14ad47",
+            "block": 52629317
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Protocol verifier on Base: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        }
+      ]
+    },
+    "payment-channel": {
+      "owner": "ours",
+      "description": "The buyer's escrow of one sale (TaifoonPaymentChannel, protocols/ours/payment-channel, the EVM port of solana-foundation/payment-channels): a channel per sale, funded by the payer, paid out by a distribution plan committed at open() and revealed at distribute() (our fee → the coordination vault, the venues' fees, the seller's share, the reseller's markup: Σ = the deposit). Released by the payer's voucher or by the sale proven settled:ok through the protocol verifier (system protocol-verifier), which names the channel a vendor. Owner = the Taifoon governance account, treasury = the coordination vault. The same address on every EVM chain (CREATE2 through the deterministic deployment proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C, salt keccak256(\"taifoon/payment-channel/TaifoonPaymentChannel/v1\")).",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x148e9e402c337ad17c4b23089b37eb3c22cd0bd8f3e5436287ec94f067e82dfa",
+            "block": 1822462
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Payment channels on Taifoon devnet (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 3692781,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0xb8fc7ad49a559a5e4fcb060f927734f5689605bc4c93d33ba342cfbcd5350a53",
+            "block": 1192173
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-14",
+          "notes": "Payment channels on Taifoon mainnet (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x97d7688e48d2e6c2404d74d64e49d4700bdd19d7c4929569be7d389c24097df6",
+            "block": 52629341
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Payment channels on Base (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        }
+      ]
+    },
+    "workflow": {
+      "owner": "ours",
+      "description": "The workflow builder of the coordination layer on chain (TaifoonWorkflow, protocols/ours/workflow; coord docs/COORD-SDK.md §3): an order of states committed once by the hash of its canonical spec and advanced by proofs through TaifoonProtocolVerifier, each step’s binding (none · the payment channel’s onProven · an allowed vendor’s call) firing in the same transaction. Same address on every EVM chain (CREATE2).",
+      "contracts": [
+        {
+          "chain": 36927,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x2e07a267b60de20fce2e3081e5ba0e708bafe5561f818a0edb70dfdf87b0a474",
+            "block": 1822469
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Workflow builder on Taifoon devnet: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 3692781,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x99c64ad3f77e281913c94d1f10e2cf255f51db5597eb4917443616e4776bdd33",
+            "block": 1192185
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": null,
+          "notes": "Workflow builder on Taifoon mainnet: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 8453,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0xe1066ba1dcb67d04650ecb147c66f524311a4e3d148ee1abc9c48a85ad659332",
+            "block": 52629349
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Workflow builder on Base: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
         }
       ]
     }

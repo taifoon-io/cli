@@ -37,7 +37,7 @@ export function loadConfig(env = process.env) {
 }
 export function saveConfig(c, env = process.env) {
   // a guard, not a hope: nothing that looks like a key reaches the config file
-  if (/tfr_[A-Za-z0-9_-]{20,}/.test(JSON.stringify(c))) throw new Error('refusing to write a key into the config file');
+  if (/tfr_[A-Za-z0-9_-]{20,}|sk-ant-[A-Za-z0-9_-]{10,}/.test(JSON.stringify(c))) throw new Error('refusing to write a key into the config file');
   writeJson(cfgPath(env), c);
 }
 export function profileOf(c, name) { return c.profiles[name ?? c.profile ?? 'default'] ?? { mode: 'guest' }; }
@@ -64,6 +64,20 @@ export const keychain = {
     return true;
   },
   del(exec, service, account) { return exec('security', ['delete-generic-password', '-s', service, '-a', account]).status === 0; },
+};
+
+/** _ONE_PRODUCT_v1_: the agent's own model key (your Anthropic key, BYO) in the Keychain — never in the config file, never printed */
+export const MODEL_SERVICE = 'taifoon-model';
+export const isAnthropicKey = (k) => typeof k === 'string' && /^sk-ant-[A-Za-z0-9_-]{20,}$/.test(k);
+export const modelKeychain = {
+  get(exec, account = 'anthropic') { const r = exec('security', ['find-generic-password', '-s', MODEL_SERVICE, '-a', account, '-w']); const v = r.status === 0 ? r.stdout.trim() : null; return isAnthropicKey(v) ? v : null; },
+  set(exec, key, account = 'anthropic') {
+    if (!isAnthropicKey(key)) throw new Error('not an Anthropic API key (sk-ant-…)');
+    const r = exec('security', ['-i'], `add-generic-password -U -s ${MODEL_SERVICE} -a ${account} -l "${MODEL_SERVICE} ${account}" -w ${key}\n`);
+    if (r.status !== 0) throw new Error(`the Keychain refused the write (${r.stderr.trim().split('\n')[0] || `exit ${r.status}`})`);
+    return true;
+  },
+  del(exec, account = 'anthropic') { return exec('security', ['delete-generic-password', '-s', MODEL_SERVICE, '-a', account]).status === 0; },
 };
 
 // ── kms-access SSM ─────────────────────────────────────────────────────────────────────────────────────────────────

@@ -42,11 +42,12 @@ const GLOBAL = `  --json        machine output: one JSON value per command (with
   --fresh       read every up step again
   --no-color    plain output (NO_COLOR and a non-TTY stdout do the same)`;
 
-const ORDER = ['login', 'logout', 'whoami', 'register', 'collaborate', 'demand', 'pools', 'markets', 'metrics'];
+const ORDER = ['login', 'logout', 'whoami', 'balance', 'buy', 'register', 'collaborate', 'demand', 'pools', 'markets', 'metrics'];
 const usageLines = (c) => c.usage.map(([u, d]) => (u.length <= 56 ? `    taifoon ${pad(u, 56)} ${d}` : `    taifoon ${u}\n    ${' '.repeat(65)}${d}`));
 
-export async function helpText(cmdName) {
-  const t = await commands();
+export async function helpText(cmdName, { admin = false } = {}) {
+  const t = new Map(await commands());
+  if (!admin) for (const [k, c] of [...t]) if (c.admin) t.delete(k);
   if (cmdName && t.has(cmdName)) {
     const c = t.get(cmdName);
     return `taifoon ${c.name} — ${c.summary}\n\n${usageLines(c).join('\n')}\n\n${GLOBAL}\n`;
@@ -139,7 +140,22 @@ export async function main(argv, io = {}) {
     const { shell } = await import('./shell.mjs');
     return shell(argv, io);
   }
-  if (first === 'help' || argv.includes('--help') || argv.includes('-h')) { out.write(await helpText(argv.find((x, i) => i > 0 && !x.startsWith('--')))); return 0; }
+  if (first === 'help' || argv.includes('--help') || argv.includes('-h')) {
+    const { operatorToken } = await import('./roles.mjs');
+    const admin = Boolean(operatorToken(env));
+    const words = parseFlags(argv).pos.slice(1);
+    const t = await commands();
+    // _ONE_PRODUCT_v1_: `taifoon help <topic>` that is not a command reads the knowledge shipped with the release
+    if (first === 'help' && words.length && !t.has(words[0])) {
+      const { knowledgeSearch } = await import('./knowledge.mjs');
+      const r = await knowledgeSearch({ query: words.join(' '), limit: 5 }, { role: admin ? 'admin' : undefined, env });
+      if (!r.ok || !r.results.length) { out.write(`no command or topic "${words.join(' ')}" · taifoon docs lists the topics\n`); return 2; }
+      for (const h of r.results) out.write(`  ${h.topic}  ${h.title || ''}\n    ${h.about || h.lines[0] || ''}\n`);
+      out.write(`\n  taifoon docs get <topic> reads one\n`);
+      return 0;
+    }
+    out.write(await helpText(words[0], { admin })); return 0;
+  }
   if (first === 'up' || first === 'curl') return legacy(argv, io);
   const table = await commands();
   const c = table.get(first);

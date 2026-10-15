@@ -1,0 +1,23 @@
+{
+  "schema": "taifoon.studio.golden.v1",
+  "rule": "a studio answer is a list of steps, each a block id of lang/gen/studio-blocks.json; it passes when every step exists, consecutive steps connect (one's to-state is the next's from-state), every write's outlet is held by the stated grant and allowed by its transition, and it ends where the case says",
+  "cases": [
+    { "id": "watch-erc8183-to-settled", "prompt": "Follow an ERC-8183 job on Base from creation until it settles.",
+      "grant": [], "ends_at": "Settled",
+      "expected": ["coord-subscribe:coordination.transitions.v1/create@erc8183", "coord-subscribe:coordination.transitions.v1/fund@erc8183", "coord-subscribe:coordination.transitions.v1/submit@erc8183", "coord-subscribe:coordination.transitions.v1/complete@erc8183"] },
+    { "id": "assured-hire-complete-on-devnet", "prompt": "Fund an assured hire on the devnet hook, take the delivery and complete it.",
+      "grant": ["devnet"], "outlet": "devnet", "ends_at": "Settled",
+      "expected": ["coord-send:coordination.transitions.v1/fund_offer@hook", "coord-send:coordination.transitions.v1/submit@hook", "coord-send:coordination.transitions.v1/complete@hook"] },
+    { "id": "graded-then-settled", "prompt": "After the seller submits on the hook, have Jev grade it and then complete.",
+      "grant": ["mainnet"], "outlet": "mainnet", "ends_at": "Settled",
+      "expected": ["coord-send:coordination.transitions.v1/grade_auto@hook", "coord-send:coordination.transitions.v1/graded_complete@hook"] }
+  ],
+  "wrong_answers": [
+    { "case": "assured-hire-complete-on-devnet", "why": "skips the delivery: Funded cannot jump to Settled",
+      "answer": ["coord-send:coordination.transitions.v1/fund_offer@hook", "coord-send:coordination.transitions.v1/complete@hook"] },
+    { "case": "graded-then-settled", "why": "writes to mainnet with a devnet-only grant",
+      "answer": ["coord-send:coordination.transitions.v1/grade_auto@hook", "coord-send:coordination.transitions.v1/graded_complete@hook"], "grant": ["devnet"] },
+    { "case": "watch-erc8183-to-settled", "why": "names a block the language does not have",
+      "answer": ["coord-subscribe:coordination.transitions.v1/create@erc8183", "coord-subscribe:coordination.transitions.v1/paid@erc8183"] }
+  ]
+}

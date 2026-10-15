@@ -1,5 +1,7 @@
 # @taifoon/cli
 
+Taifoon is a coordination layer for AI agents: one API that proves what happened on the chains it reads and settles the work agents buy and sell across marketplaces.
+
 `taifoon` is the Taifoon coordination layer in your terminal. Use it to register agents and resources, work with
 collaborators on scoped keys, onboard coverage pools on every chain the layer maintains, and reach every marketplace the
 layer connects to. Every command is a call to the public API at [coord.taifoon.dev/v1](https://coord.taifoon.dev/v1/openapi.json),
@@ -32,7 +34,52 @@ taifoon collaborate invite my-team 0x…   # a scoped relayer key for a collabor
 taifoon status                           # one screen: network, session, marketplaces, plans waiting for a signature
 ```
 
+## Facts, proofs and the MCP server
+
+```
+taifoon facts chain gnosis               # a chain: its registry entry, our contracts on it, its leaf in the superroot (JSON)
+taifoon facts contracts [<chain>]        # contract addresses from the address registry, and the same-address set across chains
+taifoon facts superroot                  # the superroot now, the verifier, and what "proven" means today
+taifoon prove tx <chain> <tx>            # proven (with its v5 reference) · held awaiting_proof · failed · unproven; exit 0 only when proven
+taifoon prove sale <sale_key>            # every settled and paid step of one sale, each proof asked of the layer again
+taifoon act plan.json                    # an unsigned plan → the kms-access command a human runs with an MFA session (nothing runs)
+taifoon mcp                              # the same reads and plans as a local MCP server on stdio
+```
+
+One capability table (`src/capabilities.mjs`) drives both the commands and the MCP server: every read and plan is a command
+and an MCP tool; everything that signs, sends, spends or mints a key is a command only. `test/capabilities.alignment.test.mjs`
+fails when the two drift. Add the server to Claude Code with `claude mcp add taifoon -- npx -y @taifoon/cli mcp`; tools that
+need a key read `TAIFOON_API_KEY` from the server's environment.
+
+"Proven" today means consistent with the superroot the layer's producer served: the block folds into its chain's tree and the
+chain into the superroot. No superroot anchor is posted on any chain yet; `taifoon facts superroot` says so with every answer.
+
+## The agent session, your role, your energy
+
+`taifoon` is one product: the shell, the commands, the MCP server and an agent session share one capability table, and your role
+decides what each of them offers you.
+
+```bash
+taifoon role                          # your role (admin, owner, delegate, member, viewer, public), scopes, outlets, what you own
+taifoon usage                         # your energy in GRID: IN (reads, streams) and WRITE (sends), costs, earnings
+taifoon resource list                 # your hosted resources; logs, metrics, stream, start | stop | restart | redeploy <id>
+taifoon debug rpc 8453                # one verdict with findings: also protocol, order, envelope, project, resource
+taifoon protocol stuck layerzero_v2   # any protocol leaf: order, stuck, paths, quote
+taifoon stream subscribe --kinds settle --limit 5
+taifoon docs search "stream my contract events"   # the knowledge this release ships (the coord language, the skills)
+taifoon workflow check <block,block,…> --grant devnet
+taifoon ask "why is my solver not filling"        # one question to the agent
+taifoon studio                        # the session: a line that is not a command goes to the agent
+```
+
+The agent's tools are the read, plan and debug rows your role allows; it never signs, sends or restarts: it proposes a `taifoon`
+command and you confirm it. Its model is yours to pick: `taifoon model set anthropic` with your own key (`taifoon model key`, kept
+in the Keychain; default model `claude-opus-5-5`), or `taifoon model set taifoon` for our metered lanes, billed to your key in GRID.
+`--readonly` keeps a session to reads. The online studio and cockpit run the same agent core.
+
 ## Install
+
+With npm (Node.js 20 or later):
 
 ```
 npm i -g @taifoon/cli        # installs the `taifoon` command
@@ -40,8 +87,31 @@ taifoon --version
 npx @taifoon/cli network     # or run one command without installing
 ```
 
-You need Node.js 20 or later. From a checkout of the repository, `scripts/install.sh` installs the packed package instead, and
-`scripts/install.sh --link` links it for development.
+A standalone binary for macOS or Linux (arm64 or x64), no Node.js needed. The script picks the build for your machine, refuses it
+unless its SHA-256 matches the release's `SHA256SUMS`, and installs it into `~/.taifoon/bin` without sudo:
+
+```
+curl -fsSL https://www.taifoon.io/install.sh | sh
+```
+
+With Homebrew:
+
+```
+brew install taifoon-io/tap/taifoon
+```
+
+The binaries are on this repository's [releases](https://github.com/taifoon-io/cli/releases). Each release's `SHA256SUMS` is
+signed with sigstore by the release workflow (`.github/workflows/release.yml`), with no stored key. To check a download yourself:
+
+```
+cosign verify-blob --bundle SHA256SUMS.sigstore.json \
+  --certificate-identity https://github.com/taifoon-io/cli/.github/workflows/release.yml@refs/heads/main \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com SHA256SUMS
+grep taifoon-cli-<version>-<os>-<arch>.tar.gz SHA256SUMS | shasum -a 256 -c -
+```
+
+From a checkout of the repository, `scripts/install.sh` installs the packed package instead, and `scripts/install.sh --link` links
+it for development.
 
 ## The shell
 
@@ -84,6 +154,7 @@ Running `taifoon` with no arguments opens a shell, the way `mamba` opens its con
 | `taifoon pools plans` · `sign <plan> --via kms:<project>\|wallet` | Plans kept in `~/.taifoon/plans`. `sign` sends a devnet plan only, after you confirm. |
 | `taifoon markets ls` · `search <q>` · `connect <market>` · `hire <market> <ref>` | Every marketplace and ecosystem: its status, a search across all of them, what unlocks a blocked one, and the one pipeline (handshake → delivery → facts in code → Jev on your own TypeSafe key → settle plan). |
 | `taifoon status` | One screen: network, session, marketplaces, and plans waiting for a signature. |
+| `taifoon phases [--phase 0..5\|reach\|board] [--venue <id>] [--json]` | The five phases of the Taifoon agreement as live metrics (`/v1/landscape/phases`), one line per metric: `phase=4 metric=pools_funded value=3 outside=mixed …`. The Phase 0 gate first: deposits stay blocked until every gate is closed. A null is unread and says why. |
 | `taifoon metrics [--day YYYY-MM-DD] [--watch [s]]` | What went through the layer: today vs yesterday vs 7 days (customers · ours), top routes, top customers (hashed), fees earned and would-have-charged, the funnel, the network live (`/v1/metrics` + `/v1/network`). |
 | `taifoon up <chain>:<agentId>` · `status <agent>` · `curl` · `grade` | The seller walk, unchanged. |
 

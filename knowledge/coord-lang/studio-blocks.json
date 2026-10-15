@@ -1,0 +1,666 @@
+{
+ "schema": "taifoon.studio.blocks.v1",
+ "generated_from": "taifoon.pipe.lang.v1",
+ "blocks": [
+  {
+   "id": "coord-send:coordination.transitions.v1/fund_offer@hook",
+   "block": "coord-send",
+   "title": "job: Open → Funded (hook)",
+   "kind": "hire",
+   "transition": "coordination.transitions.v1/fund_offer@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/fund_delivered@hook",
+   "block": "coord-send",
+   "title": "job: Delivered → Funded (hook)",
+   "kind": "hire",
+   "transition": "coordination.transitions.v1/fund_delivered@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/create@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Open → Created (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/create@erc8183",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/terms@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Created (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/terms@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/fund@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Funded (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/fund@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_unfunded@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_unfunded@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/lapse@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Cancelled (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/lapse@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_unfunded@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_unfunded@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/submit_unfunded@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Created → Submitted (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/submit_unfunded@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/terms@erc8183"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/submit@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Submitted (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/submit@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/submit@hook",
+   "block": "coord-send",
+   "title": "job: Funded → Submitted (hook)",
+   "kind": "delivery",
+   "transition": "coordination.transitions.v1/submit@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_undelivered@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_undelivered@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_undelivered@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_undelivered@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/expire_undelivered@hook",
+   "block": "coord-send",
+   "title": "job: Funded → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/expire_undelivered@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/complete@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Settled (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/complete@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/complete@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/complete@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_delivered@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_delivered@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/reject_delivered@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/reject_delivered@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_delivered@erc8183",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_delivered@erc8183",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/expire_delivered@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/expire_delivered@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/cheat@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Cheat (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/cheat@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/cheat_after_reject@hook",
+   "block": "coord-send",
+   "title": "job: Rejected → Cheat (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/cheat_after_reject@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/reject_unfunded@erc8183",
+    "coordination.transitions.v1/reject_undelivered@erc8183",
+    "coordination.transitions.v1/reject_delivered@erc8183",
+    "coordination.transitions.v1/reject_delivered@hook",
+    "coordination.transitions.v1/graded_reject@hook",
+    "coordination.transitions.v1/held_reject@hook",
+    "coordination.transitions.v1/finalize_reject_v4@hook",
+    "coordination.transitions.v1/resolve_buyer_v4@hook",
+    "coordination.transitions.v1/stale_dispute_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/grade_auto@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Graded (hook)",
+   "kind": "grade",
+   "transition": "coordination.transitions.v1/grade_auto@hook",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/hold@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Held (hook)",
+   "kind": "cover",
+   "transition": "coordination.transitions.v1/hold@hook",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_complete@hook",
+   "block": "coord-send",
+   "title": "job: Graded → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/graded_complete@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_reject@hook",
+   "block": "coord-send",
+   "title": "job: Graded → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/graded_reject@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_expire@hook",
+   "block": "coord-send",
+   "title": "job: Graded → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/graded_expire@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_cheat@hook",
+   "block": "coord-send",
+   "title": "job: Graded → Cheat (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/graded_cheat@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_complete@hook",
+   "block": "coord-send",
+   "title": "job: Held → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/held_complete@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_reject@hook",
+   "block": "coord-send",
+   "title": "job: Held → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/held_reject@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_expire@hook",
+   "block": "coord-send",
+   "title": "job: Held → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/held_expire@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_cheat@hook",
+   "block": "coord-send",
+   "title": "job: Held → Cheat (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/held_cheat@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/open_v4@hook",
+   "block": "coord-send",
+   "title": "job: Open → Opened (hook)",
+   "kind": "cover",
+   "transition": "coordination.transitions.v1/open_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/accept_v4@hook",
+   "block": "coord-send",
+   "title": "job: Opened → Funded (hook)",
+   "kind": "hire",
+   "transition": "coordination.transitions.v1/accept_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/open_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/cancel_open_v4@hook",
+   "block": "coord-send",
+   "title": "job: Opened → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/cancel_open_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/open_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/expire_open_v4@hook",
+   "block": "coord-send",
+   "title": "job: Opened → Expired (hook)",
+   "kind": "release",
+   "transition": "coordination.transitions.v1/expire_open_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/open_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/propose_reject_v4@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → RejectPending (hook)",
+   "kind": "grade",
+   "transition": "coordination.transitions.v1/propose_reject_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_propose_reject_v4@hook",
+   "block": "coord-send",
+   "title": "job: Graded → RejectPending (hook)",
+   "kind": "grade",
+   "transition": "coordination.transitions.v1/graded_propose_reject_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_propose_reject_v4@hook",
+   "block": "coord-send",
+   "title": "job: Held → RejectPending (hook)",
+   "kind": "grade",
+   "transition": "coordination.transitions.v1/held_propose_reject_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/finalize_reject_v4@hook",
+   "block": "coord-send",
+   "title": "job: RejectPending → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/finalize_reject_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/propose_reject_v4@hook",
+    "coordination.transitions.v1/graded_propose_reject_v4@hook",
+    "coordination.transitions.v1/held_propose_reject_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/dispute_v4@hook",
+   "block": "coord-send",
+   "title": "job: RejectPending → Disputed (hook)",
+   "kind": "grade",
+   "transition": "coordination.transitions.v1/dispute_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/propose_reject_v4@hook",
+    "coordination.transitions.v1/graded_propose_reject_v4@hook",
+    "coordination.transitions.v1/held_propose_reject_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/resolve_seller_v4@hook",
+   "block": "coord-send",
+   "title": "job: Disputed → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/resolve_seller_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/dispute_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/resolve_buyer_v4@hook",
+   "block": "coord-send",
+   "title": "job: Disputed → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/resolve_buyer_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/dispute_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/stale_dispute_v4@hook",
+   "block": "coord-send",
+   "title": "job: Disputed → Rejected (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/stale_dispute_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/dispute_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/auto_complete_v4@hook",
+   "block": "coord-send",
+   "title": "job: Submitted → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/auto_complete_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/graded_auto_complete_v4@hook",
+   "block": "coord-send",
+   "title": "job: Graded → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/graded_auto_complete_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/grade_auto@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/held_auto_complete_v4@hook",
+   "block": "coord-send",
+   "title": "job: Held → Settled (hook)",
+   "kind": "settle",
+   "transition": "coordination.transitions.v1/held_auto_complete_v4@hook",
+   "outlets": [
+    "devnet",
+    "mainnet"
+   ],
+   "connects_after": [
+    "coordination.transitions.v1/hold@hook"
+   ]
+  }
+ ]
+}
