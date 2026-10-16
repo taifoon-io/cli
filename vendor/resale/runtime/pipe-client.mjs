@@ -107,6 +107,12 @@ export function pipeClient({ base = PIPE_URL, fetchImpl = globalThis.fetch, toke
     address: (address, { limit = 100 } = {}) => call('GET', `/pipe/address/${encodeURIComponent(address)}${q({ limit })}`),
     head: () => call('GET', '/pipe/head'),
     result: (id, { outcome, reason = null, evidence = null }) => call('POST', '/pipe/result', { id, outcome, reason, evidence }),
+    // _SETTLEMENT_QUEUES_v1_ (coord docs/SETTLEMENT-QUEUES.md): the four queues, the public settle set, the outside settler's report
+    queues: ({ chain, detail } = {}) => call('GET', `/pipe/queues${q({ chain, detail })}`),
+    claimable: ({ chain, venue, limit } = {}) => call('GET', `/pipe/claimable${q({ chain, venue, limit })}`),
+    settled: ({ id, chain, tx, by = null }) => call('POST', '/pipe/settled', { id, chain, tx, by }),
+    settledOpen: ({ limit = 50 } = {}) => call('GET', `/pipe/settled/open${q({ limit })}`),
+    settledVerdict: ({ id, tx, ok, why = '', evidence = null }) => call('POST', '/pipe/settled/verdict', { id, tx, ok, why, evidence }),
   };
 }
 

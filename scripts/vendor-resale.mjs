@@ -18,6 +18,7 @@ export const FILES = [
   'resale/ports/transition.mjs',
   'resale/ports/coord-lang/genome-keys.mjs',
   'resale/runtime/pipe-client.mjs',
+  'resale/runtime/pipe-sealed.mjs',
   'resale/runtime/coord-lang/pipe.mjs',
   'addresses/keccak.mjs',
 ];

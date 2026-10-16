@@ -65,8 +65,10 @@ taifoon usage                         # your energy in GRID: IN (reads, streams)
 taifoon resource list                 # your hosted resources; logs, metrics, stream, start | stop | restart | redeploy <id>
 taifoon debug rpc 8453                # one verdict with findings: also protocol, order, envelope, project, resource
 taifoon protocol stuck layerzero_v2   # any protocol leaf: order, stuck, paths, quote
-taifoon stream                        # the live view: observe, batch, advert, lost … aligned, coloured, a status footer
-taifoon stream --all --chain base --protocol across_v3   # every lane, filtered; --json for NDJSON, --raw, --wide
+taifoon stream                        # the live view: whole ids, a genome line per row, the master of every component, a live footer
+taifoon stream --all --headers --stats --masters          # every lane + block headers per chain + the measures panel + the owners table
+taifoon stream --chain base --protocol across_v3 --json   # filtered; NDJSON off a terminal; --short cuts hashes; --seal-key-file opens sealed bodies
+taifoon owners                        # per key holder: the chains, protocols and products it masters, the seats it can claim
 taifoon docs search "stream my contract events"   # the knowledge this release ships (the coord language, the skills)
 taifoon workflow check <block,block,…> --grant devnet
 taifoon ask "why is my solver not filling"        # one question to the agent

@@ -5,7 +5,8 @@
     "resale/ports/genome.mjs": "7c7577d6a8fcf78ff6391a2caf3c85b3d9bbfdd8fb51b2868892716ffbceb6dc",
     "resale/ports/transition.mjs": "3caf2d66d0a8540b58d649d032b0b52a1a668274cb2e179c4440e055809a3643",
     "resale/ports/coord-lang/genome-keys.mjs": "1b50cbcc6d042041496707237c0dcd4a602e41871e9f6787fea88d22af5cccb4",
-    "resale/runtime/pipe-client.mjs": "90bcbf4e110c496b36a7293eb70ee79f07c7bd366b107830916ba16b2034bb0d",
+    "resale/runtime/pipe-client.mjs": "344d7e162624b6f2a7ad5ed642bd4054442a2e0b109a80dfd975798fe549e7a6",
+    "resale/runtime/pipe-sealed.mjs": "0c7f8f8948328610e1a1a44686d39414dc96038b9298616a43ee156f94b40cfb",
     "resale/runtime/coord-lang/pipe.mjs": "d98c960eeab6bf622f248e53e2c5e0f8949eab3716f1d5bb4e0c4db17500af90",
     "addresses/keccak.mjs": "38f31c8f10db7bd6e8c1a0faebd444a0ceac6d419803ecc1ab864158854465eb"
   }

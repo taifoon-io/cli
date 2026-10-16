@@ -10,6 +10,7 @@ const SAMPLE = readFileSync(new URL('./fixtures/pipe-sample.sse', import.meta.ur
 const blocks = SAMPLE.split('\n\n').filter(Boolean);
 const seqOf = (b) => Number(b.match(/^id: (\d+)$/m)?.[1]);
 const body = (text) => new ReadableStream({ start(c) { c.enqueue(new TextEncoder().encode(text)); c.close(); } });
+const OWNERS = [{ id: 'chain:8453', kind: 'chain', name: 'Base', owner: { persona: 'operator', holder: 'taifoon' }, seat: { state: 'held_by_operator', delegable: true }, shares: { owner_bps: 0, partner: null, partner_bps: 0, taifoon_bps: 10000 } }, { id: 'protocol:across_v3', kind: 'protocol', name: 'Across', owner: { persona: 'operator', holder: 'taifoon' }, seat: { state: 'held_by_operator', delegable: true }, shares: { owner_bps: 0, partner: null, partner_bps: 0, taifoon_bps: 10000 } }];
 const sink = (tty, columns = 140) => { const o = { buf: '', isTTY: tty, columns, write(s) { o.buf += s; return true; } }; return o; };
 const strip = (s) => s.replace(/\u001b\[[0-9;]*[A-Za-z]/g, '');
 
@@ -23,9 +24,12 @@ function layer({ lanes = '', whole = false } = {}) {
       const from = Number(u.searchParams.get('from_seq') ?? 0);
       const rest = blocks.filter((b) => seqOf(b) >= from);
       const part = pipeN++ === 0 && !whole ? rest.slice(0, 20) : rest;
-      return new Response(body(part.map((b) => `${b}\n\n`).join('')), { headers: { 'content-type': 'text/event-stream', 'x-taifoon-viewer': 'public; session 120s' } });
+      return new Response(body(part.map((b) => `${b}\n\n`).join('')), { headers: { 'content-type': 'text/event-stream', 'x-taifoon-viewer': init?.headers?.['x-api-key'] ? 'key' : 'public; session 120s' } });
     }
     if (u.pathname === '/v1/stream') return new Response(body(lanes), { headers: { 'content-type': 'text/event-stream' } });
+    if (u.pathname === '/v1/owners') return new Response(JSON.stringify({ ok: true, records: OWNERS }), { headers: { 'content-type': 'application/json' } });
+    if (u.pathname === '/v1/access/key') return new Response(JSON.stringify(init?.headers?.['x-api-key'] === 'tfr_paid_key' ? { ok: true, keys: [{ key: { prefix: 'tfr_paid_' }, tier: 'paid' }] } : { ok: false }), { status: init?.headers?.['x-api-key'] === 'tfr_paid_key' ? 200 : 401, headers: { 'content-type': 'application/json' } });
+    if (u.pathname === '/v1/root/chains') return new Response(JSON.stringify({ chains: [{ chain_id: 8453, network_name: 'Base', latest_block: 52690300 + pipeN, mini_mmr_root: '0xabc', last_header_age_secs: 2, rate_per_sec: 0.5, status: 'collecting' }] }), { headers: { 'content-type': 'application/json' } });
     return new Response('{}', { status: 404 });
   };
   return { fetch, calls };
@@ -43,7 +47,9 @@ test('off a terminal: NDJSON, the pipe by default, keyless, every event once', a
   const lines = r.out.trim().split('\n').map((l) => JSON.parse(l));
   assert.equal(lines.length, blocks.length);
   assert.deepEqual(lines.map((l) => l.data.seq), blocks.map(seqOf));
-  assert.ok(r.calls.every((c) => c.url.startsWith('https://coord.test/v1/pipe/stream') && c.key === null));
+  assert.ok(r.calls.filter((c) => c.url.includes('/v1/pipe/stream')).every((c) => c.key === null));
+  assert.ok(r.calls.some((c) => c.url === 'https://coord.test/v1/owners' && c.key === null)); // the masters, keyless
+  assert.ok(!r.calls.some((c) => c.url.includes('/v1/access/key'))); // keyless: no standing read
 });
 
 test('a session that ends resumes from the last seq + 1 (LaserStream rule)', async () => {
@@ -83,12 +89,31 @@ test('on a terminal: aligned, coloured rows and the live footer; the transcript 
   assert.equal(rows.length, 12);
   assert.ok(rows.every((l) => /^\d\d:\d\d:\d\d  (observe|advert|lost|batch) +\S/.test(l)));
   assert.ok(!/unrecognised|\{"/.test(rows.join('\n')));
-  assert.match(strip(r.out), /● live · [0-9.]+\/s · 12 events · seq [0-9,]+ · public; session 120s/);
+  assert.match(strip(r.out), /● live +· +[0-9.]+\/s · [▁▂▃▄▅▆▇█·]+ · +12 events · seq [0-9,]+ · GRID [0-9.]+\/s · signed \d+% · lost \d+% · public; session 120s/);
+  assert.match(strip(r.out), /⌁ order .* · genome 0x[0-9a-f]{4}…[0-9a-f]{4} .*buy access: the Taifoon package/); // public: elided + the hint
+  assert.match(strip(r.out), /⚑ taifoon ○/); // the master column from the register
   assert.match(r.err, /^12 event\(s\): observe \d+/);
   const snap = new URL('./snapshots/stream-live-tty.txt', import.meta.url);
   const text = rows.map((l) => l.slice(10)).join('\n') + '\n'; // without the clock (local time zone)
   if (process.env.UPDATE_SNAPSHOTS || !existsSync(snap)) writeFileSync(snap, text);
   assert.equal(text, readFileSync(snap, 'utf8'));
+});
+
+test('a paid key sees whole ids and no buy hint; --short cuts them again as a display preference', async () => {
+  const r = await run(['stream', '--limit', '3', '--key', 'tfr_paid_key'], { tty: true });
+  const txt = strip(r.out);
+  assert.match(txt, /tx 0x[0-9a-f]{64} · block/); assert.doesNotMatch(txt, /buy access/); assert.match(txt, /genome 0x[0-9a-f]{64}/); assert.match(txt, /key · entitled/);
+  const s = await run(['stream', '--limit', '3', '--key', 'tfr_paid_key', '--short'], { tty: true });
+  assert.match(strip(s.out), /tx 0x[0-9a-f]{4}…[0-9a-f]{4} · block/); assert.doesNotMatch(strip(s.out), /buy access/);
+});
+
+test('--stats draws the measures panel; --masters prints the components × master × seat table; --headers adds header rows', async () => {
+  const r = await run(['stream', '--limit', '20', '--stats', '--masters', '--headers', 'all'], { tty: true });
+  const txt = strip(r.out);
+  assert.match(txt, /measures +[0-9.]+\/s over 10 s/); assert.match(txt, /chain +10 s +1 min +GRID\/s +p50 +p95/);
+  assert.match(txt, /component +events +master +seat +shares/); assert.match(txt, /protocol:across_v3 .*taifoon .*held by operator · claimable/);
+  const h = await run(['stream', '--for', '1', '--headers', 'all']);
+  assert.ok(h.out.trim().split('\n').map((l) => JSON.parse(l)).some((l) => l.event === 'header' && l.data.chain_id === 8453 && l.data.latest_block > 0));
 });
 
 test('--no-color and NO_COLOR keep the view plain', async () => {
