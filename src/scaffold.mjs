@@ -5,6 +5,7 @@
 import { chmodSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { contracts } from './registry.mjs';
 
 export const TEMPLATE = fileURLToPath(new URL('../templates/coord-app', import.meta.url));
 const RENAME = { _gitignore: '.gitignore', '_env.example': '.env.example' }; // npm drops dotfiles from a published package
@@ -79,6 +80,8 @@ export function contractsStarter(dir) {
   if (!dir) return { ok: false, error: 'usage: taifoon new --contracts <directory>' };
   const target = resolve(dir);
   if (existsSync(target) && readdirSync(target).length) return { ok: false, error: `${dir} exists and is not empty: nothing was written` };
+  const usdc = contracts({ system: 'tokens', chain: 8453 }).find((c) => c.name === 'USDC')?.address; // the one registry (packages/addresses)
+  if (!usdc) return { ok: false, error: 'the address registry has no USDC on Base: nothing was written' };
   const files = {
     'foundry.toml': `[profile.default]\nsrc = "src"\nout = "out"\nlibs = ["lib"]\nsolc = "0.8.28"\noptimizer = true\nvia_ir = true\nevm_version = "paris"\n\n[rpc_endpoints]\nbase = "\${BASE_RPC_URL}"\n`,
     'remappings.txt': 'taifoon-contracts/=lib/taifoon-contracts/\nforge-std/=lib/forge-std/src/\n',
@@ -128,7 +131,7 @@ contract Deploy is Script {
 forge install taifoon-io/taifoon-contracts foundry-rs/forge-std@v1.15.0 --no-git
 forge build
 curl -s 'https://coord.taifoon.dev/v1/fees/quote?price=10'        # the fee rule: by_bps → FEE_BPS, floor → FEE_MIN
-TOKEN=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 FEE_BPS=49 FEE_MIN=18953 forge script script/Deploy.s.sol --rpc-url base --broadcast --account <your wallet>
+TOKEN=${usdc} FEE_BPS=49 FEE_MIN=18953 forge script script/Deploy.s.sol --rpc-url base --broadcast --account <your wallet>
 \`\`\`
 
 The contract, the release rules and the off-chain half: https://github.com/taifoon-io/taifoon-contracts/tree/main/examples/agent-job

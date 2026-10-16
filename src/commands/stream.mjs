@@ -1,15 +1,13 @@
-// taifoon stream — the pipe: its stats and one envelope's status (generic reads), and `stream subscribe`: the live stream of envelopes
-// your key may read (GET /v1/pipe/stream, server-sent events; filters as query: kinds, venues, chains, order_keys, from_seq).
-import { withGeneric, followSse } from './index.mjs';
+// taifoon stream — the live view of the coordination layer (_STREAM_LIVE_v1_, src/stream-live.mjs): the pipe by default, --all adds
+// the coord stream's lanes; filters --chain --venue --kind --protocol --actor (comma lists); --json (or a pipe) is NDJSON, --raw the
+// old one-line output, --wide whole ids, --for <s> / --limit <n> to stop. `stream live` and `stream subscribe` are the same verb.
+// `stream stats` and `stream status <id>` stay the generic reads.
+import { withGeneric } from './index.mjs';
+import { streamLive, FLAGS } from '../stream-live.mjs';
 
-const FILTERS = ['kinds', 'venues', 'chains', 'order_keys', 'protocol', 'from_seq', 'commitment'];
-export default withGeneric('stream', {
-  summary: 'the pipe: stats, one envelope, and the live stream of what your key may read',
-  valued: [...FILTERS, 'limit', 'for'],
-  subs: {
-    subscribe: async (ctx) => {
-      const q = FILTERS.filter((k) => typeof ctx.f[k] === 'string').map((k) => `${k}=${encodeURIComponent(ctx.f[k])}`).join('&');
-      return followSse(ctx, `/v1/pipe/stream${q ? `?${q}` : ''}`);
-    },
-  },
+const g = withGeneric('stream', {
+  summary: 'the live view: the pipe (and --all: every lane), aligned and coloured on a terminal, NDJSON in a pipe; stats; one envelope',
+  valued: FLAGS,
+  subs: { live: (ctx) => streamLive(ctx), subscribe: (ctx) => streamLive(ctx) },
 });
+export default { ...g, async run(ctx, rest) { return rest.length === 0 ? streamLive(ctx) : g.run(ctx, rest); } };

@@ -1,0 +1,12 @@
+observe   taifoon      superroot          anchored · key 1792169868                                                       40 mGRID
+observe   base         mayan_swift        order Placed → Filled · tx 0x5b5b…ad67 · block 52,690,236                       40 mGRID
+observe   base         mayan_swift        order Unseen → Placed · tx 0x0587…bfdb · block 52,690,250                       40 mGRID
+observe   bnb          layerzero_v2       order Unseen → Placed · tx 0x8435…ce45 · block 128,014,289                      40 mGRID
+observe   bnb          layerzero_v2       order Unseen → Placed · tx 0xe5a6…9aa4 · block 128,014,292                      40 mGRID
+observe   bnb          layerzero_v2       order Unseen → Placed · tx 0x4de1…d969 · block 128,014,294                      40 mGRID
+observe   base         layerzero_v2       order Placed → Verified · tx 0xcb93…bc30 · block 52,690,239                     40 mGRID
+observe   base         layerzero_v2       order Placed → Verified · tx 0x1d30…eb02 · block 52,690,239                     40 mGRID
+observe   base         layerzero_v2       order Placed → Verified · tx 0xdb21…1bee · block 52,690,239                     40 mGRID
+observe   base         layerzero_v2       order Placed → Committed · tx 0xb4d8…4b3c · block 52,690,241                    40 mGRID
+observe   base         layerzero_v2       order Placed → Filled · tx 0xa0b7…bcb8 · block 52,690,243                       40 mGRID
+observe   base         layerzero_v2       order Placed → Verified · tx 0x2962…9f7a · block 52,690,246                     40 mGRID

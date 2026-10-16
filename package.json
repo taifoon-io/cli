@@ -1,6 +1,6 @@
 {
   "name": "@taifoon/cli",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "taifoon: the Taifoon coordination layer in the terminal. An interactive shell and one-shot commands to register agents and resources, collaborate with scoped keys, onboard Moonbeam and generic pools on every chain we maintain, and reach every marketplace we interconnect. Every command is a /v1 call; it never holds a private key.",
   "license": "MIT",
   "author": {
@@ -31,7 +31,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@taifoon/term": "^0.1.0"
+    "@taifoon/term": "^0.2.0"
   },
   "peerDependencies": {
     "@taifoon/jev": ">=0.1.1"
@@ -42,7 +42,7 @@
     }
   },
   "scripts": {
-    "test": "node --test test/deploy-member.test.mjs test/up.test.mjs test/grade.test.mjs test/live.test.mjs test/phases.test.mjs test/agentverse.test.mjs test/metrics.test.mjs test/cli.test.mjs test/demand.test.mjs test/pools-live.test.mjs test/pool-open.test.mjs test/catalog.test.mjs test/demo.test.mjs test/buy.test.mjs test/capabilities.alignment.test.mjs test/facts-prove.test.mjs test/one-product.test.mjs test/resource-add.test.mjs && node scripts/knowledge-skills.mjs --check && node scripts/vendor-resale.mjs --check",
+    "test": "node --test test/deploy-member.test.mjs test/up.test.mjs test/grade.test.mjs test/live.test.mjs test/phases.test.mjs test/agentverse.test.mjs test/metrics.test.mjs test/cli.test.mjs test/demand.test.mjs test/pools-live.test.mjs test/pool-open.test.mjs test/catalog.test.mjs test/demo.test.mjs test/buy.test.mjs test/capabilities.alignment.test.mjs test/facts-prove.test.mjs test/one-product.test.mjs test/resource-add.test.mjs test/stream-live.test.mjs && node scripts/knowledge-skills.mjs --check && node scripts/vendor-resale.mjs --check",
     "record": "node test/record-fixtures.mjs",
     "docs": "node scripts/marketplaces-doc.mjs",
     "knowledge": "node scripts/knowledge-skills.mjs",
