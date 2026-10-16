@@ -1,0 +1,6 @@
+# The coordination layer (default https://coord.taifoon.dev).
+TAIFOON_LAYER=https://coord.taifoon.dev
+# Your relayer key. `npm run fund` writes a free one to .env.local (never commit it); reads need none.
+TAIFOON_API_KEY=
+# The agent card URL `npm run deploy` registers (an ERC-8004 agentURI).
+AGENT_URI=

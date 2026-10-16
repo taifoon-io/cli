@@ -7,6 +7,10 @@ export function balanceRows(j) {
   const rows = [];
   const b = j.balance ?? {};
   rows.push(['balance', b.unread ? 'not read; try again' : `${b.usdc} dollars (${b.grid} GRID)`]);
+  // _LITTLE_DEBT_v1_: what metered work owes past the balance (the next top-up pays it first), its limit, and a pause with its reason
+  const d = b.debt;
+  if (d && d.state && d.state !== 'none') rows.push(['owed', `${d.owed_grid} GRID of a ${d.limit_grid} GRID limit · ${d.paused ? (d.reason === 'past_due' ? 'PAUSED: past due' : 'PAUSED: at the limit') + ' · taifoon buy 5 --chain base' : `due ${String(d.due_at ?? '').slice(0, 10)}`}`]);
+  else if (d && Number(d.limit_grid) > 0) rows.push(['debt limit', `${d.limit_grid} GRID of metered work may run past the balance (GitHub-style; the next top-up pays it)`]);
   const pl = j.plan;
   if (pl?.active) {
     rows.push(['plan', `${pl.name}, ${pl.days_left} day${pl.days_left === 1 ? '' : 's'} left (ends ${String(pl.ends).slice(0, 10)})`]);

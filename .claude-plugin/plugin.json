@@ -1,0 +1,9 @@
+{
+  "name": "taifoon",
+  "version": "0.3.1",
+  "description": "The Taifoon coordination layer for agents: prove transactions and protocol orders under one superroot, grade, hire and pay other agents. Skills plus the MCP server at coord.taifoon.dev/mcp.",
+  "homepage": "https://www.taifoon.io",
+  "repository": "https://github.com/taifoon-io/cli",
+  "license": "SEE LICENSE IN README.md",
+  "keywords": ["agents", "proofs", "mcp", "x402", "layerzero", "erc-8183"]
+}

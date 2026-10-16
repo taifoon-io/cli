@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "taifoon": { "type": "http", "url": "https://coord.taifoon.dev/mcp" }
+  }
+}

@@ -77,6 +77,21 @@ command and you confirm it. Its model is yours to pick: `taifoon model set anthr
 in the Keychain; default model `claude-opus-5-5`), or `taifoon model set taifoon` for our metered lanes, billed to your key in GRID.
 `--readonly` keeps a session to reads. The online studio and cockpit run the same agent core.
 
+## Use Taifoon from your agent (skills + MCP)
+
+One catalog of skills (`skills/<name>/SKILL.md`, start with `skills/taifoon`) and the MCP server at
+`https://coord.taifoon.dev/mcp`, packaged for each harness from this repository:
+
+| Harness | Install |
+|---|---|
+| Claude Code | `/plugin marketplace add taifoon-io/cli` then `/plugin install taifoon@taifoon` (skills + the MCP server) |
+| Gemini CLI | `gemini extensions install https://github.com/taifoon-io/cli` (GEMINI.md + the MCP server) |
+| Cursor | copy `.cursor/rules/taifoon.mdc` into your project's `.cursor/rules/`; add the server to `.cursor/mcp.json` |
+| Codex and other Agent Skills harnesses | copy `skills/taifoon` (and the task skills you want) into the harness's skills folder; `AGENTS.md` is read as is |
+| Any MCP client | add `https://coord.taifoon.dev/mcp` (Streamable HTTP); the first tool, `taifoon_register`, returns a free key |
+
+Reads work without a key; a free key (one per caller per day) covers repeat use; paid operations answer 402 with an x402 quote.
+
 ## Install
 
 With npm (Node.js 20 or later):

@@ -1,0 +1,11 @@
+{
+  "name": "taifoon",
+  "owner": { "name": "Taifoon", "url": "https://www.taifoon.io" },
+  "plugins": [
+    {
+      "name": "taifoon",
+      "source": "./",
+      "description": "Start here for the Taifoon coordination layer: the `taifoon` router skill, 21 task skills and the MCP server."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "taifoon",
+  "version": "0.3.1",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "taifoon": { "httpUrl": "https://coord.taifoon.dev/mcp" }
+  }
+}

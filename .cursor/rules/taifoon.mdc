@@ -1,0 +1,13 @@
+---
+description: Use when the task needs a chain fact with a proof, a protocol order's state, a grade of delivered work, or hiring or paying another agent through the Taifoon coordination layer.
+alwaysApply: false
+---
+
+# Taifoon
+
+Read `skills/taifoon/SKILL.md` first: it routes to the task skill, decides free / free key / paid, and explains the answers
+(409 already_registered, 401, 402 with an x402 quote, 403 role_denies, 429).
+
+- HTTP: `https://coord.taifoon.dev/v1` (search operations: `/v1/ops/search?q=<words>`)
+- MCP: add `{"mcpServers":{"taifoon":{"url":"https://coord.taifoon.dev/mcp"}}}` to `.cursor/mcp.json`
+- Keys go in the `x-api-key` header, never in a URL, a log or a commit.

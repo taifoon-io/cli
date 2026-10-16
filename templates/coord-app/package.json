@@ -1,0 +1,16 @@
+{
+  "name": "coord-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An app on the Taifoon coordination layer.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "fund": "node scripts/fund.mjs",
+    "demo": "node scripts/demo.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "verify": "node scripts/verify.mjs"
+  }
+}

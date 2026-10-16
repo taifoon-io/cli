@@ -99,6 +99,9 @@ test('taifoon balance: the balance, the plan with its days left, and how to rene
   assert.equal(r.code, 0, r.err);
   for (const want of ['4.250000 dollars (425 GRID)', 'Builder, 5 days left (ends 2026-10-10)', '37.500000 of 110.000000 dollars left', 'never by itself', 'taifoon buy builder-99', '1000 calls a minute']) assert.ok(r.out.includes(want), want);
   assert.deepEqual(balanceRows({ balance: { usdc: '0.000000', grid: 0 }, plan: null }).map((x) => x[0]), ['balance', 'plan']);
+  // _LITTLE_DEBT_v1_: an open debt is one row with its limit and due date; a pause names its reason and the top-up
+  assert.deepEqual(balanceRows({ balance: { usdc: '0.000000', grid: 0, debt: { owed_grid: 42, limit_grid: 100, state: 'open', paused: false, due_at: '2026-11-08T00:00:00.000Z' } }, plan: null })[1], ['owed', '42 GRID of a 100 GRID limit · due 2026-11-08']);
+  assert.match(balanceRows({ balance: { usdc: '0.000000', grid: 0, debt: { owed_grid: 100, limit_grid: 100, state: 'at_limit', paused: true, reason: 'debt_limit' } } })[1][1], /PAUSED: at the limit/);
   assert.match(balanceRows({ balance: { usdc: '1.000000', grid: 100 }, plan: { active: false, ended: { plan: 'team-199', on: '2026-10-01T00:00:00Z' } } })[1][1], /team-199 ended 2026-10-01 · taifoon buy team-199/);
   const j = await run(['balance', '--json'], { 'GET /v1/access/key': { json: standing } });
   assert.equal(JSON.parse(j.out).plan.days_left, 5);

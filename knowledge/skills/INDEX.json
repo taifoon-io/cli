@@ -113,6 +113,12 @@
    "sha256": "598fa4d5c083e0bbc1f4da698a1ac92ddcc36a2bfeb7c29c8d05a7c5d0811d05"
   },
   {
+   "name": "taifoon",
+   "file": "taifoon.md",
+   "from": "skills/catalog/taifoon/SKILL.md",
+   "sha256": "25c9715bf09d4e2d239e3a949c1fb6fa51d9c3add9f0b6d9382bae00d3bb1f4e"
+  },
+  {
    "name": "taifoon-cli",
    "file": "taifoon-cli.md",
    "from": "skills/catalog/taifoon-cli/SKILL.md",

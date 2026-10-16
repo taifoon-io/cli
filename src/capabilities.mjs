@@ -86,6 +86,8 @@ export const CAPABILITIES = Object.freeze([
     summary: 'one member, live: cap, reserved, headroom' }),
   r({ id: 'partners.plan', kind: 'plan', cli: 'partners plan', mcp: 'partners_plan', op: 'POST /v1/partners/plan', http: { method: 'POST', path: '/v1/partners/plan', body: ['action', 'chain_id', 'ns', 'amount', 'member', 'payout', 'cap', 'partner', 'seller', 'buyer', 'price', 'deposit', 'premium', 'deadline', 'pool', 'cover_cap', 'evaluator', 'evaluator_fee', 'review_window', 'dispute_window', 'challenge_window', 'salt', 'job_id', 'evidence', 'from', 'payment_ref'] },
     summary: 'the unsigned calls of a partner-bond action' }),
+  r({ id: 'deploy.member', kind: 'local', cli: 'deploy member-contract', mcp: null, op: 'none', why: 'deploys the member\'s own contract with the member\'s own wallet (Foundry on their machine); a plan, a fork rehearsal, then their send' }),
+  r({ id: 'new', kind: 'local', cli: 'new', mcp: null, op: 'none', why: 'writes a starter directory on the caller\'s machine (a card\'s starter from the layer, or the coord app template)' }),
   r({ id: 'reach', kind: 'local', cli: 'reach', mcp: null, op: 'the published hireability worklist', why: 'reads a published worklist file, not a /v1 op' }),
   r({ id: 'markets.ls', kind: 'local', cli: 'markets ls', mcp: null, op: 'several discovery reads', why: 'one read per marketplace directory, folded on the client; MCP: venues_list' }),
   r({ id: 'markets.search', kind: 'local', cli: 'markets search', mcp: null, op: 'several search reads', why: 'one query fanned out to every searchable marketplace; MCP: agents_search' }),
@@ -154,6 +156,8 @@ export const CAPABILITIES = Object.freeze([
   r({ id: 'register.agent.uri', kind: 'plan', cli: 'register agent --uri', mcp: 'agents_register_plan', op: 'POST /v1/assurance/call { register-8004 }', http: { method: 'POST', path: '/v1/assurance/call', body: ['chainId', 'action'] },
     summary: 'the UNSIGNED register(agentURI) for a new ERC-8004 identity' }),
   r({ id: 'register.resource', kind: 'act', via: 'keychain', key: true, cli: 'register resource', mcp: null, op: 'POST /v1/agents/probe + the gateway terms', summary: 'the resource walk (--check reads only)' }),
+  // _ONBOARDING_FLOW_v1_: the onboarding entry by connector type — the same walk (coord docs/ONBOARDING-FLOW.md)
+  r({ id: 'resource.add', kind: 'act', via: 'keychain', key: true, cli: 'resource add', mcp: null, op: 'POST /v1/agents/probe + the gateway terms', summary: 'add a resource by connector type (rpc-list, compute, agent:mcp, pay:x402 …): the same walk as register resource; collect, stream, workflow, contracts and vault point where they go' }),
   r({ id: 'demo.n8n', kind: 'local', cli: 'demo n8n', mcp: null, op: 'several reads', why: 'replays the last tested run of the n8n example phase by phase' }),
   r({ id: 'demo.n8n.live', kind: 'act', via: 'keychain', key: true, cli: 'demo n8n --live', mcp: null, op: 'POST /v1/demands', summary: 'run the n8n flow on a new demand with your key' }),
 
@@ -199,6 +203,7 @@ export const CAPABILITIES = Object.freeze([
   r({ id: 'stream.status', kind: 'read', cli: 'stream status', mcp: 'pipe_status', op: 'GET /v1/pipe/status/:id', http: { method: 'GET', path: '/v1/pipe/status/:id' },
     summary: 'one envelope: its state, attempts, carrier, ack and history' }),
   r({ id: 'stream.subscribe', kind: 'local', cli: 'stream subscribe', mcp: null, op: 'GET /v1/pipe/stream (SSE)', why: 'follows a live server-sent stream until you stop it' }),
+  r({ id: 'send', kind: 'local', key: true, cli: 'send', mcp: null, op: 'POST /v1/pipe/send', why: 'a write on your key: a canonical record of any type (the lambda catalogue, GET /v1/lambda/catalog) becomes a sendable envelope and goes into the stream; --dry prints the envelope and sends nothing', summary: 'send a record into the stream as an envelope of a kind (type → envelope, the lambda catalogue); --dry builds without sending' }),
   r({ id: 'debug.rpc', kind: 'read', cli: 'debug rpc', mcp: 'debug_rpc', op: 'GET /v1/rpc/:chain + GET /v1/root/chains', run: 'debugRpc', args: ['chain'],
     summary: 'is a chain reachable: the RPC rotation for it and its header collector’s freshness, as one verdict with findings' }),
   r({ id: 'debug.protocol', kind: 'read', cli: 'debug protocol', mcp: 'debug_protocol', op: 'GET /v1/protocol/:protocol/stuck + /paths', run: 'debugProtocol', args: ['protocol'],

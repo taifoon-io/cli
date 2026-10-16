@@ -3,6 +3,40 @@
  "generated_from": "taifoon.pipe.lang.v1",
  "blocks": [
   {
+   "id": "coord-send:coordination.transitions.v1/dispatch_no_work@handshake",
+   "block": "coord-send",
+   "title": "job: Open → Open (handshake)",
+   "kind": "offer",
+   "transition": "coordination.transitions.v1/dispatch_no_work@handshake",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/dispatch_delivered@handshake",
+   "block": "coord-send",
+   "title": "job: Open → Delivered (handshake)",
+   "kind": "delivery",
+   "transition": "coordination.transitions.v1/dispatch_delivered@handshake",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.transitions.v1/pregrade@handshake",
+   "block": "coord-send",
+   "title": "job: Delivered → Delivered (handshake)",
+   "kind": "delivery",
+   "transition": "coordination.transitions.v1/pregrade@handshake",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_delivered@handshake",
+    "coordination.transitions.v1/pregrade@handshake"
+   ]
+  },
+  {
    "id": "coord-send:coordination.transitions.v1/fund_offer@hook",
    "block": "coord-send",
    "title": "job: Open → Funded (hook)",
@@ -12,7 +46,9 @@
     "devnet",
     "mainnet"
    ],
-   "connects_after": []
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
   },
   {
    "id": "coord-send:coordination.transitions.v1/fund_delivered@hook",
@@ -24,7 +60,10 @@
     "devnet",
     "mainnet"
    ],
-   "connects_after": []
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_delivered@handshake",
+    "coordination.transitions.v1/pregrade@handshake"
+   ]
   },
   {
    "id": "coord-subscribe:coordination.transitions.v1/create@erc8183",
@@ -33,7 +72,31 @@
    "kind": "observe",
    "transition": "coordination.transitions.v1/create@erc8183",
    "outlets": [],
-   "connects_after": []
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/create@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Open → Created (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/create@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/create@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Open → Created (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/create@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
   },
   {
    "id": "coord-subscribe:coordination.transitions.v1/terms@erc8183",
@@ -44,7 +107,43 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/terms@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Created → Created (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/terms@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/terms@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Created → Created (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/terms@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -56,7 +155,43 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/fund@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Created → Funded (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/fund@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/fund@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Created → Funded (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/fund@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -68,7 +203,43 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_unfunded@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Created → Rejected (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_unfunded@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_unfunded@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Created → Rejected (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_unfunded@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -80,7 +251,43 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/lapse@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Created → Cancelled (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/lapse@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/lapse@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Created → Cancelled (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/lapse@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -92,7 +299,43 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_unfunded@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Created → Expired (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_unfunded@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_unfunded@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Created → Expired (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_unfunded@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/create@erc8183",
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -104,7 +347,11 @@
    "outlets": [],
    "connects_after": [
     "coordination.transitions.v1/create@erc8183",
-    "coordination.transitions.v1/terms@erc8183"
+    "coordination.transitions.v1/create@erc8183-extra",
+    "coordination.transitions.v1/create@memo-acp",
+    "coordination.transitions.v1/terms@erc8183",
+    "coordination.transitions.v1/terms@erc8183-extra",
+    "coordination.transitions.v1/terms@memo-acp"
    ]
   },
   {
@@ -118,6 +365,40 @@
     "coordination.transitions.v1/fund_offer@hook",
     "coordination.transitions.v1/fund_delivered@hook",
     "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/submit@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Submitted (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/submit@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/submit@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Submitted (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/submit@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
     "coordination.transitions.v1/accept_v4@hook"
    ]
   },
@@ -135,6 +416,8 @@
     "coordination.transitions.v1/fund_offer@hook",
     "coordination.transitions.v1/fund_delivered@hook",
     "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
     "coordination.transitions.v1/accept_v4@hook"
    ]
   },
@@ -149,6 +432,40 @@
     "coordination.transitions.v1/fund_offer@hook",
     "coordination.transitions.v1/fund_delivered@hook",
     "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_undelivered@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Rejected (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_undelivered@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_undelivered@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Rejected (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_undelivered@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
     "coordination.transitions.v1/accept_v4@hook"
    ]
   },
@@ -163,6 +480,40 @@
     "coordination.transitions.v1/fund_offer@hook",
     "coordination.transitions.v1/fund_delivered@hook",
     "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_undelivered@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Expired (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_undelivered@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
+    "coordination.transitions.v1/accept_v4@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_undelivered@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Funded → Expired (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_undelivered@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/fund_offer@hook",
+    "coordination.transitions.v1/fund_delivered@hook",
+    "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
     "coordination.transitions.v1/accept_v4@hook"
    ]
   },
@@ -180,6 +531,8 @@
     "coordination.transitions.v1/fund_offer@hook",
     "coordination.transitions.v1/fund_delivered@hook",
     "coordination.transitions.v1/fund@erc8183",
+    "coordination.transitions.v1/fund@erc8183-extra",
+    "coordination.transitions.v1/fund@memo-acp",
     "coordination.transitions.v1/accept_v4@hook"
    ]
   },
@@ -193,6 +546,38 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/complete@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Settled (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/complete@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/complete@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Settled (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/complete@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -209,6 +594,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -222,6 +609,38 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_delivered@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Rejected (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_delivered@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/reject_delivered@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Rejected (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/reject_delivered@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -238,6 +657,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -251,6 +672,38 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_delivered@erc8183-extra",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Expired (erc8183-extra)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_delivered@erc8183-extra",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
+    "coordination.transitions.v1/submit@hook"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.transitions.v1/expire_delivered@memo-acp",
+   "block": "coord-subscribe",
+   "title": "job: Submitted → Expired (memo-acp)",
+   "kind": "observe",
+   "transition": "coordination.transitions.v1/expire_delivered@memo-acp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.transitions.v1/submit_unfunded@erc8183",
+    "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -267,6 +720,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -283,6 +738,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -298,8 +755,14 @@
    ],
    "connects_after": [
     "coordination.transitions.v1/reject_unfunded@erc8183",
+    "coordination.transitions.v1/reject_unfunded@erc8183-extra",
+    "coordination.transitions.v1/reject_unfunded@memo-acp",
     "coordination.transitions.v1/reject_undelivered@erc8183",
+    "coordination.transitions.v1/reject_undelivered@erc8183-extra",
+    "coordination.transitions.v1/reject_undelivered@memo-acp",
     "coordination.transitions.v1/reject_delivered@erc8183",
+    "coordination.transitions.v1/reject_delivered@erc8183-extra",
+    "coordination.transitions.v1/reject_delivered@memo-acp",
     "coordination.transitions.v1/reject_delivered@hook",
     "coordination.transitions.v1/graded_reject@hook",
     "coordination.transitions.v1/held_reject@hook",
@@ -318,6 +781,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -331,6 +796,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -456,7 +923,9 @@
     "devnet",
     "mainnet"
    ],
-   "connects_after": []
+   "connects_after": [
+    "coordination.transitions.v1/dispatch_no_work@handshake"
+   ]
   },
   {
    "id": "coord-send:coordination.transitions.v1/accept_v4@hook",
@@ -513,6 +982,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -631,6 +1102,8 @@
    "connects_after": [
     "coordination.transitions.v1/submit_unfunded@erc8183",
     "coordination.transitions.v1/submit@erc8183",
+    "coordination.transitions.v1/submit@erc8183-extra",
+    "coordination.transitions.v1/submit@memo-acp",
     "coordination.transitions.v1/submit@hook"
    ]
   },
@@ -660,6 +1133,3933 @@
    ],
    "connects_after": [
     "coordination.transitions.v1/hold@hook"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/probe@resource",
+   "block": "coord-send",
+   "title": "resource: Offered → Probed (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/probe@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/probe_fail@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/probe_fail@resource",
+   "block": "coord-send",
+   "title": "resource: Offered → Offered (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/probe_fail@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/probe_fail@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/attest@resource",
+   "block": "coord-send",
+   "title": "resource: Probed → Attested (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/attest@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/probe@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/reject_attestation@resource",
+   "block": "coord-send",
+   "title": "resource: Probed → Withdrawn (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/reject_attestation@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/probe@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/dedicate@resource",
+   "block": "coord-send",
+   "title": "resource: Attested → Serving (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/dedicate@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/attest@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/pool@resource",
+   "block": "coord-send",
+   "title": "resource: Attested → Pooled (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/pool@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/attest@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/place@resource",
+   "block": "coord-send",
+   "title": "resource: Pooled → Placed (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/place@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/pool@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/serve@resource",
+   "block": "coord-send",
+   "title": "resource: Placed → Serving (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/serve@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/place@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/degrade@resource",
+   "block": "coord-send",
+   "title": "resource: Serving → Degraded (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/degrade@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/dedicate@resource",
+    "coordination.compute.v1/serve@resource",
+    "coordination.compute.v1/recover@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/recover@resource",
+   "block": "coord-send",
+   "title": "resource: Degraded → Serving (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/recover@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/degrade@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/withdraw@resource",
+   "block": "coord-send",
+   "title": "resource: Serving → Withdrawn (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/withdraw@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/dedicate@resource",
+    "coordination.compute.v1/serve@resource",
+    "coordination.compute.v1/recover@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/withdraw_degraded@resource",
+   "block": "coord-send",
+   "title": "resource: Degraded → Withdrawn (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/withdraw_degraded@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/degrade@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/withdraw_unproven@resource",
+   "block": "coord-send",
+   "title": "resource: Offered → Withdrawn (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/withdraw_unproven@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/probe_fail@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/slash@resource",
+   "block": "coord-send",
+   "title": "resource: Serving → Slashed (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/slash@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/dedicate@resource",
+    "coordination.compute.v1/serve@resource",
+    "coordination.compute.v1/recover@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/slash_degraded@resource",
+   "block": "coord-send",
+   "title": "resource: Degraded → Slashed (resource)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/slash_degraded@resource",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/degrade@resource"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/meter@usage",
+   "block": "coord-send",
+   "title": "usage: Called → Metered (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/meter@usage",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/refuse@usage",
+   "block": "coord-send",
+   "title": "usage: Called → Refused (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/refuse@usage",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/fail@usage",
+   "block": "coord-send",
+   "title": "usage: Called → Failed (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/fail@usage",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/debit_free@usage",
+   "block": "coord-send",
+   "title": "usage: Metered → Debited (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/debit_free@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/meter@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/debit_usdc@usage",
+   "block": "coord-send",
+   "title": "usage: Metered → Debited (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/debit_usdc@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/meter@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/debit_x402@usage",
+   "block": "coord-send",
+   "title": "usage: Metered → Debited (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/debit_x402@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/meter@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/debit_grid@usage",
+   "block": "coord-send",
+   "title": "usage: Metered → Debited (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/debit_grid@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/meter@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/debit_resale@usage",
+   "block": "coord-send",
+   "title": "usage: Metered → Debited (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/debit_resale@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/meter@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/receipt@usage",
+   "block": "coord-send",
+   "title": "usage: Debited → Receipted (usage)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/receipt@usage",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/debit_free@usage",
+    "coordination.compute.v1/debit_usdc@usage",
+    "coordination.compute.v1/debit_x402@usage",
+    "coordination.compute.v1/debit_grid@usage",
+    "coordination.compute.v1/debit_resale@usage"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/split@payout",
+   "block": "coord-send",
+   "title": "payout: Accrued → Split (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/split@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/release@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/settle_grid_direct@payout",
+   "block": "coord-send",
+   "title": "payout: Accrued → Paid (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/settle_grid_direct@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/release@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/pay_grid@payout",
+   "block": "coord-send",
+   "title": "payout: Split → Paid (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/pay_grid@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/split@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/pay_usdc@payout",
+   "block": "coord-send",
+   "title": "payout: Split → Paid (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/pay_usdc@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/split@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/hold@payout",
+   "block": "coord-send",
+   "title": "payout: Accrued → Held (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/hold@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/release@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/release@payout",
+   "block": "coord-send",
+   "title": "payout: Held → Accrued (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/release@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/hold@payout",
+    "coordination.compute.v1/hold_split@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/hold_split@payout",
+   "block": "coord-send",
+   "title": "payout: Split → Held (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/hold_split@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/split@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.compute.v1/forfeit@payout",
+   "block": "coord-send",
+   "title": "payout: Held → Forfeited (payout)",
+   "kind": "record",
+   "transition": "coordination.compute.v1/forfeit@payout",
+   "outlets": [],
+   "connects_after": [
+    "coordination.compute.v1/hold@payout",
+    "coordination.compute.v1/hold_split@payout"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/classify@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Harvested → Classified (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/classify@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/feedback@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/list@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Classified → Listed (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/list@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/classify@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/publish@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Listed → Reached (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/publish@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/list@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/reach@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Harvested → Reached (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/reach@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/feedback@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/demand@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Reached → Demanded (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/demand@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/publish@demand_loop",
+    "coordination.demand.v1/reach@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/match@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Demanded → Matched (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/match@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/demand@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/unmatched@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Demanded → Unmatched (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/unmatched@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/demand@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/serve@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Matched → Served (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/serve@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/match@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/grade@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Served → Graded (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/grade@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/serve@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/assure@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Graded → Assured (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/assure@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/grade@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/settle_assured@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Assured → Settled (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/settle_assured@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/assure@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/settle_uncovered@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Graded → Settled (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/settle_uncovered@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/grade@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/record@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Settled → Recorded (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/record@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/settle_assured@demand_loop",
+    "coordination.demand.v1/settle_uncovered@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.demand.v1/feedback@demand_loop",
+   "block": "coord-send",
+   "title": "hire: Recorded → Harvested (demand_loop)",
+   "kind": "record",
+   "transition": "coordination.demand.v1/feedback@demand_loop",
+   "outlets": [],
+   "connects_after": [
+    "coordination.demand.v1/record@demand_loop"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/open@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Unopened → Opened (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/open@outlet_account",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/fund@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Opened → Funded (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/fund@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/open@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/go_live@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Funded → Live (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/go_live@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/fund@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/runway_low@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Live → LowRunway (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/runway_low@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/go_live@outlet_account",
+    "coordination.outlet_account.v1/top_up@outlet_account",
+    "coordination.outlet_account.v1/resume@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/top_up@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: LowRunway → Live (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/top_up@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/runway_low@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/suspend@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: LowRunway → Suspended (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/suspend@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/runway_low@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/stop@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Live → Suspended (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/stop@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/go_live@outlet_account",
+    "coordination.outlet_account.v1/top_up@outlet_account",
+    "coordination.outlet_account.v1/resume@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/resume@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Suspended → Live (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/resume@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/suspend@outlet_account",
+    "coordination.outlet_account.v1/stop@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/withdraw_unfunded@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Opened → Closed (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/withdraw_unfunded@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/open@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.outlet_account.v1/close@outlet_account",
+   "block": "coord-send",
+   "title": "outlet: Suspended → Closed (outlet_account)",
+   "kind": "record",
+   "transition": "coordination.outlet_account.v1/close@outlet_account",
+   "outlets": [],
+   "connects_after": [
+    "coordination.outlet_account.v1/suspend@outlet_account",
+    "coordination.outlet_account.v1/stop@outlet_account"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/publish@publish",
+   "block": "coord-send",
+   "title": "placement: Unpublished → Published (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/publish@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/reopen@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/prepare@publish",
+   "block": "coord-send",
+   "title": "placement: Unpublished → Prepared (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/prepare@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/reopen@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/owner_publish@publish",
+   "block": "coord-send",
+   "title": "placement: Prepared → Published (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/owner_publish@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/prepare@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/self_pay@publish",
+   "block": "coord-send",
+   "title": "placement: Unpublished → Published (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/self_pay@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/reopen@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/verify@publish",
+   "block": "coord-send",
+   "title": "placement: Published → Verified (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/verify@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/publish@publish",
+    "coordination.publish.v1/owner_publish@publish",
+    "coordination.publish.v1/self_pay@publish",
+    "coordination.publish.v1/republish@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/go_stale@publish",
+   "block": "coord-send",
+   "title": "placement: Verified → Stale (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/go_stale@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/verify@publish",
+    "coordination.publish.v1/reverify@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/reverify@publish",
+   "block": "coord-send",
+   "title": "placement: Stale → Verified (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/reverify@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/go_stale@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/republish@publish",
+   "block": "coord-send",
+   "title": "placement: Stale → Published (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/republish@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/go_stale@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/withdraw@publish",
+   "block": "coord-send",
+   "title": "placement: Published → Withdrawn (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/withdraw@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/publish@publish",
+    "coordination.publish.v1/owner_publish@publish",
+    "coordination.publish.v1/self_pay@publish",
+    "coordination.publish.v1/republish@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/withdraw_verified@publish",
+   "block": "coord-send",
+   "title": "placement: Verified → Withdrawn (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/withdraw_verified@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/verify@publish",
+    "coordination.publish.v1/reverify@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/withdraw_stale@publish",
+   "block": "coord-send",
+   "title": "placement: Stale → Withdrawn (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/withdraw_stale@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/go_stale@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/withdraw_prepared@publish",
+   "block": "coord-send",
+   "title": "placement: Prepared → Withdrawn (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/withdraw_prepared@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/prepare@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/withdraw_unpublished@publish",
+   "block": "coord-send",
+   "title": "placement: Unpublished → Withdrawn (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/withdraw_unpublished@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/reopen@publish"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.publish.v1/reopen@publish",
+   "block": "coord-send",
+   "title": "placement: Withdrawn → Unpublished (publish)",
+   "kind": "record",
+   "transition": "coordination.publish.v1/reopen@publish",
+   "outlets": [],
+   "connects_after": [
+    "coordination.publish.v1/withdraw@publish",
+    "coordination.publish.v1/withdraw_verified@publish",
+    "coordination.publish.v1/withdraw_stale@publish",
+    "coordination.publish.v1/withdraw_prepared@publish",
+    "coordination.publish.v1/withdraw_unpublished@publish"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@x402-base",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (x402-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (x402-solana)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (x402-arbitrum)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (x402-robinhood)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (x402-monad)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (erc8183-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (memoacp-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (acpv3-arc)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (acpv3-robinhood)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (bitagent-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (olas-gnosis)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (olas-polygon)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@olas-base",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (olas-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@mcp",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (mcp)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@mcp",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@a2a",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (a2a)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@a2a",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@erc8004",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (erc8004)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.in@n8n",
+   "block": "coord-subscribe",
+   "title": "offer: VenueOffer → CoordOffer (n8n)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.in@n8n",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@x402-base",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (x402-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (x402-solana)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (x402-arbitrum)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (x402-robinhood)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (x402-monad)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (erc8183-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (memoacp-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (acpv3-arc)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (acpv3-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (bitagent-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (olas-gnosis)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (olas-polygon)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@olas-base",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (olas-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@mcp",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (mcp)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@mcp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@a2a",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (a2a)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@a2a",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/offer.out@erc8004",
+   "block": "coord-send",
+   "title": "offer: CoordOffer → VenueListing (erc8004)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/offer.out@n8n",
+   "block": "coord-subscribe",
+   "title": "offer: CoordOffer → VenueListing (n8n)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/offer.out@n8n",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.in@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.in@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.in@mcp",
+    "coordination.seller-coord-buyer.v1/offer.in@a2a",
+    "coordination.seller-coord-buyer.v1/offer.in@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@x402-base",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (x402-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@x402-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@x402-solana",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (x402-solana)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@x402-solana",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (x402-arbitrum)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (x402-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@x402-monad",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (x402-monad)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@x402-monad",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@erc8183-base",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (erc8183-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@memoacp-base",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (memoacp-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (acpv3-arc)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (acpv3-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@bitagent-base",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (bitagent-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (olas-gnosis)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@olas-polygon",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (olas-polygon)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@olas-base",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (olas-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@olas-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@mcp",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (mcp)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@mcp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@a2a",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (a2a)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@a2a",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@erc8004",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (erc8004)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@erc8004",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/buy@n8n",
+   "block": "coord-send",
+   "title": "job: VenueListing → VenuePurchase (n8n)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/buy@n8n",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/offer.out@x402-base",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-solana",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@x402-monad",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8183-base",
+    "coordination.seller-coord-buyer.v1/offer.out@memoacp-base",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/offer.out@bitagent-base",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-polygon",
+    "coordination.seller-coord-buyer.v1/offer.out@olas-base",
+    "coordination.seller-coord-buyer.v1/offer.out@mcp",
+    "coordination.seller-coord-buyer.v1/offer.out@a2a",
+    "coordination.seller-coord-buyer.v1/offer.out@erc8004",
+    "coordination.seller-coord-buyer.v1/offer.out@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@x402-base",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (x402-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@x402-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@x402-solana",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (x402-solana)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (x402-arbitrum)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (x402-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@x402-monad",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (x402-monad)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (erc8183-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (memoacp-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (acpv3-arc)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (acpv3-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (bitagent-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (olas-gnosis)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (olas-polygon)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@olas-base",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (olas-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@olas-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@mcp",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (mcp)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@mcp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@a2a",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (a2a)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@a2a",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@erc8004",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (erc8004)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@erc8004",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.in@n8n",
+   "block": "coord-send",
+   "title": "hire: VenuePurchase → CoordHire (n8n)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.in@n8n",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/buy@x402-base",
+    "coordination.seller-coord-buyer.v1/buy@x402-solana",
+    "coordination.seller-coord-buyer.v1/buy@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/buy@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@x402-monad",
+    "coordination.seller-coord-buyer.v1/buy@erc8183-base",
+    "coordination.seller-coord-buyer.v1/buy@memoacp-base",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/buy@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/buy@bitagent-base",
+    "coordination.seller-coord-buyer.v1/buy@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/buy@olas-polygon",
+    "coordination.seller-coord-buyer.v1/buy@olas-base",
+    "coordination.seller-coord-buyer.v1/buy@mcp",
+    "coordination.seller-coord-buyer.v1/buy@a2a",
+    "coordination.seller-coord-buyer.v1/buy@erc8004",
+    "coordination.seller-coord-buyer.v1/buy@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@x402-base",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (x402-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@x402-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@x402-solana",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (x402-solana)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@x402-solana",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@x402-arbitrum",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (x402-arbitrum)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@x402-arbitrum",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@x402-robinhood",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (x402-robinhood)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@x402-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@x402-monad",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (x402-monad)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@x402-monad",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@erc8183-base",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (erc8183-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@erc8183-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@memoacp-base",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (memoacp-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@memoacp-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@acpv3-arc",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (acpv3-arc)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@acpv3-arc",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@acpv3-robinhood",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (acpv3-robinhood)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@acpv3-robinhood",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-subscribe:coordination.seller-coord-buyer.v1/job.out@bitagent-base",
+   "block": "coord-subscribe",
+   "title": "hire: CoordHire → CoordDelivery (bitagent-base)",
+   "kind": "observe",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@bitagent-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@olas-gnosis",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (olas-gnosis)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@olas-gnosis",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@olas-polygon",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (olas-polygon)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@olas-polygon",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@olas-base",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (olas-base)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@olas-base",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@mcp",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (mcp)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@mcp",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@a2a",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (a2a)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@a2a",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@erc8004",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (erc8004)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@erc8004",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.seller-coord-buyer.v1/job.out@n8n",
+   "block": "coord-send",
+   "title": "hire: CoordHire → CoordDelivery (n8n)",
+   "kind": "record",
+   "transition": "coordination.seller-coord-buyer.v1/job.out@n8n",
+   "outlets": [],
+   "connects_after": [
+    "coordination.seller-coord-buyer.v1/job.in@x402-base",
+    "coordination.seller-coord-buyer.v1/job.in@x402-solana",
+    "coordination.seller-coord-buyer.v1/job.in@x402-arbitrum",
+    "coordination.seller-coord-buyer.v1/job.in@x402-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@x402-monad",
+    "coordination.seller-coord-buyer.v1/job.in@erc8183-base",
+    "coordination.seller-coord-buyer.v1/job.in@memoacp-base",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-arc",
+    "coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood",
+    "coordination.seller-coord-buyer.v1/job.in@bitagent-base",
+    "coordination.seller-coord-buyer.v1/job.in@olas-gnosis",
+    "coordination.seller-coord-buyer.v1/job.in@olas-polygon",
+    "coordination.seller-coord-buyer.v1/job.in@olas-base",
+    "coordination.seller-coord-buyer.v1/job.in@mcp",
+    "coordination.seller-coord-buyer.v1/job.in@a2a",
+    "coordination.seller-coord-buyer.v1/job.in@erc8004",
+    "coordination.seller-coord-buyer.v1/job.in@n8n"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/discover@harvester",
+   "block": "coord-send",
+   "title": "resource: Unknown → Discovered (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/discover@harvester",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/discover@grid",
+   "block": "coord-send",
+   "title": "resource: Unknown → Discovered (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/discover@grid",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/register@owner",
+   "block": "coord-send",
+   "title": "resource: Unknown → Enriched (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/register@owner",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/enrich@harvester",
+   "block": "coord-send",
+   "title": "resource: Discovered → Enriched (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/enrich@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/discover@harvester",
+    "coordination.resources.v1/discover@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/enrich@owner",
+   "block": "coord-send",
+   "title": "resource: Discovered → Enriched (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/enrich@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/discover@harvester",
+    "coordination.resources.v1/discover@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/re_enrich@harvester",
+   "block": "coord-send",
+   "title": "resource: Enriched → Enriched (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/re_enrich@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/re_enrich@owner",
+   "block": "coord-send",
+   "title": "resource: Enriched → Enriched (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/re_enrich@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/probe_ok@harvester",
+   "block": "coord-send",
+   "title": "resource: Enriched → Probed (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/probe_ok@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/probe_ok@grid",
+   "block": "coord-send",
+   "title": "resource: Enriched → Probed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/probe_ok@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/probe_fail@harvester",
+   "block": "coord-send",
+   "title": "resource: Enriched → Enriched (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/probe_fail@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/probe_fail@grid",
+   "block": "coord-send",
+   "title": "resource: Enriched → Enriched (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/probe_fail@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/register@owner",
+    "coordination.resources.v1/enrich@harvester",
+    "coordination.resources.v1/enrich@owner",
+    "coordination.resources.v1/re_enrich@harvester",
+    "coordination.resources.v1/re_enrich@owner",
+    "coordination.resources.v1/probe_fail@harvester",
+    "coordination.resources.v1/probe_fail@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/list@registry",
+   "block": "coord-send",
+   "title": "resource: Probed → Listed (registry)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/list@registry",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/probe_ok@harvester",
+    "coordination.resources.v1/probe_ok@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/list@grid",
+   "block": "coord-send",
+   "title": "resource: Probed → Listed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/list@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/probe_ok@harvester",
+    "coordination.resources.v1/probe_ok@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/reprobe@harvester",
+   "block": "coord-send",
+   "title": "resource: Listed → Listed (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/reprobe@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/reprobe@grid",
+   "block": "coord-send",
+   "title": "resource: Listed → Listed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/reprobe@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/delist@harvester",
+   "block": "coord-send",
+   "title": "resource: Listed → Unlisted (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/delist@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/delist@grid",
+   "block": "coord-send",
+   "title": "resource: Listed → Unlisted (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/delist@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/delist@owner",
+   "block": "coord-send",
+   "title": "resource: Listed → Unlisted (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/delist@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/relist@harvester",
+   "block": "coord-send",
+   "title": "resource: Unlisted → Listed (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/relist@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/delist@harvester",
+    "coordination.resources.v1/delist@grid",
+    "coordination.resources.v1/delist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/relist@grid",
+   "block": "coord-send",
+   "title": "resource: Unlisted → Listed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/relist@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/delist@harvester",
+    "coordination.resources.v1/delist@grid",
+    "coordination.resources.v1/delist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/relist@owner",
+   "block": "coord-send",
+   "title": "resource: Unlisted → Listed (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/relist@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/delist@harvester",
+    "coordination.resources.v1/delist@grid",
+    "coordination.resources.v1/delist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/retire@owner",
+   "block": "coord-send",
+   "title": "resource: Unlisted → Retired (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/retire@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/delist@harvester",
+    "coordination.resources.v1/delist@grid",
+    "coordination.resources.v1/delist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/retire@harvester",
+   "block": "coord-send",
+   "title": "resource: Unlisted → Retired (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/retire@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/delist@harvester",
+    "coordination.resources.v1/delist@grid",
+    "coordination.resources.v1/delist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/retire_listed@owner",
+   "block": "coord-send",
+   "title": "resource: Listed → Retired (owner)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/retire_listed@owner",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/list@registry",
+    "coordination.resources.v1/list@grid",
+    "coordination.resources.v1/reprobe@harvester",
+    "coordination.resources.v1/reprobe@grid",
+    "coordination.resources.v1/relist@harvester",
+    "coordination.resources.v1/relist@grid",
+    "coordination.resources.v1/relist@owner"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/retire_unproven@harvester",
+   "block": "coord-send",
+   "title": "resource: Discovered → Retired (harvester)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/retire_unproven@harvester",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/discover@harvester",
+    "coordination.resources.v1/discover@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/lease@gateway",
+   "block": "coord-send",
+   "title": "resource: Open → Leased (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/lease@gateway",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/lease@grid",
+   "block": "coord-send",
+   "title": "resource: Open → Leased (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/lease@grid",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/refuse@gateway",
+   "block": "coord-send",
+   "title": "resource: Open → Refused (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/refuse@gateway",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/deliver@gateway",
+   "block": "coord-send",
+   "title": "resource: Leased → Delivered (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/deliver@gateway",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/lease@gateway",
+    "coordination.resources.v1/lease@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/deliver@grid",
+   "block": "coord-send",
+   "title": "resource: Leased → Delivered (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/deliver@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/lease@gateway",
+    "coordination.resources.v1/lease@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/fail@gateway",
+   "block": "coord-send",
+   "title": "resource: Leased → Failed (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/fail@gateway",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/lease@gateway",
+    "coordination.resources.v1/lease@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/fail@grid",
+   "block": "coord-send",
+   "title": "resource: Leased → Failed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/fail@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/lease@gateway",
+    "coordination.resources.v1/lease@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/settle_free@gateway",
+   "block": "coord-send",
+   "title": "resource: Delivered → Settled (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/settle_free@gateway",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/deliver@gateway",
+    "coordination.resources.v1/deliver@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/settle_fee@gateway",
+   "block": "coord-send",
+   "title": "resource: Delivered → Settled (gateway)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/settle_fee@gateway",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/deliver@gateway",
+    "coordination.resources.v1/deliver@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/settle_fee@grid",
+   "block": "coord-send",
+   "title": "resource: Delivered → Settled (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/settle_fee@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/deliver@gateway",
+    "coordination.resources.v1/deliver@grid"
+   ]
+  },
+  {
+   "id": "coord-send:coordination.resources.v1/lapse@grid",
+   "block": "coord-send",
+   "title": "resource: Delivered → Failed (grid)",
+   "kind": "record",
+   "transition": "coordination.resources.v1/lapse@grid",
+   "outlets": [],
+   "connects_after": [
+    "coordination.resources.v1/deliver@gateway",
+    "coordination.resources.v1/deliver@grid"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Placed->Verified",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Verified (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Placed->Verified",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Placed->Committed",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Committed (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Placed->Committed",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Placed->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Filled (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Placed->Filled",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Placed->Failed",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Failed (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Placed->Failed",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Verified->Committed",
+   "block": "coord-subscribe",
+   "title": "order: Verified → Committed (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Verified->Committed",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Verified"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Verified->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Verified → Filled (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Verified->Filled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Verified"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Committed->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Committed → Filled (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Committed->Filled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Committed",
+    "protocol.layerzero_v2/Verified->Committed"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Failed->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Failed → Filled (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Failed->Filled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Failed",
+    "protocol.layerzero_v2/Filled->Failed"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.layerzero_v2/Filled->Failed",
+   "block": "coord-subscribe",
+   "title": "order: Filled → Failed (layerzero_v2)",
+   "kind": "observe",
+   "transition": "protocol.layerzero_v2/Filled->Failed",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Filled",
+    "protocol.layerzero_v2/Verified->Filled",
+    "protocol.layerzero_v2/Committed->Filled",
+    "protocol.layerzero_v2/Failed->Filled",
+    "protocol.across_v3/Placed->Filled",
+    "protocol.mayan_swift/Placed->Filled"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.across_v3/Placed->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Filled (across_v3)",
+   "kind": "observe",
+   "transition": "protocol.across_v3/Placed->Filled",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.mayan_swift/Placed->Filled",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Filled (mayan_swift)",
+   "kind": "observe",
+   "transition": "protocol.mayan_swift/Placed->Filled",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.mayan_swift/Placed->Canceled",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Canceled (mayan_swift)",
+   "kind": "observe",
+   "transition": "protocol.mayan_swift/Placed->Canceled",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.mayan_swift/Placed->Unlocked",
+   "block": "coord-subscribe",
+   "title": "order: Placed → Unlocked (mayan_swift)",
+   "kind": "observe",
+   "transition": "protocol.mayan_swift/Placed->Unlocked",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.mayan_swift/Filled->Unlocked",
+   "block": "coord-subscribe",
+   "title": "order: Filled → Unlocked (mayan_swift)",
+   "kind": "observe",
+   "transition": "protocol.mayan_swift/Filled->Unlocked",
+   "outlets": [],
+   "connects_after": [
+    "protocol.layerzero_v2/Placed->Filled",
+    "protocol.layerzero_v2/Verified->Filled",
+    "protocol.layerzero_v2/Committed->Filled",
+    "protocol.layerzero_v2/Failed->Filled",
+    "protocol.across_v3/Placed->Filled",
+    "protocol.mayan_swift/Placed->Filled"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.mayan_swift/Unlocked->Canceled",
+   "block": "coord-subscribe",
+   "title": "order: Unlocked → Canceled (mayan_swift)",
+   "kind": "observe",
+   "transition": "protocol.mayan_swift/Unlocked->Canceled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.mayan_swift/Placed->Unlocked",
+    "protocol.mayan_swift/Filled->Unlocked"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Funded->Submitted",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Submitted (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Funded->Submitted",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Funded->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Settled (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Funded->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Funded->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Funded->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Funded->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Funded->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Submitted->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Settled (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Submitted->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Submitted->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Submitted->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Submitted->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Submitted->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Created->Funded",
+   "block": "coord-subscribe",
+   "title": "order: Created → Funded (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Created->Funded",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Settled->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Settled → Rejected (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Settled->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Settled",
+    "protocol.erc8183/Submitted->Settled",
+    "protocol.bitagent/Funded->Settled",
+    "protocol.bitagent/Submitted->Settled",
+    "protocol.taifoon_assurance/Funded->Settled",
+    "protocol.taifoon_assurance/Submitted->Settled",
+    "protocol.taifoon_assurance/Disputed->Settled"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.erc8183/Rejected->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Rejected → Expired (erc8183)",
+   "kind": "observe",
+   "transition": "protocol.erc8183/Rejected->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Rejected",
+    "protocol.erc8183/Submitted->Rejected",
+    "protocol.erc8183/Settled->Rejected",
+    "protocol.bitagent/Funded->Rejected",
+    "protocol.bitagent/Submitted->Rejected",
+    "protocol.bitagent/Settled->Rejected",
+    "protocol.taifoon_assurance/Funded->Rejected",
+    "protocol.taifoon_assurance/Submitted->Rejected",
+    "protocol.taifoon_assurance/Disputed->Rejected",
+    "protocol.taifoon_assurance/Settled->Rejected"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Funded->Submitted",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Submitted (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Funded->Submitted",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Funded->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Settled (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Funded->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Funded->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Rejected (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Funded->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Funded->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Expired (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Funded->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Submitted->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Settled (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Submitted->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Submitted->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Rejected (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Submitted->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Submitted->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Expired (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Submitted->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Created->Funded",
+   "block": "coord-subscribe",
+   "title": "order: Created → Funded (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Created->Funded",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Settled->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Settled → Rejected (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Settled->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Settled",
+    "protocol.erc8183/Submitted->Settled",
+    "protocol.bitagent/Funded->Settled",
+    "protocol.bitagent/Submitted->Settled",
+    "protocol.taifoon_assurance/Funded->Settled",
+    "protocol.taifoon_assurance/Submitted->Settled",
+    "protocol.taifoon_assurance/Disputed->Settled"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.bitagent/Rejected->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Rejected → Expired (bitagent)",
+   "kind": "observe",
+   "transition": "protocol.bitagent/Rejected->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Rejected",
+    "protocol.erc8183/Submitted->Rejected",
+    "protocol.erc8183/Settled->Rejected",
+    "protocol.bitagent/Funded->Rejected",
+    "protocol.bitagent/Submitted->Rejected",
+    "protocol.bitagent/Settled->Rejected",
+    "protocol.taifoon_assurance/Funded->Rejected",
+    "protocol.taifoon_assurance/Submitted->Rejected",
+    "protocol.taifoon_assurance/Disputed->Rejected",
+    "protocol.taifoon_assurance/Settled->Rejected"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Funded->Submitted",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Submitted (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Funded->Submitted",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Funded->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Settled (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Funded->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Funded->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Rejected (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Funded->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Funded->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Funded → Expired (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Funded->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Created->Funded",
+    "protocol.bitagent/Created->Funded",
+    "protocol.taifoon_assurance/Opened->Funded"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Submitted->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Settled (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Submitted->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Submitted->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Rejected (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Submitted->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Submitted->RejectPending",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → RejectPending (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Submitted->RejectPending",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Submitted->Disputed",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Disputed (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Submitted->Disputed",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Submitted->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Submitted → Expired (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Submitted->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Submitted",
+    "protocol.bitagent/Funded->Submitted",
+    "protocol.taifoon_assurance/Funded->Submitted"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Disputed->Settled",
+   "block": "coord-subscribe",
+   "title": "order: Disputed → Settled (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Disputed->Settled",
+   "outlets": [],
+   "connects_after": [
+    "protocol.taifoon_assurance/Submitted->Disputed",
+    "protocol.taifoon_assurance/RejectPending->Disputed"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Disputed->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Disputed → Rejected (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Disputed->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.taifoon_assurance/Submitted->Disputed",
+    "protocol.taifoon_assurance/RejectPending->Disputed"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Disputed->Cheat",
+   "block": "coord-subscribe",
+   "title": "order: Disputed → Cheat (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Disputed->Cheat",
+   "outlets": [],
+   "connects_after": [
+    "protocol.taifoon_assurance/Submitted->Disputed",
+    "protocol.taifoon_assurance/RejectPending->Disputed"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Opened->Funded",
+   "block": "coord-subscribe",
+   "title": "order: Opened → Funded (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Opened->Funded",
+   "outlets": [],
+   "connects_after": []
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/RejectPending->Disputed",
+   "block": "coord-subscribe",
+   "title": "order: RejectPending → Disputed (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/RejectPending->Disputed",
+   "outlets": [],
+   "connects_after": [
+    "protocol.taifoon_assurance/Submitted->RejectPending"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Settled->Rejected",
+   "block": "coord-subscribe",
+   "title": "order: Settled → Rejected (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Settled->Rejected",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Settled",
+    "protocol.erc8183/Submitted->Settled",
+    "protocol.bitagent/Funded->Settled",
+    "protocol.bitagent/Submitted->Settled",
+    "protocol.taifoon_assurance/Funded->Settled",
+    "protocol.taifoon_assurance/Submitted->Settled",
+    "protocol.taifoon_assurance/Disputed->Settled"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Rejected->Expired",
+   "block": "coord-subscribe",
+   "title": "order: Rejected → Expired (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Rejected->Expired",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Rejected",
+    "protocol.erc8183/Submitted->Rejected",
+    "protocol.erc8183/Settled->Rejected",
+    "protocol.bitagent/Funded->Rejected",
+    "protocol.bitagent/Submitted->Rejected",
+    "protocol.bitagent/Settled->Rejected",
+    "protocol.taifoon_assurance/Funded->Rejected",
+    "protocol.taifoon_assurance/Submitted->Rejected",
+    "protocol.taifoon_assurance/Disputed->Rejected",
+    "protocol.taifoon_assurance/Settled->Rejected"
+   ]
+  },
+  {
+   "id": "coord-subscribe:protocol.taifoon_assurance/Expired->Cheat",
+   "block": "coord-subscribe",
+   "title": "order: Expired → Cheat (taifoon_assurance)",
+   "kind": "observe",
+   "transition": "protocol.taifoon_assurance/Expired->Cheat",
+   "outlets": [],
+   "connects_after": [
+    "protocol.erc8183/Funded->Expired",
+    "protocol.erc8183/Submitted->Expired",
+    "protocol.erc8183/Rejected->Expired",
+    "protocol.bitagent/Funded->Expired",
+    "protocol.bitagent/Submitted->Expired",
+    "protocol.bitagent/Rejected->Expired",
+    "protocol.taifoon_assurance/Funded->Expired",
+    "protocol.taifoon_assurance/Submitted->Expired",
+    "protocol.taifoon_assurance/Rejected->Expired"
    ]
   }
  ]

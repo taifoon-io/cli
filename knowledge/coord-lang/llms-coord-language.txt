@@ -6,34 +6,61 @@ Kinds a send may carry: offer, hire, delivery, grade, settle, release, advert, c
 Outlets: mainnet, devnet, taifoon, vaults. Vault venues write to `vaults`; eip155:36927 → devnet; eip155:3692781 → taifoon; any other chain → mainnet; a watch or an http delivery writes to no outlet.
 
 Carrier routes (first match wins):
-1. record: agent_is=audit, venue_is=coord, kinds=record
-2. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery
-3. http: endpoint=http, kinds=any
-4. solana: chain_prefix=solana, kinds=settle|release
-5. venue: venue=present, kinds=any
-6. evm: chain_prefix=eip155:, kinds=settle|release
-7. solana: chain_prefix=solana, agent=present, kinds=any
+1. record: agent_is=audit, venue_is=coord, kinds=record, exclusive=true
+2. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery, exclusive=false
+3. http: endpoint=http, kinds=any, exclusive=false
+4. solana: chain_prefix=solana, kinds=settle|release, exclusive=false
+5. venue: venue=present, kinds=any, exclusive=false
+6. evm: chain_prefix=eip155:, kinds=settle|release, exclusive=false
+7. solana: chain_prefix=solana, agent=present, kinds=any, exclusive=false
 
 Transitions an envelope may name:
+- coordination.transitions.v1/dispatch_no_work@handshake: job Open → Open, write, kind offer
+- coordination.transitions.v1/dispatch_delivered@handshake: job Open → Delivered, write, kind delivery
+- coordination.transitions.v1/pregrade@handshake: job Delivered → Delivered, write, kind delivery
 - coordination.transitions.v1/fund_offer@hook: job Open → Funded, write, kind hire, outlets devnet|mainnet
 - coordination.transitions.v1/fund_delivered@hook: job Delivered → Funded, write, kind hire, outlets devnet|mainnet
 - coordination.transitions.v1/create@erc8183: job Open → Created, read, kind observe
+- coordination.transitions.v1/create@erc8183-extra: job Open → Created, read, kind observe
+- coordination.transitions.v1/create@memo-acp: job Open → Created, read, kind observe
 - coordination.transitions.v1/terms@erc8183: job Created → Created, read, kind observe
+- coordination.transitions.v1/terms@erc8183-extra: job Created → Created, read, kind observe
+- coordination.transitions.v1/terms@memo-acp: job Created → Created, read, kind observe
 - coordination.transitions.v1/fund@erc8183: job Created → Funded, read, kind observe
+- coordination.transitions.v1/fund@erc8183-extra: job Created → Funded, read, kind observe
+- coordination.transitions.v1/fund@memo-acp: job Created → Funded, read, kind observe
 - coordination.transitions.v1/reject_unfunded@erc8183: job Created → Rejected, read, kind observe
+- coordination.transitions.v1/reject_unfunded@erc8183-extra: job Created → Rejected, read, kind observe
+- coordination.transitions.v1/reject_unfunded@memo-acp: job Created → Rejected, read, kind observe
 - coordination.transitions.v1/lapse@erc8183: job Created → Cancelled, read, kind observe
+- coordination.transitions.v1/lapse@erc8183-extra: job Created → Cancelled, read, kind observe
+- coordination.transitions.v1/lapse@memo-acp: job Created → Cancelled, read, kind observe
 - coordination.transitions.v1/expire_unfunded@erc8183: job Created → Expired, read, kind observe
+- coordination.transitions.v1/expire_unfunded@erc8183-extra: job Created → Expired, read, kind observe
+- coordination.transitions.v1/expire_unfunded@memo-acp: job Created → Expired, read, kind observe
 - coordination.transitions.v1/submit_unfunded@erc8183: job Created → Submitted, read, kind observe
 - coordination.transitions.v1/submit@erc8183: job Funded → Submitted, read, kind observe
+- coordination.transitions.v1/submit@erc8183-extra: job Funded → Submitted, read, kind observe
+- coordination.transitions.v1/submit@memo-acp: job Funded → Submitted, read, kind observe
 - coordination.transitions.v1/submit@hook: job Funded → Submitted, write, kind delivery, outlets devnet|mainnet
 - coordination.transitions.v1/reject_undelivered@erc8183: job Funded → Rejected, read, kind observe
+- coordination.transitions.v1/reject_undelivered@erc8183-extra: job Funded → Rejected, read, kind observe
+- coordination.transitions.v1/reject_undelivered@memo-acp: job Funded → Rejected, read, kind observe
 - coordination.transitions.v1/expire_undelivered@erc8183: job Funded → Expired, read, kind observe
+- coordination.transitions.v1/expire_undelivered@erc8183-extra: job Funded → Expired, read, kind observe
+- coordination.transitions.v1/expire_undelivered@memo-acp: job Funded → Expired, read, kind observe
 - coordination.transitions.v1/expire_undelivered@hook: job Funded → Expired, write, kind release, outlets devnet|mainnet
 - coordination.transitions.v1/complete@erc8183: job Submitted → Settled, read, kind observe
+- coordination.transitions.v1/complete@erc8183-extra: job Submitted → Settled, read, kind observe
+- coordination.transitions.v1/complete@memo-acp: job Submitted → Settled, read, kind observe
 - coordination.transitions.v1/complete@hook: job Submitted → Settled, write, kind settle, outlets devnet|mainnet
 - coordination.transitions.v1/reject_delivered@erc8183: job Submitted → Rejected, read, kind observe
+- coordination.transitions.v1/reject_delivered@erc8183-extra: job Submitted → Rejected, read, kind observe
+- coordination.transitions.v1/reject_delivered@memo-acp: job Submitted → Rejected, read, kind observe
 - coordination.transitions.v1/reject_delivered@hook: job Submitted → Rejected, write, kind settle, outlets devnet|mainnet
 - coordination.transitions.v1/expire_delivered@erc8183: job Submitted → Expired, read, kind observe
+- coordination.transitions.v1/expire_delivered@erc8183-extra: job Submitted → Expired, read, kind observe
+- coordination.transitions.v1/expire_delivered@memo-acp: job Submitted → Expired, read, kind observe
 - coordination.transitions.v1/expire_delivered@hook: job Submitted → Expired, write, kind release, outlets devnet|mainnet
 - coordination.transitions.v1/cheat@hook: job Submitted → Cheat, write, kind settle, outlets devnet|mainnet
 - coordination.transitions.v1/cheat_after_reject@hook: job Rejected → Cheat, write, kind settle, outlets devnet|mainnet
@@ -62,3 +89,246 @@ Transitions an envelope may name:
 - coordination.transitions.v1/auto_complete_v4@hook: job Submitted → Settled, write, kind settle, outlets devnet|mainnet
 - coordination.transitions.v1/graded_auto_complete_v4@hook: job Graded → Settled, write, kind settle, outlets devnet|mainnet
 - coordination.transitions.v1/held_auto_complete_v4@hook: job Held → Settled, write, kind settle, outlets devnet|mainnet
+- coordination.compute.v1/probe@resource: resource Offered → Probed, write, kind record
+- coordination.compute.v1/probe_fail@resource: resource Offered → Offered, write, kind record
+- coordination.compute.v1/attest@resource: resource Probed → Attested, write, kind record
+- coordination.compute.v1/reject_attestation@resource: resource Probed → Withdrawn, write, kind record
+- coordination.compute.v1/dedicate@resource: resource Attested → Serving, write, kind record
+- coordination.compute.v1/pool@resource: resource Attested → Pooled, write, kind record
+- coordination.compute.v1/place@resource: resource Pooled → Placed, write, kind record
+- coordination.compute.v1/serve@resource: resource Placed → Serving, write, kind record
+- coordination.compute.v1/degrade@resource: resource Serving → Degraded, write, kind record
+- coordination.compute.v1/recover@resource: resource Degraded → Serving, write, kind record
+- coordination.compute.v1/withdraw@resource: resource Serving → Withdrawn, write, kind record
+- coordination.compute.v1/withdraw_degraded@resource: resource Degraded → Withdrawn, write, kind record
+- coordination.compute.v1/withdraw_unproven@resource: resource Offered → Withdrawn, write, kind record
+- coordination.compute.v1/slash@resource: resource Serving → Slashed, write, kind record
+- coordination.compute.v1/slash_degraded@resource: resource Degraded → Slashed, write, kind record
+- coordination.compute.v1/meter@usage: usage Called → Metered, write, kind record
+- coordination.compute.v1/refuse@usage: usage Called → Refused, write, kind record
+- coordination.compute.v1/fail@usage: usage Called → Failed, write, kind record
+- coordination.compute.v1/debit_free@usage: usage Metered → Debited, write, kind record
+- coordination.compute.v1/debit_usdc@usage: usage Metered → Debited, write, kind record
+- coordination.compute.v1/debit_x402@usage: usage Metered → Debited, write, kind record
+- coordination.compute.v1/debit_grid@usage: usage Metered → Debited, write, kind record
+- coordination.compute.v1/debit_resale@usage: usage Metered → Debited, write, kind record
+- coordination.compute.v1/receipt@usage: usage Debited → Receipted, write, kind record
+- coordination.compute.v1/split@payout: payout Accrued → Split, write, kind record
+- coordination.compute.v1/settle_grid_direct@payout: payout Accrued → Paid, write, kind record
+- coordination.compute.v1/pay_grid@payout: payout Split → Paid, write, kind record
+- coordination.compute.v1/pay_usdc@payout: payout Split → Paid, write, kind record
+- coordination.compute.v1/hold@payout: payout Accrued → Held, write, kind record
+- coordination.compute.v1/release@payout: payout Held → Accrued, write, kind record
+- coordination.compute.v1/hold_split@payout: payout Split → Held, write, kind record
+- coordination.compute.v1/forfeit@payout: payout Held → Forfeited, write, kind record
+- coordination.demand.v1/classify@demand_loop: hire Harvested → Classified, write, kind record
+- coordination.demand.v1/list@demand_loop: hire Classified → Listed, write, kind record
+- coordination.demand.v1/publish@demand_loop: hire Listed → Reached, write, kind record
+- coordination.demand.v1/reach@demand_loop: hire Harvested → Reached, write, kind record
+- coordination.demand.v1/demand@demand_loop: hire Reached → Demanded, write, kind record
+- coordination.demand.v1/match@demand_loop: hire Demanded → Matched, write, kind record
+- coordination.demand.v1/unmatched@demand_loop: hire Demanded → Unmatched, write, kind record
+- coordination.demand.v1/serve@demand_loop: hire Matched → Served, write, kind record
+- coordination.demand.v1/grade@demand_loop: hire Served → Graded, write, kind record
+- coordination.demand.v1/assure@demand_loop: hire Graded → Assured, write, kind record
+- coordination.demand.v1/settle_assured@demand_loop: hire Assured → Settled, write, kind record
+- coordination.demand.v1/settle_uncovered@demand_loop: hire Graded → Settled, write, kind record
+- coordination.demand.v1/record@demand_loop: hire Settled → Recorded, write, kind record
+- coordination.demand.v1/feedback@demand_loop: hire Recorded → Harvested, write, kind record
+- coordination.outlet_account.v1/open@outlet_account: outlet Unopened → Opened, write, kind record
+- coordination.outlet_account.v1/fund@outlet_account: outlet Opened → Funded, write, kind record
+- coordination.outlet_account.v1/go_live@outlet_account: outlet Funded → Live, write, kind record
+- coordination.outlet_account.v1/runway_low@outlet_account: outlet Live → LowRunway, write, kind record
+- coordination.outlet_account.v1/top_up@outlet_account: outlet LowRunway → Live, write, kind record
+- coordination.outlet_account.v1/suspend@outlet_account: outlet LowRunway → Suspended, write, kind record
+- coordination.outlet_account.v1/stop@outlet_account: outlet Live → Suspended, write, kind record
+- coordination.outlet_account.v1/resume@outlet_account: outlet Suspended → Live, write, kind record
+- coordination.outlet_account.v1/withdraw_unfunded@outlet_account: outlet Opened → Closed, write, kind record
+- coordination.outlet_account.v1/close@outlet_account: outlet Suspended → Closed, write, kind record
+- coordination.publish.v1/publish@publish: placement Unpublished → Published, write, kind record
+- coordination.publish.v1/prepare@publish: placement Unpublished → Prepared, write, kind record
+- coordination.publish.v1/owner_publish@publish: placement Prepared → Published, write, kind record
+- coordination.publish.v1/self_pay@publish: placement Unpublished → Published, write, kind record
+- coordination.publish.v1/verify@publish: placement Published → Verified, write, kind record
+- coordination.publish.v1/go_stale@publish: placement Verified → Stale, write, kind record
+- coordination.publish.v1/reverify@publish: placement Stale → Verified, write, kind record
+- coordination.publish.v1/republish@publish: placement Stale → Published, write, kind record
+- coordination.publish.v1/withdraw@publish: placement Published → Withdrawn, write, kind record
+- coordination.publish.v1/withdraw_verified@publish: placement Verified → Withdrawn, write, kind record
+- coordination.publish.v1/withdraw_stale@publish: placement Stale → Withdrawn, write, kind record
+- coordination.publish.v1/withdraw_prepared@publish: placement Prepared → Withdrawn, write, kind record
+- coordination.publish.v1/withdraw_unpublished@publish: placement Unpublished → Withdrawn, write, kind record
+- coordination.publish.v1/reopen@publish: placement Withdrawn → Unpublished, write, kind record
+- coordination.seller-coord-buyer.v1/offer.in@x402-base: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@x402-solana: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@x402-arbitrum: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@x402-robinhood: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@x402-monad: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@erc8183-base: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@memoacp-base: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@acpv3-arc: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@acpv3-robinhood: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@bitagent-base: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@olas-gnosis: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@olas-polygon: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@olas-base: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@mcp: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@a2a: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@erc8004: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.in@n8n: offer VenueOffer → CoordOffer, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@x402-base: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@x402-solana: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@x402-robinhood: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@x402-monad: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/offer.out@erc8183-base: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@memoacp-base: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@acpv3-arc: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@bitagent-base: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@olas-gnosis: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@olas-polygon: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@olas-base: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@mcp: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@a2a: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@erc8004: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@n8n: offer CoordOffer → VenueListing, read, kind observe
+- coordination.seller-coord-buyer.v1/buy@x402-base: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@x402-solana: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@x402-arbitrum: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@x402-robinhood: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@x402-monad: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@erc8183-base: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@memoacp-base: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@acpv3-arc: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@acpv3-robinhood: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@bitagent-base: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@olas-gnosis: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@olas-polygon: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@olas-base: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@mcp: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@a2a: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@erc8004: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/buy@n8n: job VenueListing → VenuePurchase, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@x402-base: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@x402-solana: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@x402-arbitrum: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@x402-robinhood: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@x402-monad: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@erc8183-base: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@memoacp-base: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@acpv3-arc: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@bitagent-base: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@olas-gnosis: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@olas-polygon: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@olas-base: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@mcp: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@a2a: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@erc8004: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.in@n8n: hire VenuePurchase → CoordHire, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@x402-base: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@x402-solana: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@x402-arbitrum: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@x402-robinhood: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@x402-monad: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@erc8183-base: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@memoacp-base: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@acpv3-arc: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@acpv3-robinhood: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@bitagent-base: hire CoordHire → CoordDelivery, read, kind observe
+- coordination.seller-coord-buyer.v1/job.out@olas-gnosis: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@olas-polygon: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@olas-base: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@mcp: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@a2a: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@erc8004: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@n8n: hire CoordHire → CoordDelivery, write, kind record
+- coordination.resources.v1/discover@harvester: resource Unknown → Discovered, write, kind record
+- coordination.resources.v1/discover@grid: resource Unknown → Discovered, write, kind record
+- coordination.resources.v1/register@owner: resource Unknown → Enriched, write, kind record
+- coordination.resources.v1/enrich@harvester: resource Discovered → Enriched, write, kind record
+- coordination.resources.v1/enrich@owner: resource Discovered → Enriched, write, kind record
+- coordination.resources.v1/re_enrich@harvester: resource Enriched → Enriched, write, kind record
+- coordination.resources.v1/re_enrich@owner: resource Enriched → Enriched, write, kind record
+- coordination.resources.v1/probe_ok@harvester: resource Enriched → Probed, write, kind record
+- coordination.resources.v1/probe_ok@grid: resource Enriched → Probed, write, kind record
+- coordination.resources.v1/probe_fail@harvester: resource Enriched → Enriched, write, kind record
+- coordination.resources.v1/probe_fail@grid: resource Enriched → Enriched, write, kind record
+- coordination.resources.v1/list@registry: resource Probed → Listed, write, kind record
+- coordination.resources.v1/list@grid: resource Probed → Listed, write, kind record
+- coordination.resources.v1/reprobe@harvester: resource Listed → Listed, write, kind record
+- coordination.resources.v1/reprobe@grid: resource Listed → Listed, write, kind record
+- coordination.resources.v1/delist@harvester: resource Listed → Unlisted, write, kind record
+- coordination.resources.v1/delist@grid: resource Listed → Unlisted, write, kind record
+- coordination.resources.v1/delist@owner: resource Listed → Unlisted, write, kind record
+- coordination.resources.v1/relist@harvester: resource Unlisted → Listed, write, kind record
+- coordination.resources.v1/relist@grid: resource Unlisted → Listed, write, kind record
+- coordination.resources.v1/relist@owner: resource Unlisted → Listed, write, kind record
+- coordination.resources.v1/retire@owner: resource Unlisted → Retired, write, kind record
+- coordination.resources.v1/retire@harvester: resource Unlisted → Retired, write, kind record
+- coordination.resources.v1/retire_listed@owner: resource Listed → Retired, write, kind record
+- coordination.resources.v1/retire_unproven@harvester: resource Discovered → Retired, write, kind record
+- coordination.resources.v1/lease@gateway: resource Open → Leased, write, kind record
+- coordination.resources.v1/lease@grid: resource Open → Leased, write, kind record
+- coordination.resources.v1/refuse@gateway: resource Open → Refused, write, kind record
+- coordination.resources.v1/deliver@gateway: resource Leased → Delivered, write, kind record
+- coordination.resources.v1/deliver@grid: resource Leased → Delivered, write, kind record
+- coordination.resources.v1/fail@gateway: resource Leased → Failed, write, kind record
+- coordination.resources.v1/fail@grid: resource Leased → Failed, write, kind record
+- coordination.resources.v1/settle_free@gateway: resource Delivered → Settled, write, kind record
+- coordination.resources.v1/settle_fee@gateway: resource Delivered → Settled, write, kind record
+- coordination.resources.v1/settle_fee@grid: resource Delivered → Settled, write, kind record
+- coordination.resources.v1/lapse@grid: resource Delivered → Failed, write, kind record
+- protocol.layerzero_v2/Placed->Verified: order Placed → Verified, read, kind observe
+- protocol.layerzero_v2/Placed->Committed: order Placed → Committed, read, kind observe
+- protocol.layerzero_v2/Placed->Filled: order Placed → Filled, read, kind observe
+- protocol.layerzero_v2/Placed->Failed: order Placed → Failed, read, kind observe
+- protocol.layerzero_v2/Verified->Committed: order Verified → Committed, read, kind observe
+- protocol.layerzero_v2/Verified->Filled: order Verified → Filled, read, kind observe
+- protocol.layerzero_v2/Committed->Filled: order Committed → Filled, read, kind observe
+- protocol.layerzero_v2/Failed->Filled: order Failed → Filled, read, kind observe
+- protocol.layerzero_v2/Filled->Failed: order Filled → Failed, read, kind observe
+- protocol.across_v3/Placed->Filled: order Placed → Filled, read, kind observe
+- protocol.mayan_swift/Placed->Filled: order Placed → Filled, read, kind observe
+- protocol.mayan_swift/Placed->Canceled: order Placed → Canceled, read, kind observe
+- protocol.mayan_swift/Placed->Unlocked: order Placed → Unlocked, read, kind observe
+- protocol.mayan_swift/Filled->Unlocked: order Filled → Unlocked, read, kind observe
+- protocol.mayan_swift/Unlocked->Canceled: order Unlocked → Canceled, read, kind observe
+- protocol.erc8183/Funded->Submitted: order Funded → Submitted, read, kind observe
+- protocol.erc8183/Funded->Settled: order Funded → Settled, read, kind observe
+- protocol.erc8183/Funded->Rejected: order Funded → Rejected, read, kind observe
+- protocol.erc8183/Funded->Expired: order Funded → Expired, read, kind observe
+- protocol.erc8183/Submitted->Settled: order Submitted → Settled, read, kind observe
+- protocol.erc8183/Submitted->Rejected: order Submitted → Rejected, read, kind observe
+- protocol.erc8183/Submitted->Expired: order Submitted → Expired, read, kind observe
+- protocol.erc8183/Created->Funded: order Created → Funded, read, kind observe
+- protocol.erc8183/Settled->Rejected: order Settled → Rejected, read, kind observe
+- protocol.erc8183/Rejected->Expired: order Rejected → Expired, read, kind observe
+- protocol.bitagent/Funded->Submitted: order Funded → Submitted, read, kind observe
+- protocol.bitagent/Funded->Settled: order Funded → Settled, read, kind observe
+- protocol.bitagent/Funded->Rejected: order Funded → Rejected, read, kind observe
+- protocol.bitagent/Funded->Expired: order Funded → Expired, read, kind observe
+- protocol.bitagent/Submitted->Settled: order Submitted → Settled, read, kind observe
+- protocol.bitagent/Submitted->Rejected: order Submitted → Rejected, read, kind observe
+- protocol.bitagent/Submitted->Expired: order Submitted → Expired, read, kind observe
+- protocol.bitagent/Created->Funded: order Created → Funded, read, kind observe
+- protocol.bitagent/Settled->Rejected: order Settled → Rejected, read, kind observe
+- protocol.bitagent/Rejected->Expired: order Rejected → Expired, read, kind observe
+- protocol.taifoon_assurance/Funded->Submitted: order Funded → Submitted, read, kind observe
+- protocol.taifoon_assurance/Funded->Settled: order Funded → Settled, read, kind observe
+- protocol.taifoon_assurance/Funded->Rejected: order Funded → Rejected, read, kind observe
+- protocol.taifoon_assurance/Funded->Expired: order Funded → Expired, read, kind observe
+- protocol.taifoon_assurance/Submitted->Settled: order Submitted → Settled, read, kind observe
+- protocol.taifoon_assurance/Submitted->Rejected: order Submitted → Rejected, read, kind observe
+- protocol.taifoon_assurance/Submitted->RejectPending: order Submitted → RejectPending, read, kind observe
+- protocol.taifoon_assurance/Submitted->Disputed: order Submitted → Disputed, read, kind observe
+- protocol.taifoon_assurance/Submitted->Expired: order Submitted → Expired, read, kind observe
+- protocol.taifoon_assurance/Disputed->Settled: order Disputed → Settled, read, kind observe
+- protocol.taifoon_assurance/Disputed->Rejected: order Disputed → Rejected, read, kind observe
+- protocol.taifoon_assurance/Disputed->Cheat: order Disputed → Cheat, read, kind observe
+- protocol.taifoon_assurance/Opened->Funded: order Opened → Funded, read, kind observe
+- protocol.taifoon_assurance/RejectPending->Disputed: order RejectPending → Disputed, read, kind observe
+- protocol.taifoon_assurance/Settled->Rejected: order Settled → Rejected, read, kind observe
+- protocol.taifoon_assurance/Rejected->Expired: order Rejected → Expired, read, kind observe
+- protocol.taifoon_assurance/Expired->Cheat: order Expired → Cheat, read, kind observe

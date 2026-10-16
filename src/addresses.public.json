@@ -3628,6 +3628,42 @@
           "status": "live",
           "since": "2026-10-03",
           "notes": "Records Jev answers (JevAnswered) on Monad; one trusted recorder fixed in the constructor (the KMS recorder). The same bytecode as the Base log; no owner. Sourcify exact match; verified on the chain's Etherscan-family explorer. The address is the deployer's nonce on this chain: another chain has a different contract at the same address, so read it with its chain id."
+        },
+        {
+          "chain": 8453,
+          "name": "JevAnswerLogV2",
+          "address": "0xC08dfc61d702AEA45d1EF2515d8BDA36d548C75c",
+          "kind": "log",
+          "deploy": {
+            "tx": "0x10c028f96bfc85dc5176180f311c11c4248a16a6bd2b4340245577e19b918e8c",
+            "block": 52639649
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Jev answers on Base: guardian the Safe, delayed tombstoned rotation."
+        },
+        {
+          "chain": 8453,
+          "name": "JudgeAdapterV5",
+          "address": "0x5242dE388a846d16641744dEB095eD63990E7be8",
+          "kind": "adapter",
+          "deploy": {
+            "tx": "0x2f07ffffe6279658853659e6b13ca152292c940034f71a3b2a21ab04008340d5",
+            "block": 52639651
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-15",
+          "notes": "Evaluator adapter on Base for the V4 hook 0x93122A47d1824afFA3bAa5751aacf4919F67eb25: anchored verdict + Safe-vetoable delay."
         }
       ]
     },

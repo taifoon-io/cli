@@ -131,8 +131,8 @@ async function agent(ctx, [refRaw]) {
   return 0;
 }
 
-const RES_KINDS = ['mcp', 'a2a', 'x402', 'rpc', 'gpu', 'mech'];
-async function resource(ctx, [kind, target]) {
+export const RES_KINDS = ['mcp', 'a2a', 'x402', 'rpc', 'gpu', 'mech'];
+export async function resource(ctx, [kind, target]) {
   const { p, t } = ctx;
   if (!RES_KINDS.includes(kind) || !target) { ctx.fail(`usage: taifoon register resource <${RES_KINDS.join('|')}> <endpoint URL | mech address> [--check]`); return 2; }
   const out = { ok: true, kind, target, steps: [] };
