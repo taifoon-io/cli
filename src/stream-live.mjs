@@ -3,46 +3,19 @@
 // dropped) in short sessions; with a key, your own envelopes too. --all adds the coord stream's lanes (GET /v1/stream: job, action,
 // flow, root, jev, pool, quota) into the same view. Rendering is @taifoon/term/stream, the same view `taifoon-sdk coord stream` uses.
 // Reconnect is LaserStream's rule, the one the SDK's StreamApi.pipe() keeps: a FIXED 5 s wait, at most 240 attempts in a row, the count
-// resets on progress, resume from the last seq + 1, a refusal (400/401/403/404) is final.
-import { createStreamView, chainName } from '@taifoon/term/stream';
+// resets on progress, resume from the last seq + 1, a refusal (401/403/404/410) is final; a 5xx or a drop retries.
+import { createStreamView, filtersOf, passes } from '@taifoon/term/stream';
+export { filtersOf, passes }; // the one filter (term/stream), the SDK's coord stream uses it too
 import { colorOn } from '@taifoon/term';
 
 export const RECONNECT_MS = 5000; export const RECONNECT_CAP = 240;
+/** the statuses that end a stream for good; everything else (5xx, 429, a dropped connection) retries on the fixed rule */
+export const FINAL = new Set([401, 403, 404, 410]);
 export const RECONNECT_RULE = 'laserstream:fixed_ms=5000:cap=240:reset_on_progress:resume_last_seq_plus_1:refusal_final';
 export const LANES = ['job', 'action', 'flow', 'root', 'jev', 'pool', 'quota'];
 export const FLAGS = ['chain', 'venue', 'kind', 'protocol', 'actor', 'from-seq', 'from_seq', 'for', 'limit', 'lanes', 'kinds', 'venues', 'chains', 'order_keys', 'commitment'];
 
-const list = (v) => (typeof v === 'string' && v ? v.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean) : []);
-
-/** The filters from the flags (each accepts a comma list). Pure. */
-export function filtersOf(f) {
-  return {
-    kind: [...list(f.kind), ...list(f.kinds)],
-    chain: [...list(f.chain), ...list(f.chains)].map((c) => chainName(c).toLowerCase()),
-    venue: [...list(f.venue), ...list(f.venues)],
-    protocol: list(f.protocol),
-    actor: list(f.actor),
-  };
-}
-
-/** Does one event pass the filters? Pure; an empty filter passes everything. */
-export function passes(ev, F) {
-  const d = ev?.data && typeof ev.data === 'object' ? ev.data : {};
-  const env = d.envelope ?? {}; const ob = d.observed ?? {};
-  const kind = String(env.kind || d.kind || ev.event || '').toLowerCase();
-  if (F.kind.length && !F.kind.includes(kind) && !F.kind.includes(String(ev.event).toLowerCase())) return false;
-  const chain = chainName(ob.chain_id || env.from?.chain || env.to?.chain || d.chain_id || d.chainId || '').toLowerCase();
-  if (F.chain.length && !F.chain.includes(chain)) return false;
-  const venues = [env.from?.venue, env.to?.venue, ob.source, d.venue].filter(Boolean).map((s) => String(s).toLowerCase());
-  if (F.venue.length && !F.venue.some((v) => venues.includes(v))) return false;
-  const protocol = String(ob.protocol || d.leaf?.protocol || env.from?.venue || '').toLowerCase();
-  if (F.protocol.length && !F.protocol.some((p) => protocol.includes(p))) return false;
-  if (F.actor.length) {
-    const hay = [env.from?.agent, env.to?.agent, env.from?.address, env.to?.address, d.address, d.actor, d.client, d.provider, d.seller, d.buyer].filter(Boolean).join(' ').toLowerCase();
-    if (!F.actor.some((a) => hay.includes(a))) return false;
-  }
-  return true;
-}
+const list = (v) => (typeof v === 'string' && v ? v.split(',').map((x) => x.trim().toLowerCase()).filter(Boolean) : []);
 
 /** Server-sent events → { event, id, data } (data parsed when it is JSON). */
 async function* sse(body, signal) {
@@ -100,7 +73,7 @@ export async function follow({ fetchImpl, base, path: pathOf, key, signal, on, w
     } else {
       const j = r.json ? await r.json().catch(() => null) : null;
       const why = `${r.status || 'network'}${j?.error ? ` ${j.error}` : r.error ? ` ${r.error}` : ''}`;
-      if ([400, 401, 403, 404].includes(r.status)) { on.state('closed'); return { code: 1, reason: `refused: ${why}` }; }
+      if (FINAL.has(r.status)) { on.state('closed'); return { code: 1, reason: `refused: ${why}` }; }  // a 5xx, a 429, a drop: retry
       attempts++;
       on.notice?.(`answered ${why}`);
     }

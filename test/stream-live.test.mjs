@@ -55,6 +55,18 @@ test('a session that ends resumes from the last seq + 1 (LaserStream rule)', asy
   assert.deepEqual(seen, blocks.map(seqOf)); // no gap, no repeat
 });
 
+test('a 502 retries on the fixed rule and the stream resumes; 401/403/404/410 are final', async () => {
+  let n = 0; const l = layer();
+  const flaky = async (url, init) => (n++ === 0 ? new Response('{"code":"pipe_unavailable"}', { status: 502 }) : l.fetch(url, init));
+  const seen = []; const res = await follow({ fetchImpl: flaky, base: 'https://coord.test', path: () => '/v1/pipe/stream', key: null, signal: new AbortController().signal, wait: 1, cap: 5,
+    on: { event: (ev) => { seen.push(ev.data.seq); return seen.length < 5; }, state() {} } });
+  assert.equal(res.reason, 'limit'); assert.equal(seen.length, 5); assert.equal(n, 2);
+  for (const st of [401, 403, 404, 410]) {
+    const r = await follow({ fetchImpl: async () => new Response('{"error":"no"}', { status: st }), base: '', path: () => '/', key: null, signal: new AbortController().signal, wait: 1, cap: 3, on: { event() {}, state() {} } });
+    assert.match(r.reason, new RegExp(`^refused: ${st}`));
+  }
+});
+
 test('a refusal is final; a run of empty sessions gives up at the cap', async () => {
   const refused = await follow({ fetchImpl: async () => new Response('{"error":"bad key"}', { status: 401 }), base: '', path: () => '/v1/pipe/stream', key: 'x', signal: new AbortController().signal, wait: 1, cap: 3, on: { event() {}, state() {} } });
   assert.match(refused.reason, /^refused: 401 bad key/);
