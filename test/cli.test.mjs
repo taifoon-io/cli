@@ -330,3 +330,40 @@ test('every command takes --json and prints exactly one JSON value with the /v1 
     assert.ok(Array.isArray(j.calls), argv.join(' '));
   }
 });
+
+// _KEYS_MENU_v1_: taifoon keys — the standing, the tenant's keys, create/roll into the Keychain (never printed), revoke asks first
+test('keys show · ls · create (Keychain, never printed) · roll of this key rewrites the profile · revoke refuses in a pipe without --yes', async () => {
+  const x = fakeExec(); x.kc.set('taifoon-cli|default', KEY);
+  const NEW = 'tfr_' + 'C'.repeat(32); const ROLLED = 'tfr_' + 'D'.repeat(32);
+  const posted = [];
+  const over = (path, m, b, h) => {
+    assert.ok([KEY, ROLLED].includes(h['x-api-key']), 'the profile key (rolled to ROLLED mid-test) rides on every call');
+    if (path === '/v1/access/key') return { status: 200, json: { key: { prefix: KEY.slice(0, 10), env: 'live', label: 'mine' }, tier: 'free', permissions: { scopes: ['rpc', 'proofs'] }, budgets: { cap_day_grid: 50, cap_month_grid: 500, metered_today_grid: 3 }, balance: { grid: 12, usdc: 0.5 } } };
+    if (path === '/v1/tenant/keys' && m === 'GET') return { status: 200, json: { keys: [{ prefix: KEY.slice(0, 10), env: 'live', label: 'mine', revoked: false, created_at: '2026-10-01' }, { prefix: 'tfr_old000', env: 'live', label: 'old', revoked: true, created_at: '2026-09-01' }], recent_changes: [{ at: '2026-10-16T10:00:00Z', what: 'rotated', prefix: KEY.slice(0, 10), by: 'key:x', via: 'key' }] } };
+    if (path === '/v1/tenant/keys' && m === 'POST') { posted.push(b); if (b.action === 'create') return { status: 201, json: { ok: true, api_key: NEW, key: { prefix: NEW.slice(0, 10) }, policy: {} } }; if (b.action === 'roll') return { status: 200, json: { ok: true, api_key: ROLLED, key: { prefix: ROLLED.slice(0, 10) } } }; return { status: 200, json: { ok: true, keys: [] } }; }
+    return null;
+  };
+  const home = mkdtempSync(join(tmpdir(), 'taifoon-cli-'));
+  const { writeFileSync } = await import('node:fs');
+  writeFileSync(join(home, 'config.json'), JSON.stringify({ profile: 'default', profiles: { default: { mode: 'key', store: 'keychain', keychain: { service: 'taifoon-cli', account: 'default' }, key_prefix: KEY.slice(0, 10) } } }));
+  const sh = await run(['keys', 'show'], { over, exec: x, home });
+  assert.equal(sh.code, 0, sh.err); assert.match(sh.out, /scopes\s+rpc, proofs/); assert.match(sh.out, /entitled\s+no/); assert.match(sh.out, /12 GRID/);
+  const l = await run(['keys', 'ls'], { over, exec: x, home });
+  assert.match(l.out, /◂ this one/); assert.match(l.out, /tfr_old000\s+old\s+live\s+revoked/); assert.match(l.out, /rotated/);
+  const both = await run(['keys'], { over, exec: x, home });
+  assert.equal(both.code, 0, both.err + both.out); assert.match(both.out, /your key/); assert.match(both.out, /your tenant's keys/);
+  const bad = await run(['keys', 'create', '--label', 'x', '--scopes', 'rpc,teleport', '--yes'], { over, exec: x, home });
+  assert.equal(bad.code, 2); assert.match(bad.err, /unknown scope teleport/);
+  const c = await run(['keys', 'create', '--label', 'bot', '--scopes', 'rpc', '--yes'], { over, exec: x, home });
+  assert.equal(c.code, 0, c.err); assert.equal(x.kc.get(`taifoon-cli|key/${NEW.slice(0, 10)}`), NEW); noKeyAnywhere(c, NEW);
+  assert.deepEqual(posted.at(-1), { action: 'create', label: 'bot', scopes: ['rpc'] });
+  const cj = await run(['keys', 'create', '--label', 'bot', '--json', '--yes'], { over, exec: x, home }); assert.ok(!cj.out.includes(NEW), '--json never carries the key');
+  const r = await run(['keys', 'roll', '--grace-hours', '24', '--yes'], { over, exec: x, home });
+  assert.equal(r.code, 0, r.err); assert.equal(x.kc.get('taifoon-cli|default'), ROLLED, 'the profile entry now holds the rolled key'); noKeyAnywhere(r, ROLLED);
+  assert.deepEqual(posted.at(-1), { action: 'roll', env: 'live', grace_hours: 24 });
+  const n = posted.length;
+  const rv = await run(['keys', 'revoke', 'tfr_old000'], { over, exec: x, home });
+  assert.equal(rv.code, 1); assert.equal(posted.length, n, 'nothing sent without a yes');
+  const rv2 = await run(['keys', 'revoke', 'tfr_old000', '--yes'], { over, exec: x, home: home });
+  assert.equal(rv2.code, 0, rv2.err); assert.deepEqual(posted.at(-1), { action: 'revoke', prefix: 'tfr_old000' });
+});

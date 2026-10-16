@@ -10,16 +10,16 @@
     {
      "file": "roles.mjs",
      "from": "lang/gen/roles.mjs",
-     "sha256": "1032edce1746ee8d5031f40a9ca0fc3bd2b287cb1d74ed30f8bc269b76972833"
+     "sha256": "60428451a99034fe825cb342b431a95c777c9e6753c482f1c2eab58231f2e38e"
     },
     {
      "file": "roles-matrix.json",
      "from": "lang/gen/roles-matrix.json",
-     "sha256": "acfba29b12ee94eecfce74b78c7fec37300d9ef18ae98b84f8b2ce2279d5db19"
+     "sha256": "b068b874eebfe95d9968c099349039d40596f10dec3a44a1a72ce25303a7382b"
     }
    ],
    "consumed_by": "the taifoon CLI and its agent tools (its verbs and tools filtered by the caller's role, the same decision as the site and the pipe)"
   }
  ],
- "commit": "c2bebd1fb96117b672a1f2331e45c30a9dc987bb"
+ "commit": "021dd681dc64713cb73aaaa5cd3bd9903c305ad5"
 }

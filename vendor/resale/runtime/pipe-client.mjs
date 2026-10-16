@@ -15,6 +15,7 @@
  */
 import { canonical, keccakHex, utf8Hex } from '../ports/transition.mjs';
 import { PIPE_KINDS, ROUTES, route, TRANSITIONS, untransitioned } from './coord-lang/pipe.mjs';
+import { agreementError, kindRule } from './coord-lang/agreement.mjs';
 
 export const PIPE_URL = (process.env.PIPE_URL || 'http://127.0.0.1:8620').replace(/\/$/, '');
 export const SCHEMA = 'taifoon.pipe.envelope.v1';
@@ -35,6 +36,8 @@ export function envelope(f = {}) {
   if (!KINDS.includes(f.kind)) throw new Error(`envelope: kind ${String(f.kind)} is not one of ${KINDS.join(' · ')}`);
   if (!f.from || !f.to) throw new Error('envelope: from and to are named');
   if (f.transition != null) checkTransition(f.kind, f.transition);
+  // _ONE_FORMAT_v1_ (coord lang/cue/commerce.cue #Agreement): the commerce agreement, checked here as the pipe checks it at accept
+  if (f.agreement != null) { const why = agreementError(f.agreement); if (why) throw new Error(`envelope: agreement: ${why}`); }
   const payload = f.payload == null ? null : (typeof f.payload === 'string' ? f.payload : canonical(f.payload));
   if (payload && Buffer.byteLength(payload, 'utf8') > MAX_PAYLOAD_BYTES) throw new Error(`envelope: the payload is above ${MAX_PAYLOAD_BYTES} bytes; carry it by payload_uri`);
   const body = { schema: SCHEMA, kind: f.kind,
@@ -45,7 +48,17 @@ export function envelope(f = {}) {
     sig: f.sig ?? { scheme: 'none', by: null, sig: null } };
   // _WIRE_SENDERS_v1_: the v2 transition the send performs; present only when named, as in the pipe's canonical form (same id)
   if (f.transition != null) body.transition = f.transition;
+  // _ENVELOPE_ECONOMICS_v1_ / _ONE_FORMAT_v1_: the sender's terms and the commerce agreement are part of the id when written (coordpipe
+  // envelope.rs: skip_serializing_if none), so they join the body only when named — the same canonical form, the same id
+  if (f.terms != null) body.terms = f.terms;
+  if (f.agreement != null) body.agreement = f.agreement;
   return { id: keccakHex(utf8Hex(canonical(body))), ...body };
+}
+/** _ONE_FORMAT_v1_: whether this kind must carry the agreement once the pipe requires it (PIPE_AGREEMENT_REQUIRE=1; the admin audit
+ *  record exempt), from the kind rules of the coord language. Pure. */
+export function agreementRequired(e) {
+  if (e.kind === 'record' && e.to?.venue === 'coord' && e.to?.agent === 'audit') return false;
+  return kindRule(e.kind)?.agreement === 'required';
 }
 /** _WIRE_SENDERS_v1_: a named transition must be a WRITE of the coord language carrying this kind (the pipe's check_send, client side). */
 export function checkTransition(kind, id) {
@@ -113,12 +126,22 @@ export function pipeClient({ base = PIPE_URL, fetchImpl = globalThis.fetch, toke
     settled: ({ id, chain, tx, by = null }) => call('POST', '/pipe/settled', { id, chain, tx, by }),
     settledOpen: ({ limit = 50 } = {}) => call('GET', `/pipe/settled/open${q({ limit })}`),
     settledVerdict: ({ id, tx, ok, why = '', evidence = null }) => call('POST', '/pipe/settled/verdict', { id, tx, ok, why, evidence }),
+    // _AUTOMATCH_TWIG_v1_ (coord lang/cue/match.cue): the match twigs — a capability in, the cheapest offers under a tag out, one leaf's proof
+    matchIndex: (c) => call('POST', '/pipe/match/index', c),
+    matchSearch: ({ tag, venue, chain, price_cap, limit, proofs } = {}) => call('GET', `/pipe/match/search${q({ tag, venue, chain, price_cap, limit, proofs })}`),
+    matchProof: ({ venue, index }) => call('GET', `/pipe/match/proof${q({ venue, index })}`),
+    matchHeads: () => call('GET', '/pipe/match/heads'),
+    matchCoverage: () => call('GET', '/pipe/match/coverage'),
+    // _MATCH_WINDOW_v1_ (coord lang/cue/match.cue #MatchWindow): a settle window's pass in, the windows and their totals out
+    matchWindow: (w) => call('POST', '/pipe/match/window', w),
+    matchWindows: ({ limit } = {}) => call('GET', `/pipe/match/windows${q({ limit })}`),
+    cancel: (id) => call('POST', `/pipe/cancel/${encodeURIComponent(id)}`, {}),
   };
 }
 
 /** the FAKE pipe: the state machine in memory. `now` is injectable (ms). */
 export function fakePipe({ now = () => Date.now() } = {}) {
-  const rows = new Map(); const calls = []; const acks = []; const batches = [];
+  const rows = new Map(); const calls = []; const acks = []; const batches = []; const match = new Map(); const windows = new Map();
   const ok = (json) => ({ status: 200, ok: true, json });
   const bad = (status, error) => ({ status, ok: false, json: { ok: false, error } });
   const tick = (r) => { if (['queued', 'sent', 'delivered'].includes(r.state) && now() - Date.parse(r.envelope.created_at) > r.envelope.ttl_s * 1000) { r.state = 'lost'; r.lost_at = now(); r.history.push({ state: 'lost', at: now(), why: `no ${r.state === 'delivered' ? 'ack' : 'delivery'} within ttl` }); } };
@@ -126,13 +149,24 @@ export function fakePipe({ now = () => Date.now() } = {}) {
   return {
     kind: 'fake-pipe', calls, rows, acks, batches,
     async health() { return ok({ ok: true, service: 'fake-pipe' }); },
-    async send(e) { calls.push(['send', e.id]); if (e.schema !== SCHEMA || !KINDS.includes(e.kind)) return bad(400, 'not an envelope'); const carrier = carrierOf(e); if (!carrier) return bad(422, 'no carrier takes this envelope'); if (rows.has(e.id)) return ok({ id: e.id, state: rows.get(e.id).state, duplicate: true }); rows.set(e.id, { envelope: e, carrier, state: 'queued', attempts: 0, history: [{ state: 'queued', at: now() }], claimed_by: null, evidence: [] }); return ok({ id: e.id, state: 'queued', carrier, batch: null }); },
+    async send(e) { calls.push(['send', e.id]); if (e.schema !== SCHEMA || !KINDS.includes(e.kind)) return bad(400, 'not an envelope'); if (e.agreement != null && agreementError(e.agreement)) return bad(400, `agreement: ${agreementError(e.agreement)}`); const carrier = carrierOf(e); if (!carrier) return bad(422, 'no carrier takes this envelope'); if (rows.has(e.id)) return ok({ id: e.id, state: rows.get(e.id).state, duplicate: true }); rows.set(e.id, { envelope: e, carrier, state: 'queued', attempts: 0, history: [{ state: 'queued', at: now() }], claimed_by: null, evidence: [] }); return ok({ id: e.id, state: 'queued', carrier, batch: null }); },
     async status(id) { const r = rows.get(id); if (!r) return bad(404, 'no such envelope'); tick(r); return ok({ id, state: r.state, carrier: r.carrier, attempts: r.attempts, history: r.history, evidence: r.evidence, handler: r.handler ?? null, batch: null }); },
     async inbox(who, { limit = 50 } = {}) { const out = [...rows.values()].filter((r) => (r.envelope.to.agent === who || r.envelope.to.venue === who) && ['sent', 'delivered'].includes(r.state)).slice(0, limit).map((r) => r.envelope); return ok({ who, envelopes: out }); },
     async ack(a) { calls.push(['ack', a.reply_to]); const r = rows.get(a.reply_to); if (!r) return bad(404, 'no such envelope'); tick(r); if (!['sent', 'delivered'].includes(r.state)) return bad(409, `the envelope is ${r.state}`); r.state = 'acked'; r.history.push({ state: 'acked', at: now(), by: a.sig?.by ?? a.payload?.by ?? null }); acks.push(a); return ok({ id: a.reply_to, state: 'acked' }); },
     async lost() { for (const r of rows.values()) tick(r); return ok({ envelopes: [...rows.values()].filter((r) => r.state === 'lost').map((r) => ({ id: r.envelope.id, kind: r.envelope.kind, carrier: r.carrier, attempts: r.attempts })) }); },
     async dead() { return ok({ envelopes: [...rows.values()].filter((r) => r.state === 'dropped').map((r) => ({ id: r.envelope.id, handler: r.handler })) }); },
     async batches() { return ok({ batches }); },
+    // _AUTOMATCH_TWIG_v1_: the fake's match index — the same answers' shapes (leaf index, twig, head, hits cheapest first, a proof), no MMR
+    async matchIndex(c) { calls.push(['matchIndex', c.venue, c.side]); if (c.schema !== 'taifoon.match.capability.v1' || !['offer', 'demand'].includes(c.side)) return bad(400, 'not a capability'); const v = (match.get(c.venue) ?? match.set(c.venue, { leaves: [], by: new Map() }).get(c.venue)); const twig = keccakHex(utf8Hex(canonical(c))); const seen = v.by.get(twig); if (seen !== undefined) return ok({ venue: c.venue, index: seen, twig, fresh: false, head: { count: v.leaves.length, hash: twig } }); v.by.set(twig, v.leaves.length); v.leaves.push({ c, twig }); return ok({ venue: c.venue, index: v.leaves.length - 1, twig, fresh: true, head: { count: v.leaves.length, hash: twig } }); },
+    async matchSearch({ tag, venue, chain, price_cap, limit = 10, proofs = 1 } = {}) { calls.push(['matchSearch', tag]); const hits = []; for (const [name, v] of match) { if (venue && venue !== name) continue; v.leaves.forEach(({ c, twig }, i) => { if (c.side !== 'offer' || !(c.tags ?? []).includes(tag) && c.class !== tag) return; if (chain && c.chain !== chain) return; if (price_cap != null && c.price_micro > Number(price_cap)) return; hits.push({ venue: name, head: { count: v.leaves.length, hash: v.leaves[v.leaves.length - 1].twig }, candidate: { index: i, twig, capability: c, ...(Number(proofs) ? { proof: { index: i, count: v.leaves.length, siblings: [], peaks: [twig], peak_index: 0 } } : {}) } }); }); } hits.sort((a, b) => a.candidate.capability.price_micro - b.candidate.capability.price_micro); return ok({ schema: 'taifoon.match.search.v1', tag, venue: venue ?? null, chain: chain ?? null, price_cap_micro: price_cap ?? null, proofs: Boolean(Number(proofs)), n: Math.min(hits.length, limit), hits: hits.slice(0, limit) }); },
+    async matchProof({ venue, index }) { calls.push(['matchProof', venue, index]); const v = match.get(venue); const l = v?.leaves[Number(index)]; if (!l) return bad(404, 'no such leaf'); return ok({ venue, head: { count: v.leaves.length, hash: v.leaves[v.leaves.length - 1].twig, signed: { actor: `match:${venue}`, count: v.leaves.length, head: v.leaves[v.leaves.length - 1].twig, sig: '0x' + '00'.repeat(64), cert_ref: 'fake', session: 'fake' } }, candidate: { index: Number(index), twig: l.twig, capability: l.c, proof: { index: Number(index), count: v.leaves.length, siblings: [], peaks: [l.twig], peak_index: 0 } } }); },
+    async matchHeads() { return ok({ venues: [...match].map(([venue, v]) => ({ venue, count: v.leaves.length, head: v.leaves.at(-1)?.twig ?? '0x' + '00'.repeat(32), offers: v.leaves.filter((l) => l.c.side === 'offer').length })) }); },
+    async matchCoverage() { return ok({ schema: 'taifoon.match.coverage.v1', venues: [...match].map(([venue, v]) => { const offers = v.leaves.filter((l) => l.c.side === 'offer').length; const tags = {}; for (const l of v.leaves) if (l.c.side === 'offer') for (const t of [...(l.c.tags ?? []), l.c.class]) tags[t] = (tags[t] ?? 0) + 1; return { venue, count: v.leaves.length, head: v.leaves.at(-1)?.twig ?? null, offers, demands: v.leaves.length - offers, tags: Object.entries(tags).map(([tag, n]) => ({ tag, offers: n })).sort((a, b) => b.offers - a.offers).slice(0, 12), masters: [...new Set(v.leaves.filter((l) => l.c.master).map((l) => `${l.c.master.id}@${l.c.master.holder}:${l.c.master.state}`))] }; }) }); },
+    /** a bundle: every envelope sent in order (atomic: the first refusal refuses the rest; nothing partial is kept) */
+    async matchWindow(w) { calls.push(['matchWindow', w.window]); if (w.schema !== 'taifoon.match.window.v1') return bad(400, 'not a window'); windows.set(w.window, w); return ok(w); },
+    async matchWindows() { const ws = [...windows.values()].sort((a, b) => (a.window < b.window ? 1 : -1)); return ok({ schema: 'taifoon.match.windows.v1', n: ws.length, latest: ws[0] ?? null, windows: ws }); },
+    async cancel(id) { calls.push(['cancel', id]); const r = rows.get(id); if (!r) return bad(404, 'no such envelope'); if (['acked', 'dropped', 'cancelled'].includes(r.state)) return bad(409, `the envelope is ${r.state}`); r.state = 'cancelled'; r.history.push({ state: 'cancelled', at: now() }); return ok({ id, state: 'cancelled' }); },
+    async bundle(b) { calls.push(['bundle', b.envelopes?.length ?? 0, b.atomic]); if (b.schema !== 'taifoon.pipe.bundle.v1' || !Array.isArray(b.envelopes) || !b.envelopes.length) return bad(400, 'not a bundle'); const out = []; for (const e of b.envelopes) { const r = await this.send(e); if (!r.ok) { if (b.atomic) for (const id of out) rows.delete(id); return bad(r.status, `bundle refused at ${e.kind}: ${r.json?.error ?? r.status}`); } out.push(e.id); } batches.push({ bundle: out, atomic: b.atomic, priority: b.priority ?? null }); return ok({ ok: true, accepted: out, atomic: b.atomic }); },
     async stats() { const by = {}; for (const r of rows.values()) { tick(r); by[r.state] = (by[r.state] ?? 0) + 1; } return ok({ envelopes: rows.size, by_state: by }); },
     async claim(carrier, { limit = 20, dry = false } = {}) { calls.push(['claim', carrier, dry]); const out = []; for (const r of rows.values()) { tick(r); if (r.carrier === carrier && (r.state === 'queued' || r.state === 'retried') && out.length < limit) { if (!dry) { r.state = 'sent'; r.claimed_by = carrier; r.attempts += 1; r.history.push({ state: 'sent', at: now(), carrier }); } out.push(r.envelope); } } return ok({ carrier, envelopes: out, dry }); },
     async result(id, { outcome, reason = null, evidence = null }) { calls.push(['result', id, outcome, reason]); const r = rows.get(id); if (!r) return bad(404, 'no such envelope'); if (evidence) r.evidence.push({ outcome, reason, evidence, at: now() }); if (outcome === 'delivered') { r.state = 'delivered'; r.history.push({ state: 'delivered', at: now(), reason }); } else if (outcome === 'deferred') { r.state = r.attempts >= r.envelope.max_attempts ? 'lost' : 'retried'; r.history.push({ state: r.state, at: now(), reason }); if (r.state === 'lost') drop(r); } else if (outcome === 'refused') { r.state = 'lost'; r.history.push({ state: 'lost', at: now(), reason }); drop(r); } else return bad(400, 'outcome is delivered | deferred | refused'); return ok({ id, state: r.state, handler: r.handler ?? null }); },

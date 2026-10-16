@@ -45,8 +45,8 @@ const GLOBAL = `  --json        machine output: one JSON value per command (with
 const ORDER = ['login', 'logout', 'whoami', 'balance', 'buy', 'register', 'collaborate', 'demand', 'pools', 'markets', 'metrics'];
 const usageLines = (c) => c.usage.map(([u, d]) => (u.length <= 56 ? `    taifoon ${pad(u, 56)} ${d}` : `    taifoon ${u}\n    ${' '.repeat(65)}${d}`));
 
-export async function helpText(cmdName, { admin = false } = {}) {
-  const t = new Map(await commands());
+export async function helpText(cmdName, { admin = false, extra = [] } = {}) {
+  const t = new Map(await commands(extra));
   if (!admin) for (const [k, c] of [...t]) if (c.admin) t.delete(k);
   if (cmdName && t.has(cmdName)) {
     const c = t.get(cmdName);
@@ -135,8 +135,8 @@ export async function main(argv, io = {}) {
   if (argv.includes('--version') || argv.includes('-v')) { out.write(`${VERSION}\n`); return 0; }
   const first = parseFlags(argv).pos[0];
   if (!first) {
-    if (argv.includes('--help') || argv.includes('-h')) { out.write(await helpText()); return 0; }
-    if (io.noShell) { out.write(await helpText()); return 2; }
+    if (argv.includes('--help') || argv.includes('-h')) { out.write(await helpText(undefined, { extra: io.extra })); return 0; }
+    if (io.noShell) { out.write(await helpText(undefined, { extra: io.extra })); return 2; }
     const { shell } = await import('./shell.mjs');
     return shell(argv, io);
   }
@@ -144,7 +144,7 @@ export async function main(argv, io = {}) {
     const { operatorToken } = await import('./roles.mjs');
     const admin = Boolean(operatorToken(env));
     const words = parseFlags(argv).pos.slice(1);
-    const t = await commands();
+    const t = await commands(io.extra);
     // _ONE_PRODUCT_v1_: `taifoon help <topic>` that is not a command reads the knowledge shipped with the release
     if (first === 'help' && words.length && !t.has(words[0])) {
       const { knowledgeSearch } = await import('./knowledge.mjs');
@@ -154,10 +154,10 @@ export async function main(argv, io = {}) {
       out.write(`\n  taifoon docs get <topic> reads one\n`);
       return 0;
     }
-    out.write(await helpText(words[0], { admin })); return 0;
+    out.write(await helpText(words[0], { admin, extra: io.extra })); return 0;
   }
   if (first === 'up' || first === 'curl') return legacy(argv, io);
-  const table = await commands();
+  const table = await commands(io.extra);
   const c = table.get(first);
   const { pos, f } = parseFlags(argv, [...(c?.valued ?? []), 'status', 'tenant', 'chain']);
   if (first === 'status') {

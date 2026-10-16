@@ -7087,6 +7087,14 @@
      "envelope_kind": "record",
      "block": "coord-send",
      "blocks": []
+    },
+    {
+     "id": "to:*:forecast:signal",
+     "direction": "write",
+     "connector_type": null,
+     "envelope_kind": "signal",
+     "block": "coord-send",
+     "blocks": []
     }
    ]
   },
@@ -7885,6 +7893,14 @@
      "direction": "write",
      "connector_type": null,
      "envelope_kind": "record",
+     "block": "coord-send",
+     "blocks": []
+    },
+    {
+     "id": "to:*:signal:signal",
+     "direction": "write",
+     "connector_type": null,
+     "envelope_kind": "signal",
      "block": "coord-send",
      "blocks": []
     }

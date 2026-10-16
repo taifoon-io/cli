@@ -1,0 +1,1803 @@
+{
+ "schema": "taifoon.commerce.agreement.vectors.v1",
+ "rule": "every target checks `agreement` (ok or refused) and, for the ok ones, computes the elided view for a viewer without the right; Rust and CUE must agree with these",
+ "cases": [
+  {
+   "name": "erc8183-paid-assured",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     },
+     "assurer": {
+      "id": "…",
+      "elided": true
+     },
+     "evaluator": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "erc8183-hired-no-legs-yet",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "hired",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [],
+    "delivered": {
+     "unknown": true,
+     "reason": "not delivered yet"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x01"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "hired",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     },
+     "assurer": {
+      "id": "…",
+      "elided": true
+     },
+     "evaluator": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [],
+    "delivered": {
+     "unknown": true,
+     "reason": "not delivered yet"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "memoacp-observed-price-unknown",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "memoacp-base",
+    "hop": "settled",
+    "ref": "job:8453:memo_acp:4410",
+    "parties": {
+     "seller": {
+      "id": "0x3333333333333333333333333333333333333333"
+     },
+     "buyer": {
+      "unknown": true,
+      "reason": "the client is a contract wallet the memo does not name"
+     }
+    },
+    "payment": {
+     "unknown": true,
+     "reason": "the memo carries no price"
+    },
+    "legs": [],
+    "delivered": {
+     "unknown": true,
+     "reason": "the deliverable is off chain"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "memoacp-base",
+    "hop": "settled",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "unknown": true,
+      "reason": "the client is a contract wallet the memo does not name"
+     }
+    },
+    "payment": {
+     "unknown": true,
+     "reason": "the memo carries no price"
+    },
+    "legs": [],
+    "delivered": {
+     "unknown": true,
+     "reason": "the deliverable is off chain"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "wall-sale-x402",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "wall",
+    "hop": "paid",
+    "ref": "sale:8453:0x68c6457832e617575352f0b11e0afbda1bda05c1b239880d242bb2293e8a2dd1",
+    "parties": {
+     "seller": {
+      "id": "taifoon"
+     },
+     "buyer": {
+      "id": "0x4444444444444444444444444444444444444444"
+     }
+    },
+    "payment": {
+     "units": "30000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "6000",
+      "to": "layer"
+     },
+     {
+      "leg": "seller_share",
+      "units": "24000",
+      "to": "seller"
+     }
+    ],
+    "delivered": {
+     "what": "a walled answer"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "the ledger row carries no tx for this sale"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "wall",
+    "hop": "paid",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "30000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "6000",
+      "to": "layer"
+     },
+     {
+      "leg": "seller_share",
+      "units": "24000",
+      "to": "seller"
+     }
+    ],
+    "delivered": {
+     "what": "a walled answer"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "the ledger row carries no tx for this sale"
+    }
+   }
+  },
+  {
+   "name": "rpc-window-close",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "rpc",
+    "hop": "recorded",
+    "ref": "usage:rpc:tfr_k_ab12:2026-10-16T18",
+    "parties": {
+     "seller": {
+      "id": "taifoon"
+     },
+     "buyer": {
+      "id": "tfr_k_ab12"
+     }
+    },
+    "payment": {
+     "units": "1500",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "provider",
+      "units": "1200",
+      "to": "seller"
+     },
+     {
+      "leg": "ecosystem",
+      "units": "300",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "3000 RPC reads"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "metered off chain; the ledger is the record"
+    },
+    "volume": {
+     "count": "3000",
+     "unit": "read",
+     "window": {
+      "from": "2026-10-16T18:00:00Z",
+      "to": "2026-10-16T19:00:00Z"
+     }
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "rpc",
+    "hop": "recorded",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "1500",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "provider",
+      "units": "1200",
+      "to": "seller"
+     },
+     {
+      "leg": "ecosystem",
+      "units": "300",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "3000 RPC reads"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "metered off chain; the ledger is the record"
+    },
+    "volume": {
+     "count": "3000",
+     "unit": "read",
+     "window": {
+      "from": "2026-10-16T18:00:00Z",
+      "to": "2026-10-16T19:00:00Z"
+     }
+    }
+   }
+  },
+  {
+   "name": "grade-sold",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "grades",
+    "hop": "paid",
+    "ref": "grade:jev:7c1c",
+    "parties": {
+     "seller": {
+      "id": "jev"
+     },
+     "buyer": {
+      "id": "tfr_k_cd34"
+     },
+     "evaluator": {
+      "id": "jev"
+     }
+    },
+    "payment": {
+     "units": "50000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "50000",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "a Jev grade",
+     "ref": "decision:0x209490d6A0FFC5368A42b0c2208BDCda853f6a92:12"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "grades",
+    "hop": "paid",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     },
+     "evaluator": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "50000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "50000",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "a Jev grade",
+     "ref": "decision:0x209490d6A0FFC5368A42b0c2208BDCda853f6a92:12"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "reseller-markup",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "moonbeam-acp",
+    "hop": "legs",
+    "ref": "sale:1284:mb:9",
+    "parties": {
+     "seller": {
+      "id": "taifoon"
+     },
+     "buyer": {
+      "id": "tfr_k_child"
+     },
+     "reseller": {
+      "id": "acct_moonbeam"
+     }
+    },
+    "payment": {
+     "units": "1100000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "seller_share",
+      "units": "1000000",
+      "to": "seller"
+     },
+     {
+      "leg": "reseller_markup",
+      "units": "100000",
+      "to": "reseller"
+     }
+    ],
+    "delivered": {
+     "what": "a hosted hire"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "moonbeam-acp",
+    "hop": "legs",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     },
+     "reseller": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "1100000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "seller_share",
+      "units": "1000000",
+      "to": "seller"
+     },
+     {
+      "leg": "reseller_markup",
+      "units": "100000",
+      "to": "reseller"
+     }
+    ],
+    "delivered": {
+     "what": "a hosted hire"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "access-bought",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "access",
+    "hop": "paid",
+    "ref": "grant_0123456789abcdef01234567",
+    "parties": {
+     "seller": {
+      "id": "taifoon"
+     },
+     "buyer": {
+      "id": "tfr_k_ef56"
+     }
+    },
+    "payment": {
+     "units": "5000000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "5000000",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "30 days of sealed market signals"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "paid from the key balance (GRID), no chain tx"
+    },
+    "access": "topic:market.signal"
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "access",
+    "hop": "paid",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "5000000",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "5000000",
+      "to": "layer"
+     }
+    ],
+    "delivered": {
+     "what": "30 days of sealed market signals"
+    },
+    "evidence": {
+     "unknown": true,
+     "reason": "paid from the key balance (GRID), no chain tx"
+    },
+    "access": "topic:market.signal"
+   }
+  },
+  {
+   "name": "big-units-18-decimals",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "bridge",
+    "hop": "paid",
+    "ref": "bridge:8453:1",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "25000000000000000000",
+     "asset": "ETH"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "20000000000000000",
+      "to": "layer"
+     },
+     {
+      "leg": "seller_share",
+      "units": "24980000000000000000",
+      "to": "seller"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": true,
+   "view": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "bridge",
+    "hop": "paid",
+    "ref": "…",
+    "parties": {
+     "seller": {
+      "id": "…",
+      "elided": true
+     },
+     "buyer": {
+      "id": "…",
+      "elided": true
+     },
+     "assurer": {
+      "id": "…",
+      "elided": true
+     },
+     "evaluator": {
+      "id": "…",
+      "elided": true
+     }
+    },
+    "payment": {
+     "units": "25000000000000000000",
+     "asset": "ETH"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "20000000000000000",
+      "to": "layer"
+     },
+     {
+      "leg": "seller_share",
+      "units": "24980000000000000000",
+      "to": "seller"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "…"
+    }
+   }
+  },
+  {
+   "name": "legs-do-not-sum",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500001",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "legs sum to 3024691, not the payment 3024690"
+  },
+  {
+   "name": "legs-of-unknown-payment",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "unknown": true,
+     "reason": "no price on the memo"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "legs are shares of a payment: none while the payment is unknown"
+  },
+  {
+   "name": "no-legs-after-hop-legs",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "from hop legs on, a known payment leaves as legs"
+  },
+  {
+   "name": "unknown-without-reason",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "unknown": true
+    }
+   },
+   "ok": false,
+   "why": "evidence is unknown with a reason (3..200 chars)"
+  },
+  {
+   "name": "unknown-feature",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "nope",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "feature \"nope\" is not a venue of the standard or a line of ours"
+  },
+  {
+   "name": "unknown-hop",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "shipped",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "hop \"shipped\" is not one of the twelve"
+  },
+  {
+   "name": "leg-not-in-scheme",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "tip",
+      "units": "3024690",
+      "to": "seller"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "legs[0].leg \"tip\" is not a leg of the payment scheme"
+  },
+  {
+   "name": "leg-to-unknown-party",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "3024690",
+      "to": "friend"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "legs[0].to \"friend\" is not a party of the standard"
+  },
+  {
+   "name": "units-as-number",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": 3024690,
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "payment.units is a base-unit integer string"
+  },
+  {
+   "name": "leading-zero",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "03024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "payment.units is a base-unit integer string"
+  },
+  {
+   "name": "extra-field",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    },
+    "price": "1"
+   },
+   "ok": false,
+   "why": "agreement has no field price"
+  },
+  {
+   "name": "seller-missing",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "buyer": {
+      "id": "x"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "parties.seller is required (or unknown with a reason)"
+  },
+  {
+   "name": "optional-party-unknown",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     },
+     "reseller": {
+      "unknown": true,
+      "reason": "maybe there is one"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "parties.reseller is named or absent"
+  },
+  {
+   "name": "evidence-chain-not-caip2",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "base",
+     "tx": "0x01"
+    }
+   },
+   "ok": false,
+   "why": "evidence.chain is a CAIP-2 chain"
+  },
+  {
+   "name": "bad-access-id",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "job:8453:erc8183:81877",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    },
+    "access": "stream:everything"
+   },
+   "ok": false,
+   "why": "access is an access id (<kind>:<name>, access.cue)"
+  },
+  {
+   "name": "bad-ref",
+   "agreement": {
+    "schema": "taifoon.commerce.agreement.v1",
+    "feature": "erc8183-base",
+    "hop": "paid",
+    "ref": "a b",
+    "parties": {
+     "seller": {
+      "id": "0x1111111111111111111111111111111111111111"
+     },
+     "buyer": {
+      "id": "0x2222222222222222222222222222222222222222"
+     },
+     "assurer": {
+      "id": "pool:8453:assurance:1"
+     },
+     "evaluator": {
+      "id": "jev:0x5242dE388a846d16641744dEB095eD63990E7be8"
+     }
+    },
+    "payment": {
+     "units": "3024690",
+     "asset": "USDC"
+    },
+    "legs": [
+     {
+      "leg": "our_fee",
+      "units": "500000",
+      "to": "layer"
+     },
+     {
+      "leg": "venue_fee",
+      "units": "302468",
+      "side": "in",
+      "to": "venue"
+     },
+     {
+      "leg": "seller_share",
+      "units": "2000000",
+      "to": "seller"
+     },
+     {
+      "leg": "premium",
+      "units": "222222",
+      "to": "assurer"
+     }
+    ],
+    "delivered": {
+     "what": "the job deliverable, graded complete",
+     "ref": "deliverable:0xabc"
+    },
+    "vault": {
+     "move": "release",
+     "units": "100000",
+     "asset": "USDC",
+     "what": "the seller's deposit returned"
+    },
+    "evidence": {
+     "chain": "eip155:8453",
+     "tx": "0x81464f5e6a8b6322e4bec8f609a08e8ec1f1ef11d39e5f5d51e3fa676c5f042a"
+    }
+   },
+   "ok": false,
+   "why": "ref is the sale id (3..160 of A-Za-z0-9:._/-)"
+  }
+ ]
+}

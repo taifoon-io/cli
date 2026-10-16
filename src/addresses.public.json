@@ -5969,6 +5969,60 @@
           "status": "live",
           "since": "2026-10-15",
           "notes": "TSUL 70/20/10 split on Base (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 5042,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xb1d65a735f5d18998ecde1b3295a358dd539cf73dff548dc3784eff4fb7e44e3",
+            "block": 26308967
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "TSUL 70/20/10 split on Arc (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 143,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0xdbb7f62e900d027265baa0268ac01de4e9ff5449dc7258786a2f259fd41d9de4",
+            "block": 113977990
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "TSUL 70/20/10 split on Monad (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 4663,
+          "name": "TsulDonut",
+          "address": "0xBB14351B345d8D518A605EDD0406723a88A18787",
+          "kind": "settlement",
+          "deploy": {
+            "tx": "0x20739ae65345bd3103e67224f18a0bb5bbb8db90d5f4b1a57a638d2ff220f310",
+            "block": 90323965
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "TSUL 70/20/10 split on Robinhood Chain (native coin). Same address on every chain; deployed by the deploy pipeline (deploy/modules/coord-settlement.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
         }
       ]
     },
@@ -6069,6 +6123,78 @@
           "status": "live",
           "since": "2026-10-15",
           "notes": "Superroot anchor on Base: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 100,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0x3f4039b282d517d983ab267e0f84983d8a368d456819e1137e06a841d8a159d7",
+            "block": 48790781
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Superroot anchor on Gnosis: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 5042,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0x8742a4fa35e7896a6dcfedfbae992bc43962147085fbb196f72d2b17821ce10d",
+            "block": 26308892
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Superroot anchor on Arc: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 143,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0xbe32c2898a805b46acc60ee93c222104b34e14bf4e0a23163f321a7d899da9ce",
+            "block": 113977875
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Superroot anchor on Monad: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 4663,
+          "name": "TaifoonSuperrootAnchor",
+          "address": "0x457D583b3A409D6DC8421ca6d3FB67ceb94718ad",
+          "kind": "anchor",
+          "deploy": {
+            "tx": "0x737a1c3c9dee28398474a0eb2a5e142a3ca74c9225558b067bfe222f1b641b42",
+            "block": 90323606
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Superroot anchor on Robinhood Chain: the roots the relayer pushed here; verifiers on this chain ask isKnownSuperroot(). Same address on every chain; deployed by the deploy pipeline (deploy/modules/superroot-anchor.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
         }
       ]
     },
@@ -6183,6 +6309,150 @@
           "status": "live",
           "since": "2026-10-15",
           "notes": "Protocol verifier on Base: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 100,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0xda19c5ee13d5582b8155819fbcf1b1928ad6e45cad92b68279436cab1ef27e44",
+            "block": 48790782
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "The taifoon_coord lambda on Gnosis: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 100,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x3866a9ca25787fefd689e982a4157fb5acf952342bd95200b9ac7a8353d8ad4f",
+            "block": 48790786
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Protocol verifier on Gnosis: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 5042,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0xd54f70b4997bf5aa9e0ab0f60e559ae1ebfcfff521bd49005b31d33763731ee9",
+            "block": 26308904
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "The taifoon_coord lambda on Arc: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 5042,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x863836c3b5873b0d96b283b15b8c3f6536d0f9025ad7735d09bd5c8961584a3e",
+            "block": 26308913
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Protocol verifier on Arc: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 143,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0xa99240f1e5bfa2d34fde2310d2d14354981a51346141a40eada03cbb28ee0821",
+            "block": 113977892
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "The taifoon_coord lambda on Monad: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 143,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x354710a070566cd06a7fb33f1620741bcce83e8e9ffde9dfe4f3c60051ee6fb6",
+            "block": 113977906
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Protocol verifier on Monad: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 4663,
+          "name": "TaifoonCoordLambda",
+          "address": "0x6701257d271fFC7C214d7dEBb72c3C6996b293e8",
+          "kind": "lambda",
+          "deploy": {
+            "tx": "0xb34a4a9a203a44a4d74609badaaced4bc31eac84e69ff0a99f988e8696dafe56",
+            "block": 90323660
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "The taifoon_coord lambda on Robinhood Chain: isValidMove(protocolId, from, to, kind) over the sale run's vocabulary (<hop>:<outcome>). No owner, no state beyond its table. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key."
+        },
+        {
+          "chain": 4663,
+          "name": "TaifoonProtocolVerifier",
+          "address": "0xD00892925F085b366d82B8B577B1b303B7b1b3f9",
+          "kind": "verifier",
+          "deploy": {
+            "tx": "0x3f0750e2156f3efa0ddd35d89132e7601907d634e533d271e8b20922dae25563",
+            "block": 90323703
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Protocol verifier on Robinhood Chain: a transition proven here is remembered with its superroot (provenUnder); the superroot must be known to the chain's superroot anchor. taifoon_coord wired: lambda = TaifoonCoordLambda, the coordination vault its attester. Same address on every chain; deployed by the deploy pipeline (deploy/modules/protocol-verifier.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
         }
       ]
     },
@@ -6243,6 +6513,78 @@
           "status": "live",
           "since": "2026-10-15",
           "notes": "Payment channels on Base (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 100,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x510dac64209c116173320e49b9e2423413f752cac0d43247b90fa28ffa6c4b61",
+            "block": 48790811
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Payment channels on Gnosis (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 5042,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x4b71eb3e3bf4c5e0a2fbb1eba7619e063d4e8d05eb327f5fe1fbe1b46d784de4",
+            "block": 26308993
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Payment channels on Arc (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 143,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x4aafba757e8ce1bda9216be61c9ba32bb9beba52d2062d58f8523de0488b432a",
+            "block": 113978032
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Payment channels on Monad (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
+        },
+        {
+          "chain": 4663,
+          "name": "TaifoonPaymentChannel",
+          "address": "0x78009091C0EE2fc3a259995A19425FC94a6988d1",
+          "kind": "escrow",
+          "deploy": {
+            "tx": "0x60a161797a396eceb98ace3ec7301edf5ec00145c03e3b7dbfb859edc5767375",
+            "block": 90324091
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Payment channels on Robinhood Chain (any ERC-20; USDC in the one payment scheme): open → settled:ok proven → sealProven → distribute. Same address on every chain; deployed by the deploy pipeline (deploy/modules/payment-channel.mjs) with the KMS deploy key, owned by the Taifoon governance account from the constructor."
         }
       ]
     },
@@ -6303,6 +6645,78 @@
           "status": "live",
           "since": "2026-10-15",
           "notes": "Workflow builder on Base: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 100,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x32cb5e00cf01898e59603d363d3046b4f83496e9f95cad01a9c75dfdea636c7d",
+            "block": 48790823
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Workflow builder on Gnosis: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 5042,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x468f1df1ab1a12acd636836164cca10bb966e3f36c038177de1290543034d632",
+            "block": 26309021
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Workflow builder on Arc: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 143,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x9d9543050f647fbdb1f7630692204ff0683ecdca9432d4db61afa3be0b720cb7",
+            "block": 113978075
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Workflow builder on Monad: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
+        },
+        {
+          "chain": 4663,
+          "name": "TaifoonWorkflow",
+          "address": "0x5F7ddB935D8C2e85BbA502De7c91b14b31CB17bE",
+          "kind": "workflow",
+          "deploy": {
+            "tx": "0x7f56d6c80740b12147868121b362aca90e24ee714be6e1a422433ff20612e0af",
+            "block": 90324222
+          },
+          "verified": {
+            "blockscout": null,
+            "basescan": null,
+            "sourcify": null
+          },
+          "status": "live",
+          "since": "2026-10-16",
+          "notes": "Workflow builder on Robinhood Chain: register(specHash, states, bindings) once per spec; advance(wfId, protocolId, pl, t, hp, args) proves a step and fires its binding; instanceOf(wfId, orderKeyHash) = (next, total, done). Same address on every chain; deployed by the deploy pipeline (deploy/modules/workflow.mjs)."
         }
       ]
     }

@@ -84,6 +84,13 @@ export function makeContext(io, f, version) {
       const ans = await readLine(input);
       return /^y(es)?$/i.test(ans.trim());
     },
+    /** ask for one line on a TTY (a menu choice, a label); null without a TTY */
+    async ask(q) {
+      const input = io.stdin ?? process.stdin;
+      if (!input.isTTY) return null;
+      out.write(`  ${p.you(q)} `);
+      return (await readLine(input)).trim();
+    },
     /** read one hidden line from a TTY (a pasted key); null without a TTY */
     async secret(q) {
       const input = io.stdin ?? process.stdin;
@@ -98,8 +105,11 @@ export function makeContext(io, f, version) {
 function readLine(input) {
   return new Promise((resolve) => {
     let buf = '';
-    const on = (d) => { buf += d.toString('utf8'); const i = buf.indexOf('\n'); if (i >= 0) { input.off('data', on); input.pause?.(); resolve(buf.slice(0, i)); } };
-    input.resume?.(); input.on('data', on);
+    // a line, or whatever came before the input ended (ctrl-d, a closed pipe): a prompt never waits on a stream that is gone
+    const done = (v) => { input.off('data', on); input.off('end', end); input.pause?.(); resolve(v); };
+    const on = (d) => { buf += d.toString('utf8').replace(/\u0004/g, ''); const i = buf.indexOf('\n'); if (i >= 0) done(buf.slice(0, i)); };
+    const end = () => done(buf);
+    input.resume?.(); input.on('data', on); input.once('end', end);
   });
 }
 function readHidden(input, out) {

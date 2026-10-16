@@ -7,23 +7,24 @@
 
 Every envelope is a transition. A READ arrives as kind `observe` from the producer (GET /v1/pipe/stream); a WRITE is sent with POST /v1/pipe/send, names its transition, carries the transition's kind, and writes to one outlet the caller's key holds.
 
-Kinds a send may carry: offer, hire, delivery, grade, settle, release, advert, cover, ack, record. Read-only kinds: observe.
+Kinds a send may carry: offer, hire, delivery, grade, settle, release, advert, cover, ack, record, signal. Read-only kinds: observe.
 Outlets: mainnet, devnet, taifoon, vaults. Vault venues write to `vaults`; eip155:36927 → devnet; eip155:3692781 → taifoon; any other chain → mainnet; a watch or an http delivery writes to no outlet.
 
 Carrier routes (first match wins):
 1. record: agent_is=audit, venue_is=coord, kinds=record, exclusive=true
-2. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery, exclusive=false
-3. vault: venue_is=vault, kinds=settle|release, exclusive=false
-4. vault: venue_is=vaults, kinds=settle|release, exclusive=false
-5. vault: venue_is=vault_server, kinds=settle|release, exclusive=false
-6. vault: venue_is=custody_registry, kinds=settle|release, exclusive=false
-7. vault: venue_is=service:vault, kinds=settle|release, exclusive=false
-8. vault: venue_is=service:custody, kinds=settle|release, exclusive=false
-9. http: endpoint=http, kinds=any, exclusive=false
-10. solana: chain_prefix=solana, kinds=settle|release, exclusive=false
-11. venue: venue=present, kinds=any, exclusive=false
-12. evm: chain_prefix=eip155:, kinds=settle|release, exclusive=false
-13. solana: chain_prefix=solana, agent=present, kinds=any, exclusive=false
+2. record: venue_is=coord, kinds=signal, exclusive=true
+3. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery, exclusive=false
+4. vault: venue_is=vault, kinds=settle|release, exclusive=false
+5. vault: venue_is=vaults, kinds=settle|release, exclusive=false
+6. vault: venue_is=vault_server, kinds=settle|release, exclusive=false
+7. vault: venue_is=custody_registry, kinds=settle|release, exclusive=false
+8. vault: venue_is=service:vault, kinds=settle|release, exclusive=false
+9. vault: venue_is=service:custody, kinds=settle|release, exclusive=false
+10. http: endpoint=http, kinds=any, exclusive=false
+11. solana: chain_prefix=solana, kinds=settle|release, exclusive=false
+12. venue: venue=present, kinds=any, exclusive=false
+13. evm: chain_prefix=eip155:, kinds=settle|release, exclusive=false
+14. solana: chain_prefix=solana, agent=present, kinds=any, exclusive=false
 
 Transitions an envelope may name:
 - coordination.transitions.v1/dispatch_no_work@handshake: job Open → Open, write, kind offer

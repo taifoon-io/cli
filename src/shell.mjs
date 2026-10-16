@@ -63,7 +63,7 @@ export async function shell(argv, io = {}) {
   const out = io.out ?? process.stdout; const env = io.env ?? process.env; const input = io.stdin ?? process.stdin;
   const noColor = argv.includes('--no-color');
   const p = brand(out, env, noColor ? false : undefined);
-  const table = await commands();
+  const table = await commands(io.extra);
   const exec = io.exec ?? defaultExec;
   // the global flags given to `taifoon` ride on every line (a value flag keeps its value)
   const { f: gf } = parseFlags(argv, ['provider', 'model', 'max-turns']);

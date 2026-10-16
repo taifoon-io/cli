@@ -31,6 +31,8 @@ taifoon register agent 8453:95902 --check
 taifoon pools ls                         # the 28 Moonbeam V3 pools on Base (not open yet) and the layer's pools
 taifoon pools create devnet dUSDC 0x…    # an unsigned createPool plan on the devnet
 taifoon collaborate invite my-team 0x…   # a scoped relayer key for a collaborator, stored in your Keychain
+taifoon keys                             # your key and your tenant's keys: a menu on a terminal (standing, scopes, roll, revoke, seats)
+taifoon stream --all                     # the live view: every sale as its agreement line + ⚖ legs, a format gap flagged inline
 taifoon status                           # one screen: network, session, marketplaces, plans waiting for a signature
 ```
 
@@ -161,6 +163,11 @@ Running `taifoon` with no arguments opens a shell, the way `mamba` opens its con
 | `taifoon register resource <mcp\|a2a\|x402\|rpc\|gpu\|mech> <endpoint>` | The λ resource walk: register → probe → list → gateway URL and fee terms. |
 | `taifoon collaborate invite <project> <member>` | `/v1` mints the collaborator's **own** relayer key, with a scope (`read` or `write`) and per-minute and per-day budgets. It goes straight into the Keychain (`taifoon-collab/<project>/<prefix>`) and is never printed. |
 | `taifoon collaborate ls` · `activity <project>` · `revoke <prefix>` · `handoff <project> <prefix>` | Show your projects and keys; see who did what (calls per day and gateway steps per key); stop a key from its next call; copy a key to the clipboard to hand it over. |
+| `taifoon keys` | Your key and your tenant's keys in one place. On a terminal it is a menu: standing, keys, create, scopes, roll, revoke, team, seats; in a pipe it prints the standing and the keys once. |
+| `taifoon keys show` · `keys ls` | Your key's standing (`GET /v1/access/key`): tier, plan, scopes, caps, balance, whether it is entitled to whole ids, and the access ids it bought one by one · every key of your tenant with the recent changes (`GET /v1/tenant/keys`). |
+| `taifoon keys create --label <text> [--scopes rpc,proofs,…]` · `update <prefix> [--scopes …] [--cap-day-grid n]` · `roll [<prefix>] [--grace-hours h]` · `revoke <prefix>` | Manage keys through `POST /v1/tenant/keys`. A created or rolled key goes straight into the Keychain (`taifoon-cli/key/<prefix>`, or this profile's entry when you roll the key you use) and is never printed. Every write asks first (`--yes` in a pipe). |
+| `taifoon keys seats` | Your Jev seat (`GET /v1/judge/keys`) and the components you master (`GET /v1/owners`). |
+| `taifoon stream [--all] [--legs \| --no-legs] [--no-check]` | The live view. A sale reads in the commerce protocol's own order: the venue, then `job · paid 3.02 USDC · seller → buyer · via reseller · tx`, with a dim `⚖` line of its legs (our fee, venue fee, seller share, premium → backers, the vault move). Every commerce event is checked against the one agreement format: `✗ agreement refused: <why>` or `○ no agreement: <why>` under the row makes a broken envelope obvious. Ids are whole for a key that bought them, `…` otherwise. |
 | `taifoon demand post "<need>" [--dry-run]` · `--class <id> --input '{…}'` | Say what you need in plain words (`POST /v1/demands`). The layer maps the words to a job class by its own rules (no model); when they fit no class, several, or miss a field, you get the candidates and resend with `--class`. `--dry-run` shows the mapping and the cover preview (which pool would cover the job and at what premium, quoted by `POST /v1/pools/quote`; quote only, the loop's hires name no pool) and keeps nothing. The auto-match loop then picks the seller, hires it, grades the reply by code and settles on the devnet 36927. |
 | `taifoon demand status <dm_…> [--watch [s]]` · `demand ls [--state s] [--limit n]` | Every step the loop wrote on a demand; `--watch` re-reads until it ends and prints the job and the ending transaction · demands, newest first. |
 | `taifoon demo n8n` · `demo n8n --live [--need "<words>"]` | The n8n flow (`n8n-nodes-taifoon`), phase by phase: each phase with the node operation and example workflow that does it, and its link. Without `--live` it replays the last tested run of the n8n buyer example: every phase is read again from the layer and the settlement is re-checked on chain (`POST /v1/attest/hire`); no key, nothing written. `--live` runs the same flow on a new demand with your key, or a free key minted for the run (shown by prefix only). |
@@ -175,6 +182,12 @@ Running `taifoon` with no arguments opens a shell, the way `mamba` opens its con
 | `taifoon phases [--phase 0..5\|reach\|board] [--venue <id>] [--json]` | The five phases of the Taifoon agreement as live metrics (`/v1/landscape/phases`), one line per metric: `phase=4 metric=pools_funded value=3 outside=mixed …`. The Phase 0 gate first: deposits stay blocked until every gate is closed. A null is unread and says why. |
 | `taifoon metrics [--day YYYY-MM-DD] [--watch [s]]` | What went through the layer: today vs yesterday vs 7 days (customers · ours), top routes, top customers (hashed), fees earned and would-have-charged, the funnel, the network live (`/v1/metrics` + `/v1/network`). |
 | `taifoon up <chain>:<agentId>` · `status <agent>` · `curl` · `grade` | The seller walk, unchanged. |
+
+On a terminal every other command prints its answer as aligned rows, tables and agreement lines; `--json`, or a pipe, prints the
+JSON exactly as the layer answered.
+
+**One command set.** `taifoon-sdk` (the SDK's command line) runs these same commands: it is a thin entry over this package that adds
+only the verbs needing the SDK's own code (`taifoon-sdk coord economies | workflow | vacuum | keygen | decode`, `taifoon-sdk demo`).
 
 `taifoon markets ls` prints the marketplace matrix: each marketplace's status, what the statuses mean, and what unblocks a
 blocked one. The list lives in `src/markets.mjs`.

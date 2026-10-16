@@ -10,12 +10,12 @@
     {
      "file": "llms-coord-language.txt",
      "from": "lang/gen/llms-coord-language.txt",
-     "sha256": "37e2271316892f6ad9d2e55574e6eced4e8e9ad11ff1d631e96f65e46346fd6d"
+     "sha256": "44dda70ddf69dad7f0d47eea81748b893625f26489512d761a73bd99c6213bbc"
     },
     {
      "file": "studio-blocks.json",
      "from": "lang/gen/studio-blocks.json",
-     "sha256": "2c2091c4b740bdc67001c7fda2d87001e54e2631850214d50030950da876665b"
+     "sha256": "b1d8feae469b0fc62c226a5abe141a1c4bc4afe58ab41ef4d80c0995c6664c91"
     },
     {
      "file": "check-lib.mjs",
@@ -31,5 +31,5 @@
    "consumed_by": "the taifoon CLI (src/knowledge.mjs): taifoon docs, taifoon workflow check and the agent session's grounding; the golden set runs in the CLI tests"
   }
  ],
- "commit": "a3f259e0c062e8a8c5b3f25c0d879ae2b53799db"
+ "commit": "021dd681dc64713cb73aaaa5cd3bd9903c305ad5"
 }

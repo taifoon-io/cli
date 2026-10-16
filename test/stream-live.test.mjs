@@ -146,3 +146,22 @@ test('--raw is the old one-line output', async () => {
   const r = await run(['stream', '--raw', '--limit', '2']);
   assert.match(r.out, /^  envelope \{"filters"/);
 });
+
+// _AGREEMENT_CHECK_v1_: the inline check runs the vendored generated checker (one rule) on every hit
+test('agreementChecker: ok, refused with the reason, missing on a commerce kind or lane, silent on infrastructure; elided views check the same', async () => {
+  const { agreementChecker } = await import('../src/stream-live.mjs');
+  const m = await import('../vendor/resale/runtime/coord-lang/agreement.mjs');
+  const { readFileSync } = await import('node:fs');
+  const V = JSON.parse(readFileSync(new URL('../vendor/resale/runtime/coord-lang/agreement.json', import.meta.url), 'utf8'));
+  const check = agreementChecker(m);
+  for (const c of V.cases) {
+    const got = check({ event: 'job', data: { lane: 'job', agreement: c.agreement } });
+    assert.equal(got.state, c.ok ? 'ok' : 'invalid', c.name);
+    if (c.ok) assert.equal(check({ event: 'job', data: { lane: 'job', agreement: c.view } }).state, 'ok', `${c.name} (elided view)`);
+  }
+  assert.equal(check({ event: 'job', data: { lane: 'job', venue: 'erc8183' } }).state, 'missing');
+  assert.match(check({ event: 'envelope', data: { envelope: { kind: 'hire' } } }).reason, /a hire envelope \(fire\) carries envelope\.agreement/);
+  assert.equal(check({ event: 'envelope', data: { envelope: { kind: 'ack' } } }), null);
+  assert.equal(check({ event: 'root', data: { lane: 'root' } }), null);
+  assert.equal(check({ event: 'jev', data: { lane: 'jev' } }).state, 'missing');
+});

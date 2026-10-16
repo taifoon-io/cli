@@ -20,6 +20,8 @@ export const FILES = [
   'resale/runtime/pipe-client.mjs',
   'resale/runtime/pipe-sealed.mjs',
   'resale/runtime/coord-lang/pipe.mjs',
+  'resale/runtime/coord-lang/agreement.mjs', // _ONE_FORMAT_v1_: pipe-client checks the agreement before it leaves
+  'resale/runtime/coord-lang/agreement.json',  // its vectors (lang/vectors/agreement.json), so the published tests run them (stream's inline check)
   'addresses/keccak.mjs',
 ];
 const sha = (b) => createHash('sha256').update(b).digest('hex');

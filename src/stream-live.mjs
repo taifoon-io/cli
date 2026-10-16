@@ -123,6 +123,29 @@ async function openerOf(ctx, file) {
   };
 }
 
+/**
+ * _AGREEMENT_CHECK_v1_: the envelope's shape on every hit. One rule, the generated checker (coord lang/cue/commerce.cue #Agreement →
+ * packages/resale/runtime/coord-lang/agreement.mjs, vendored here byte for byte): an agreement that is there is checked field by field
+ * (✗ with the checker's reason); a commerce event without one is flagged (○): an envelope whose kind requires it (KIND_RULES) or a
+ * coord-lane event of a commerce lane (COMMERCE_LANES: erc8183, memo_acp, olas, acp, x402, n8n, jev, …). An elided view is checked with
+ * its marker fields standing in, so a viewer without the right sees the same verdict. Infrastructure events (leaf, ack, batch, root,
+ * quota, headers) are not commerce and get no line. Pure given the module.
+ */
+export function agreementChecker(m) {
+  const viewOk = (a) => (a.ref === m.ELISION_MARKER ? { ...a, ref: 'elided:ref' } : a);
+  return (ev) => {
+    const d = ev?.data && typeof ev.data === 'object' ? ev.data : {};
+    const a = d.envelope?.agreement ?? d.agreement;
+    if (a) { const why = m.agreementError(viewOk(a)); return why ? { state: 'invalid', reason: why } : { state: 'ok' }; }
+    const kind = d.envelope?.kind;
+    if (kind) { const r = m.kindRule(kind); return r?.agreement === 'required' ? { state: 'missing', reason: `a ${kind} envelope (${r.event}) carries envelope.agreement` } : null; }
+    const lane = String(d.lane ?? ev?.event ?? '');
+    const venue = lane === 'job' ? String(d.venue || 'erc8183') : lane;
+    const feature = m.laneFeature(venue);
+    return feature ? { state: 'missing', reason: `the ${venue} lane is commerce (feature ${feature}): its events carry the agreement` } : null;
+  };
+}
+
 /** The command. Exit code 0 on ctrl-c, --for or --limit; 1 when refused or the attempts run out. */
 export async function streamLive(ctx, { wait, cap, headersEveryMs = HEADERS_EVERY_MS } = {}) {
   const f = ctx.f; const out = ctx.out; const env = ctx.env;
@@ -132,7 +155,9 @@ export async function streamLive(ctx, { wait, cap, headersEveryMs = HEADERS_EVER
   const fetchImpl = ctx.io.fetch ?? globalThis.fetch;
   const [masters, entitlement] = await Promise.all([f['no-masters'] ? null : loadMasters(ctx), loadEntitlement(ctx, key)]);
   const opened = entitlement.entitled && typeof f['seal-key-file'] === 'string' ? await openerOf(ctx, f['seal-key-file']) : null;
-  const view = f.raw ? null : createStreamView({ out, tty, color, short: !!f.short, wide: !!f.wide, genome: !f['no-genome'], masters, stats: !!f.stats, json: !tty, entitlement, opened });
+  // --legs (on by default) the ⚖ line of each commerce agreement; --no-legs hides it. --no-check hides the inline agreement check.
+  const check = f['no-check'] ? null : agreementChecker(await import('../vendor/resale/runtime/coord-lang/agreement.mjs'));
+  const view = f.raw ? null : createStreamView({ out, tty, color, short: !!f.short, wide: !!f.wide, genome: !f['no-genome'], legs: !f['no-legs'], masters, stats: !!f.stats, json: !tty, entitlement, opened, check });
   const F = filtersOf(f);
   const limit = Number(f.limit) || Infinity; const forS = Number(f.for) || 0;
   const ac = new AbortController();

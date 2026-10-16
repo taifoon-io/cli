@@ -36,7 +36,9 @@ export function genericCommand(verb) {
       // the knowledge runners read the operator skills only for an admin (an operator token on this machine)
       const admin = Boolean(operatorToken(ctx.env));
       const out = await runRow(row, args, { base: ctx.base, key, fetch: ctx.io.fetch ?? globalThis.fetch, version: ctx.version, role: admin ? 'admin' : undefined, env: admin ? ctx.env : {} });
-      ctx.out.write(JSON.stringify(out, null, ctx.json ? 0 : 2) + '\n');
+      // _PRETTY_v1_: a terminal reads the answer in the stream view's language; --json and a pipe keep the JSON as answered
+      if (ctx.tty && !ctx.f.raw) { const { pretty } = await import('../pretty.mjs'); ctx.out.write(pretty(ctx.p, out, { width: ctx.width }).join('\n') + '\n'); }
+      else ctx.out.write(JSON.stringify(out, null, ctx.json ? 0 : 2) + '\n');
       return out.ok === false ? 1 : 0;
     },
   };
@@ -78,9 +80,14 @@ export async function followSse(ctx, path, { headers = {} } = {}) {
   return 0;
 }
 
-/** name → command, loaded once. */
-export async function commands() {
-  if (table) return table;
+/**
+ * name → command, loaded once. _ONE_COMMAND_SET_v1_: `extra` are the commands a host program adds to THIS table (taifoon-sdk adds
+ * the verbs that need the SDK's own code): same dispatch, same help, same render, never a second CLI. An extra never replaces a
+ * command of the table.
+ */
+export async function commands(extra = []) {
+  if (table && !extra.length) return table;
+  if (table) { const t = new Map(table); for (const c of extra) if (c && !t.has(c.name)) t.set(c.name, { ...c, extra: true }); return t; }
   const t = new Map();
   const dir = new URL('./', import.meta.url);
   for (const f of readdirSync(dir).filter((x) => x.endsWith('.mjs') && !SKIP.has(x)).sort()) {
@@ -91,5 +98,5 @@ export async function commands() {
   }
   for (const verb of genericVerbs(new Set(t.keys()))) t.set(verb, genericCommand(verb));
   table = t;
-  return t;
+  return extra.length ? commands(extra) : t;
 }
