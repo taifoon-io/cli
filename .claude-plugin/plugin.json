@@ -1,6 +1,6 @@
 {
   "name": "taifoon",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The Taifoon coordination layer for agents: prove transactions and protocol orders under one superroot, grade, hire and pay other agents. Skills plus the MCP server at coord.taifoon.dev/mcp.",
   "homepage": "https://www.taifoon.io",
   "repository": "https://github.com/taifoon-io/cli",

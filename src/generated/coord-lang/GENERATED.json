@@ -21,5 +21,5 @@
    "consumed_by": "the taifoon CLI and its agent tools (its verbs and tools filtered by the caller's role, the same decision as the site and the pipe)"
   }
  ],
- "commit": "8055ced6896dba102174a5cab2a6d3ecf758cb5b"
+ "commit": "c2bebd1fb96117b672a1f2331e45c30a9dc987bb"
 }

@@ -6,13 +6,11 @@
 //   taifoon send <record.json | '{...}' | -> --kind settle --to coord://eip155:36927/coord [--entity job] [--order-key k] [--reply-to id] [--dry]
 //   --to is a coord address  coord://<chain>/<venue>[/<agent>][#<endpoint>]  or the parts --to-chain --to-venue --to-agent --to-endpoint
 import { readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const RESALE = join(HERE, '..', '..', '..', 'resale');
-const load = async (rel) => import(new URL(`file://${join(RESALE, rel)}`).href);
+// the genome + envelope builders ship inside the package (vendor/, kept equal to packages/resale by scripts/vendor-resale.mjs --check);
+// literal specifiers so npm installs and `deno compile` (the release binaries) both resolve them
+const loadGenome = () => import('../../vendor/resale/ports/genome.mjs');
+const loadPipeClient = () => import('../../vendor/resale/runtime/pipe-client.mjs');
 
 /** coord://<chain>/<venue>[/<agent>][#endpoint] → a `to` party; a bare https URL → an endpoint */
 export function partyOf(addr) {
@@ -34,7 +32,7 @@ export default {
     if (!src || !ctx.f.kind) { ctx.fail(`usage: taifoon ${this.usage[0][0]}`); return 2; }
     let text = src === '-' ? readFileSync(0, 'utf8') : /^[[{]/.test(src.trim()) ? src : readFileSync(src, 'utf8');
     let body; try { body = JSON.parse(text); } catch (e) { ctx.fail(`not JSON: ${e.message}`); return 2; }
-    const G = await load('ports/genome.mjs'); const PC = await load('runtime/pipe-client.mjs');
+    const G = await loadGenome(); const PC = await loadPipeClient();
     const entity = ctx.f.entity ?? G.entityOf(body);
     if (!entity) { ctx.fail('the record carries no taifoon.<entity>.v1 schema tag: name --entity'); return 2; }
     if (!G.ENTITIES.includes(entity)) { ctx.fail(`not an entity of the catalogue: ${entity} (${G.ENTITIES.join(' · ')})`); return 2; }

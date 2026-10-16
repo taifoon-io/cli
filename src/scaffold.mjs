@@ -72,3 +72,69 @@ export function cardStarter(L, cardId, dir) {
   writeFileSync(join(d, 'package.json'), JSON.stringify({ name: `${c.id}-starter`, private: true, type: 'module', scripts: { start: 'node starter.mjs' } }, null, 2) + '\n');
   return { ok: true, dir: d, card: c.id, files: ['README.md', 'starter.sh', 'starter.mjs', 'package.json'] };
 }
+
+/** _FORGE_SDK_v1_: a forge project on taifoon-contracts (the public mirror of the coord Solidity SDK) into `dir`: the agent-job example
+ *  wired to Base by the package's own TaifoonAddresses, a deploy script and the install commands. Nothing is installed or sent. */
+export function contractsStarter(dir) {
+  if (!dir) return { ok: false, error: 'usage: taifoon new --contracts <directory>' };
+  const target = resolve(dir);
+  if (existsSync(target) && readdirSync(target).length) return { ok: false, error: `${dir} exists and is not empty: nothing was written` };
+  const files = {
+    'foundry.toml': `[profile.default]\nsrc = "src"\nout = "out"\nlibs = ["lib"]\nsolc = "0.8.28"\noptimizer = true\nvia_ir = true\nevm_version = "paris"\n\n[rpc_endpoints]\nbase = "\${BASE_RPC_URL}"\n`,
+    'remappings.txt': 'taifoon-contracts/=lib/taifoon-contracts/\nforge-std/=lib/forge-std/src/\n',
+    '.gitignore': '/out/\n/cache/\n/broadcast/\n/lib/\n.env\n',
+    'src/MyAgentJob.sol': `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import {AgentJob} from "taifoon-contracts/src/coord/sdk/examples/AgentJob.sol";
+import {TaifoonAddresses} from "taifoon-contracts/src/coord/sdk/TaifoonAddresses.sol";
+import {Deployments} from "taifoon-contracts/src/coord/sdk/Deployments.sol";
+
+/// The agent-job example wired to this chain by the package: the Jev decision log and recorder, the verifier (reverts NotLive where
+/// a piece is not deployed). The fee rule: the live quote's bps and floor (GET https://coord.taifoon.dev/v1/fees/quote?price=10).
+contract MyAgentJob is AgentJob {
+    constructor(address token, uint16 feeBps, uint256 feeMin)
+        AgentJob(
+            token,
+            Deployments.VAULT,
+            feeBps,
+            feeMin,
+            TaifoonAddresses.jevDecisionLog(block.chainid),
+            TaifoonAddresses.JEV_RECORDER,
+            TaifoonAddresses.requireLive(block.chainid, TaifoonAddresses.Module.Verifier),
+            keccak256("taifoon_coord")
+        )
+    {}
+}
+`,
+    'script/Deploy.s.sol': `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import {Script} from "forge-std/Script.sol";
+import {MyAgentJob} from "../src/MyAgentJob.sol";
+
+/// forge script script/Deploy.s.sol --rpc-url base --broadcast  (TOKEN, FEE_BPS, FEE_MIN from the environment)
+contract Deploy is Script {
+    function run() external returns (MyAgentJob job) {
+        vm.startBroadcast();
+        job = new MyAgentJob(vm.envAddress("TOKEN"), uint16(vm.envUint("FEE_BPS")), vm.envUint("FEE_MIN"));
+        vm.stopBroadcast();
+    }
+}
+`,
+    'README.md': `# agent job on Taifoon
+
+\`\`\`bash
+forge install taifoon-io/taifoon-contracts foundry-rs/forge-std@v1.15.0 --no-git
+forge build
+curl -s 'https://coord.taifoon.dev/v1/fees/quote?price=10'        # the fee rule: by_bps → FEE_BPS, floor → FEE_MIN
+TOKEN=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 FEE_BPS=49 FEE_MIN=18953 forge script script/Deploy.s.sol --rpc-url base --broadcast --account <your wallet>
+\`\`\`
+
+The contract, the release rules and the off-chain half: https://github.com/taifoon-io/taifoon-contracts/tree/main/examples/agent-job
+A free key for the coordination API: \`curl -X POST https://coord.taifoon.dev/v1/register\`. Pricing: https://www.taifoon.io/pricing
+`,
+  };
+  for (const [p, text] of Object.entries(files)) { mkdirSync(join(target, p, '..'), { recursive: true }); writeFileSync(join(target, p), text); }
+  return { ok: true, dir: target, files: Object.keys(files) };
+}

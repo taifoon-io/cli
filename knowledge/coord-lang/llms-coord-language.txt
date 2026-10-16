@@ -1,5 +1,10 @@
 # The coord language — grounding pack (taifoon.pipe.lang.v1, generated; do not edit)
 
+## Tornado — the three steps of engagement (docs/TORNADO.md)
+1. coord: read and stream any venue's transitions — t.stream, t.coord.stream, GET /v1/protocol/:p/order/:key, GET /v1/pipe/stream (venue → lane → leaf under the superroot → the stream).
+2. Tornado: transform any type into a sendable envelope and submit it under a valid key; Twigster signs it for the key's actor — t.coord.envelope.toEnvelope, t.send, POST /v1/pipe/send; every transformation is a row of GET /v1/lambda/catalog.
+3. settle: the vacuum and the transitions onto any venue through its traits (VenueRead · VenueSettle · VenueProve · VenueQuote), any to any — the carriers behind POST /v1/pipe/send (evm · solana · venue · http), the settle plans; the venues' readiness (ready · partial · missing per capability) is register/tornado-venues.json (t.coord.tornado).
+
 Every envelope is a transition. A READ arrives as kind `observe` from the producer (GET /v1/pipe/stream); a WRITE is sent with POST /v1/pipe/send, names its transition, carries the transition's kind, and writes to one outlet the caller's key holds.
 
 Kinds a send may carry: offer, hire, delivery, grade, settle, release, advert, cover, ack, record. Read-only kinds: observe.
@@ -8,11 +13,17 @@ Outlets: mainnet, devnet, taifoon, vaults. Vault venues write to `vaults`; eip15
 Carrier routes (first match wins):
 1. record: agent_is=audit, venue_is=coord, kinds=record, exclusive=true
 2. watch: venue_is=coord, endpoint=absent, kinds=hire|settle|release|delivery, exclusive=false
-3. http: endpoint=http, kinds=any, exclusive=false
-4. solana: chain_prefix=solana, kinds=settle|release, exclusive=false
-5. venue: venue=present, kinds=any, exclusive=false
-6. evm: chain_prefix=eip155:, kinds=settle|release, exclusive=false
-7. solana: chain_prefix=solana, agent=present, kinds=any, exclusive=false
+3. vault: venue_is=vault, kinds=settle|release, exclusive=false
+4. vault: venue_is=vaults, kinds=settle|release, exclusive=false
+5. vault: venue_is=vault_server, kinds=settle|release, exclusive=false
+6. vault: venue_is=custody_registry, kinds=settle|release, exclusive=false
+7. vault: venue_is=service:vault, kinds=settle|release, exclusive=false
+8. vault: venue_is=service:custody, kinds=settle|release, exclusive=false
+9. http: endpoint=http, kinds=any, exclusive=false
+10. solana: chain_prefix=solana, kinds=settle|release, exclusive=false
+11. venue: venue=present, kinds=any, exclusive=false
+12. evm: chain_prefix=eip155:, kinds=settle|release, exclusive=false
+13. solana: chain_prefix=solana, agent=present, kinds=any, exclusive=false
 
 Transitions an envelope may name:
 - coordination.transitions.v1/dispatch_no_work@handshake: job Open → Open, write, kind offer
@@ -181,69 +192,69 @@ Transitions an envelope may name:
 - coordination.seller-coord-buyer.v1/offer.out@x402-arbitrum: offer CoordOffer → VenueListing, read, kind observe
 - coordination.seller-coord-buyer.v1/offer.out@x402-robinhood: offer CoordOffer → VenueListing, read, kind observe
 - coordination.seller-coord-buyer.v1/offer.out@x402-monad: offer CoordOffer → VenueListing, read, kind observe
-- coordination.seller-coord-buyer.v1/offer.out@erc8183-base: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@memoacp-base: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@acpv3-arc: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@bitagent-base: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@olas-gnosis: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@olas-polygon: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@olas-base: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@mcp: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@a2a: offer CoordOffer → VenueListing, write, kind record
-- coordination.seller-coord-buyer.v1/offer.out@erc8004: offer CoordOffer → VenueListing, write, kind record
+- coordination.seller-coord-buyer.v1/offer.out@erc8183-base: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@memoacp-base: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@acpv3-arc: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@acpv3-robinhood: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@bitagent-base: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@olas-gnosis: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@olas-polygon: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@olas-base: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@mcp: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@a2a: offer CoordOffer → VenueListing, write, kind offer
+- coordination.seller-coord-buyer.v1/offer.out@erc8004: offer CoordOffer → VenueListing, write, kind offer
 - coordination.seller-coord-buyer.v1/offer.out@n8n: offer CoordOffer → VenueListing, read, kind observe
-- coordination.seller-coord-buyer.v1/buy@x402-base: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@x402-solana: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@x402-arbitrum: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@x402-robinhood: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@x402-monad: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@erc8183-base: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@memoacp-base: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@acpv3-arc: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@acpv3-robinhood: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@bitagent-base: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@olas-gnosis: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@olas-polygon: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@olas-base: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@mcp: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@a2a: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@erc8004: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/buy@n8n: job VenueListing → VenuePurchase, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@x402-base: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@x402-solana: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@x402-arbitrum: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@x402-robinhood: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@x402-monad: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@erc8183-base: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@memoacp-base: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@acpv3-arc: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@bitagent-base: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@olas-gnosis: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@olas-polygon: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@olas-base: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@mcp: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@a2a: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@erc8004: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.in@n8n: hire VenuePurchase → CoordHire, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@x402-base: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/buy@x402-base: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@x402-solana: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@x402-arbitrum: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@x402-robinhood: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@x402-monad: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@erc8183-base: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@memoacp-base: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@acpv3-arc: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@acpv3-robinhood: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@bitagent-base: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@olas-gnosis: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@olas-polygon: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@olas-base: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@mcp: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@a2a: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@erc8004: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/buy@n8n: job VenueListing → VenuePurchase, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@x402-base: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@x402-solana: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@x402-arbitrum: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@x402-robinhood: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@x402-monad: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@erc8183-base: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@memoacp-base: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@acpv3-arc: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@acpv3-robinhood: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@bitagent-base: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@olas-gnosis: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@olas-polygon: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@olas-base: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@mcp: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@a2a: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@erc8004: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.in@n8n: hire VenuePurchase → CoordHire, write, kind hire
+- coordination.seller-coord-buyer.v1/job.out@x402-base: hire CoordHire → CoordDelivery, write, kind delivery
 - coordination.seller-coord-buyer.v1/job.out@x402-solana: hire CoordHire → CoordDelivery, read, kind observe
 - coordination.seller-coord-buyer.v1/job.out@x402-arbitrum: hire CoordHire → CoordDelivery, read, kind observe
 - coordination.seller-coord-buyer.v1/job.out@x402-robinhood: hire CoordHire → CoordDelivery, read, kind observe
 - coordination.seller-coord-buyer.v1/job.out@x402-monad: hire CoordHire → CoordDelivery, read, kind observe
 - coordination.seller-coord-buyer.v1/job.out@erc8183-base: hire CoordHire → CoordDelivery, read, kind observe
 - coordination.seller-coord-buyer.v1/job.out@memoacp-base: hire CoordHire → CoordDelivery, read, kind observe
-- coordination.seller-coord-buyer.v1/job.out@acpv3-arc: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@acpv3-robinhood: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@acpv3-arc: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@acpv3-robinhood: hire CoordHire → CoordDelivery, write, kind delivery
 - coordination.seller-coord-buyer.v1/job.out@bitagent-base: hire CoordHire → CoordDelivery, read, kind observe
-- coordination.seller-coord-buyer.v1/job.out@olas-gnosis: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@olas-polygon: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@olas-base: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@mcp: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@a2a: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@erc8004: hire CoordHire → CoordDelivery, write, kind record
-- coordination.seller-coord-buyer.v1/job.out@n8n: hire CoordHire → CoordDelivery, write, kind record
+- coordination.seller-coord-buyer.v1/job.out@olas-gnosis: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@olas-polygon: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@olas-base: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@mcp: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@a2a: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@erc8004: hire CoordHire → CoordDelivery, write, kind delivery
+- coordination.seller-coord-buyer.v1/job.out@n8n: hire CoordHire → CoordDelivery, write, kind delivery
 - coordination.resources.v1/discover@harvester: resource Unknown → Discovered, write, kind record
 - coordination.resources.v1/discover@grid: resource Unknown → Discovered, write, kind record
 - coordination.resources.v1/register@owner: resource Unknown → Enriched, write, kind record
@@ -280,6 +291,7 @@ Transitions an envelope may name:
 - coordination.resources.v1/settle_fee@gateway: resource Delivered → Settled, write, kind record
 - coordination.resources.v1/settle_fee@grid: resource Delivered → Settled, write, kind record
 - coordination.resources.v1/lapse@grid: resource Delivered → Failed, write, kind record
+- protocol.layerzero_v2/Unseen->Placed: order Unseen → Placed, read, kind observe
 - protocol.layerzero_v2/Placed->Verified: order Placed → Verified, read, kind observe
 - protocol.layerzero_v2/Placed->Committed: order Placed → Committed, read, kind observe
 - protocol.layerzero_v2/Placed->Filled: order Placed → Filled, read, kind observe
@@ -289,12 +301,15 @@ Transitions an envelope may name:
 - protocol.layerzero_v2/Committed->Filled: order Committed → Filled, read, kind observe
 - protocol.layerzero_v2/Failed->Filled: order Failed → Filled, read, kind observe
 - protocol.layerzero_v2/Filled->Failed: order Filled → Failed, read, kind observe
+- protocol.across_v3/Unseen->Placed: order Unseen → Placed, read, kind observe
 - protocol.across_v3/Placed->Filled: order Placed → Filled, read, kind observe
+- protocol.mayan_swift/Unseen->Placed: order Unseen → Placed, read, kind observe
 - protocol.mayan_swift/Placed->Filled: order Placed → Filled, read, kind observe
 - protocol.mayan_swift/Placed->Canceled: order Placed → Canceled, read, kind observe
 - protocol.mayan_swift/Placed->Unlocked: order Placed → Unlocked, read, kind observe
 - protocol.mayan_swift/Filled->Unlocked: order Filled → Unlocked, read, kind observe
 - protocol.mayan_swift/Unlocked->Canceled: order Unlocked → Canceled, read, kind observe
+- protocol.erc8183/Unseen->Created: order Unseen → Created, read, kind observe
 - protocol.erc8183/Funded->Submitted: order Funded → Submitted, read, kind observe
 - protocol.erc8183/Funded->Settled: order Funded → Settled, read, kind observe
 - protocol.erc8183/Funded->Rejected: order Funded → Rejected, read, kind observe
@@ -305,6 +320,7 @@ Transitions an envelope may name:
 - protocol.erc8183/Created->Funded: order Created → Funded, read, kind observe
 - protocol.erc8183/Settled->Rejected: order Settled → Rejected, read, kind observe
 - protocol.erc8183/Rejected->Expired: order Rejected → Expired, read, kind observe
+- protocol.bitagent/Unseen->Created: order Unseen → Created, read, kind observe
 - protocol.bitagent/Funded->Submitted: order Funded → Submitted, read, kind observe
 - protocol.bitagent/Funded->Settled: order Funded → Settled, read, kind observe
 - protocol.bitagent/Funded->Rejected: order Funded → Rejected, read, kind observe
@@ -315,6 +331,7 @@ Transitions an envelope may name:
 - protocol.bitagent/Created->Funded: order Created → Funded, read, kind observe
 - protocol.bitagent/Settled->Rejected: order Settled → Rejected, read, kind observe
 - protocol.bitagent/Rejected->Expired: order Rejected → Expired, read, kind observe
+- protocol.taifoon_assurance/Unseen->Opened: order Unseen → Opened, read, kind observe
 - protocol.taifoon_assurance/Funded->Submitted: order Funded → Submitted, read, kind observe
 - protocol.taifoon_assurance/Funded->Settled: order Funded → Settled, read, kind observe
 - protocol.taifoon_assurance/Funded->Rejected: order Funded → Rejected, read, kind observe
@@ -332,3 +349,8 @@ Transitions an envelope may name:
 - protocol.taifoon_assurance/Settled->Rejected: order Settled → Rejected, read, kind observe
 - protocol.taifoon_assurance/Rejected->Expired: order Rejected → Expired, read, kind observe
 - protocol.taifoon_assurance/Expired->Cheat: order Expired → Cheat, read, kind observe
+- taifoon.send.v1/tx:submitted->tx:accepted@evm: settlement tx:submitted → tx:accepted, write, kind settle, outlets devnet|mainnet|taifoon
+- taifoon.send.v1/tx:submitted->tx:refused@evm: settlement tx:submitted → tx:refused, read, kind observe
+- taifoon.send.v1/tx:accepted->tx:included@evm: settlement tx:accepted → tx:included, read, kind observe
+- taifoon.send.v1/tx:accepted->tx:failed@evm: settlement tx:accepted → tx:failed, read, kind observe
+- taifoon.send.v1/tx:accepted->tx:expired@evm: settlement tx:accepted → tx:expired, read, kind observe
