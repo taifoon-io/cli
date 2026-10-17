@@ -127,9 +127,11 @@ async function modelView(ctx, want, q) {
       provider: l.provider?.name ?? l.provider?.id ?? '?', model: l.model,
       in: f(l.price_usd_per_1m?.in), out: f(l.price_usd_per_1m?.out), src: f(l.provider_usd_per_1m?.out),
       delivers: l.live ? p.live('now') : p.part(`after funding`),
-      leaf: h ? `${h.venue} leaf ${h.candidate?.index}` : 'not indexed',
+      leaf: h ? `${h.venue} leaf ${h.candidate?.index}` : r.ok ? 'not indexed' : 'index down',
     };
   }), ctx.width));
+  // the index did not answer: say so (the listings feed did), never call every listing "not indexed"
+  if (!r.ok) ctx.line(`  ${p.part('!')} ${p.faint(`the match index did not answer (${r.json?.code ?? r.status ?? 'no answer'}${r.json?.retry_after_seconds ? `, retry in ${r.json.retry_after_seconds} s` : ''}); the listings feed did · taifoon match offers shows the index`)}`);
   const steps = [...new Set(rows.filter((l) => !l.live && l.owner_step).map((l) => `${l.provider?.id}: ${l.owner_step}`))];
   if (steps.length) { ctx.line(`  ${p.ink('waits on the owner')}`); for (const st of steps) ctx.line(`    ${p.faint(st)}`); }
   ctx.line(`  ${p.faint('prices in USD per 1M tokens · taifoon match gpu-inference --model <id> --json for the legs · taifoon match claim <venue> <leaf> to hire')}`);

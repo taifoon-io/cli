@@ -29,3 +29,11 @@ export function quoteTermsOf(venue) {
 }
 /** the seller's price for `units` of the offer's own unit: ceil(price × units ÷ units_per_quote) */
 export const sellerPriceOf = (c, units = 1) => { const upq = BigInt(Math.max(1, Math.round(Number(c.units_per_quote ?? 1)))); const t = BigInt(Math.max(0, Math.round(Number(c.price_micro)))) * BigInt(Math.max(1, Math.round(units))); return (t + upq - 1n) / upq; };
+/** _MATCH_DELIVERABLE_v1_: why an offer cannot be delivered now (null: deliverable) — its listing says live: false (owner_step), or its
+ *  venue has no working buy path in the register (match_delivery.venues). The twin of coordpipe matcher::waits_on. Pure. */
+export function waitsOn(c) {
+  if (c?.meta?.live === false) return (typeof c.meta.owner_step === 'string' && c.meta.owner_step) || 'the listing is not live';
+  return TERMS.delivery?.venues?.[c?.venue]?.waits_on ?? null;
+}
+/** a hit is deliverable when the pipe says so, or (an older answer without the field) when waitsOn finds nothing */
+export const deliverableHit = (h) => (typeof h?.deliverable === 'boolean' ? h.deliverable : waitsOn(h?.candidate?.capability) === null);

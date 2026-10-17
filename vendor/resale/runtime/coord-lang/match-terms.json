@@ -314,6 +314,131 @@
             "scheme_venue": "coord"
         }
     },
+    "delivery": {
+        "rule": "deliverable unless meta.live is false or the venue is listed here; undeliverable offers rank after deliverable ones, carry waits_on, and are never claimed",
+        "from_meta": {
+            "live": "meta.live",
+            "waits_on": "meta.owner_step"
+        },
+        "venues": {
+            "openrouter": {
+                "waits_on": "no resale: the venue's terms forbid it",
+                "source": "inference.cue venues.openrouter.buy.state none"
+            },
+            "together": {
+                "waits_on": "no resale: the venue's terms forbid it",
+                "source": "inference.cue venues.together.buy.state none"
+            },
+            "deepinfra": {
+                "waits_on": "deepinfra-reseller-order: ask DeepInfra for a Service Order that permits resale (https://deepinfra.com/contact)",
+                "source": "inference.cue venues.deepinfra.buy.state owner_step"
+            },
+            "hyperbolic": {
+                "waits_on": "hyperbolic-terms: read the inference terms for resale before any deposit",
+                "source": "inference.cue venues.hyperbolic.buy.state owner_step"
+            },
+            "vast": {
+                "waits_on": "vast-account: create the account and top up 25 USD (https://cloud.vast.ai/billing/)",
+                "source": "inference.cue venues.vast.buy.state owner_step"
+            },
+            "runpod": {
+                "waits_on": "runpod-account: create the account and top up 10 USD (https://www.runpod.io/console/user/billing)",
+                "source": "inference.cue venues.runpod.buy.state owner_step"
+            },
+            "akash": {
+                "waits_on": "akash-console: create an Akash Console account and add 20 USD credit (https://console.akash.network)",
+                "source": "inference.cue venues.akash.buy.state owner_step"
+            },
+            "ionet": {
+                "waits_on": "ionet-account: create an io.cloud account and fund 20 USD (https://cloud.io.net)",
+                "source": "inference.cue venues.ionet.buy.state owner_step"
+            },
+            "nosana": {
+                "waits_on": "nosana-credits: fund Nosana credits or NOS on taifoon-vault/solana-ops GQcEn5pLcweo7qaiy3rDdsiUPiygygmFBaixNtNqhQVD (owner sends)",
+                "source": "inference.cue venues.nosana.buy.state owner_step"
+            },
+            "chutes": {
+                "waits_on": "chutes-paygo: create a Chutes account, take the PAYGO plan (not a subscription) and fund 20 USD (https://chutes.ai)",
+                "source": "inference.cue venues.chutes.buy.state owner_step"
+            },
+            "groq": {
+                "waits_on": "groq-reseller-order: ask Groq for a reseller order form (https://groq.com/contact)",
+                "source": "inference.cue venues.groq.buy.state owner_step"
+            },
+            "fireworks": {
+                "waits_on": "fireworks-terms: read the Fireworks terms for resale, then create the account and buy 20 USD of credits (https://fireworks.ai/account/billing)",
+                "source": "inference.cue venues.fireworks.buy.state owner_step"
+            },
+            "targon": {
+                "waits_on": "targon-account: read the Targon terms, create an account and fund 20 USD (https://targon.com)",
+                "source": "inference.cue venues.targon.buy.state owner_step"
+            },
+            "x402-inference": {
+                "waits_on": "the venue has no live buy path",
+                "source": "inference.cue venues.x402-inference.buy.state dry_run"
+            },
+            "rpc-alchemy": {
+                "waits_on": "only with a written reseller agreement: email Alchemy sales asking for resale rights under §2.2(v)",
+                "source": "rpc-resale.cue providers.alchemy.buy (no account held)"
+            },
+            "rpc-quicknode": {
+                "waits_on": "only with a written reseller agreement (QuickNode partner team) under §7(v); until then a buyer pays QuickNode's x402 with its own wallet",
+                "source": "rpc-resale.cue providers.quicknode.buy (no account held)"
+            },
+            "rpc-infura": {
+                "waits_on": "read Infura's terms on resale before any purchase",
+                "source": "rpc-resale.cue providers.infura.buy (no account held)"
+            },
+            "rpc-ankr": {
+                "waits_on": "read Ankr's terms on resale; then top up from the vault signer (kms-access send) only after the owner's yes",
+                "source": "rpc-resale.cue providers.ankr.buy (no account held)"
+            },
+            "rpc-drpc": {
+                "waits_on": "read dRPC's terms on resale (not found on 2026-10-16); list our Taifoon chain nodes as a dRPC provider (owner signs up)",
+                "source": "rpc-resale.cue providers.drpc.buy (no account held)"
+            },
+            "rpc-chainstack": {
+                "waits_on": "apply to the Chainstack partner program (reseller) at https://chainstack.com/service-providers/ before any resale",
+                "source": "rpc-resale.cue providers.chainstack.buy (no account held)"
+            },
+            "rpc-getblock": {
+                "waits_on": "read GetBlock's terms on resale and its CU table before any purchase",
+                "source": "rpc-resale.cue providers.getblock.buy (no account held)"
+            },
+            "rpc-tenderly": {
+                "waits_on": "read Tenderly's terms on resale; the warmbed already reads its public gateway",
+                "source": "rpc-resale.cue providers.tenderly.buy (no account held)"
+            },
+            "rpc-helius": {
+                "waits_on": "only with a written reseller agreement from Helius",
+                "source": "rpc-resale.cue providers.helius.buy (no account held)"
+            },
+            "rpc-triton": {
+                "waits_on": "read Triton's terms on resale; the deposit is non-refundable",
+                "source": "rpc-resale.cue providers.triton.buy (no account held)"
+            },
+            "rpc-grove": {
+                "waits_on": "confirm Grove's current price and terms; supplying relays needs our own node and stake",
+                "source": "rpc-resale.cue providers.grove.buy (no account held)"
+            },
+            "rpc-lava": {
+                "waits_on": "read Lava's provider terms; supplying needs our own node and a LAVA stake (a new key: owner's yes)",
+                "source": "rpc-resale.cue providers.lava.buy (no account held)"
+            },
+            "rpc-blastapi": {
+                "waits_on": "read Blast API's current pricing and terms (not read on 2026-10-16)",
+                "source": "rpc-resale.cue providers.blastapi.buy (no account held)"
+            },
+            "rpc-blockmachine": {
+                "waits_on": "read Blockmachine's terms on resale",
+                "source": "rpc-resale.cue providers.blockmachine.buy (no account held)"
+            },
+            "rpc-publicnode": {
+                "waits_on": "read PublicNode's terms on commercial use; the warmbed already rotates it",
+                "source": "rpc-resale.cue providers.publicnode.buy (no account held)"
+            }
+        }
+    },
     "vectors": {
         "normalize": [
             {
@@ -389,6 +514,52 @@
                 "price_micro": 5,
                 "upq": 1,
                 "norm": null
+            }
+        ],
+        "deliverable": [
+            {
+                "id": "listing-not-live",
+                "venue": "deepinfra",
+                "meta": {
+                    "live": false,
+                    "owner_step": "deepinfra-reseller-order: ask DeepInfra for a Service Order"
+                },
+                "deliverable": false,
+                "waits_on": "deepinfra-reseller-order: ask DeepInfra for a Service Order"
+            },
+            {
+                "id": "listing-live",
+                "venue": "taifoon-gpu",
+                "meta": {
+                    "live": true
+                },
+                "deliverable": true
+            },
+            {
+                "id": "own-product",
+                "venue": "grid",
+                "meta": {},
+                "deliverable": true
+            },
+            {
+                "id": "x402-wall",
+                "venue": "x402-base",
+                "meta": {},
+                "deliverable": true
+            },
+            {
+                "id": "venue-not-live",
+                "venue": "vast",
+                "meta": {},
+                "deliverable": false,
+                "waits_on": "vast-account: create the account and top up 25 USD (https://cloud.vast.ai/billing/)"
+            },
+            {
+                "id": "rpc-provider-no-account",
+                "venue": "rpc-alchemy",
+                "meta": {},
+                "deliverable": false,
+                "waits_on": "only with a written reseller agreement: email Alchemy sales asking for resale rights under §2.2(v)"
             }
         ],
         "fees": [

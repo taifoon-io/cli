@@ -41,7 +41,14 @@ export function genericCommand(verb) {
       // _PRETTY_v1_: a terminal reads the answer in the stream view's language; --json and a pipe keep the JSON as answered
       // _CLI_FINISH_v1_: a refusal on a terminal is one ✗ line with the layer's reason and what to run next, not a dump of the answer
       if (ctx.tty && !ctx.f.raw && out.ok === false) { const b = out.body ?? out; ctx.fail(b?.error ?? b?.hint ?? out.error ?? `${row.op} answered ${out.status ?? 'no'}`, { status: out.status, body: out }); return 1; }
-      if (ctx.tty && !ctx.f.raw) { const { pretty } = await import('../pretty.mjs'); ctx.out.write(pretty(ctx.p, out, { width: ctx.width }).join('\n') + '\n'); }
+      // _CLI_FINISH_v1_: a terminal reads the layer's answer, not the runner's wrapper (ok · kind · status · body · source): the body, then
+      // one faint line naming the operation it came from
+      if (ctx.tty && !ctx.f.raw) {
+        const { pretty } = await import('../pretty.mjs');
+        const wrapped = out && typeof out === 'object' && 'body' in out && 'kind' in out;
+        ctx.out.write(pretty(ctx.p, wrapped ? out.body : out, { width: ctx.width }).join('\n') + '\n');
+        if (wrapped) ctx.out.write(`  ${ctx.p.faint(`${out.source?.op ?? row.op}${out.status ? ` · ${out.status}` : ''} · --json for the whole answer`)}\n`);
+      }
       else ctx.out.write(JSON.stringify(out, null, ctx.json ? 0 : 2) + '\n');
       return out.ok === false ? 1 : 0;
     },

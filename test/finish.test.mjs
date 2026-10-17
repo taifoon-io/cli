@@ -119,3 +119,24 @@ test('a created key is stored under its whole layer prefix (two free keys never 
   assert.ok(kc.has('taifoon-cli/key/tfr_free_bbbbb'));
   assert.ok(!r.out.includes('C'.repeat(30)), 'no key is printed');
 });
+
+test('the model view says when the match index did not answer, instead of calling every listing "not indexed"', async () => {
+  const listings = { at: '2026-10-17T08:00:00Z', listing_rule: { cut_bps: 300 }, listings: [{ reference_model: 'llama-3.3-70b', model: 'm', provider: { id: 'ionet', name: 'io.net' }, price_usd_per_1m: { in: 0.33, out: 0.33 }, provider_usd_per_1m: { in: 0.32, out: 0.32 }, live: false, owner_step: 'fund' }] };
+  const fetch = async (url) => (String(url).includes('inference-listings') ? new Response(JSON.stringify(listings)) : new Response(JSON.stringify({ ok: false, code: 'pipe_unavailable', retry_after_seconds: 30 }), { status: 503 }));
+  const r = await run(['match', 'gpu-inference', '--model', 'llama-3.3-70b'], { fetch });
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /index down/);
+  assert.match(r.out, /the match index did not answer \(pipe_unavailable, retry in 30 s\)/);
+  assert.doesNotMatch(r.out, /not indexed/);
+});
+
+test('a generic read on a terminal prints the layer\'s answer, not the runner\'s wrapper', async () => {
+  const out = { write(x) { this.t = (this.t ?? '') + x; return true; }, isTTY: true, columns: 120 };
+  const err = sink();
+  const fetch = async () => new Response(JSON.stringify({ schema: 'taifoon.access.role.v1', role: 'owner', tenant: 'acct_1' }));
+  const code = await main(['role'], { out, err, env: { NO_COLOR: '1', TAIFOON_HOME: '/nonexistent', TAIFOON_API_KEY: 'tfr_free_' + 'A'.repeat(32) }, noShell: true, fetch, exec: () => ({ status: 1, stdout: '', stderr: '' }) });
+  assert.equal(code, 0, err.text);
+  assert.match(out.t, /role\s+owner/);
+  assert.doesNotMatch(out.t, /^kind\s+read/m);
+  assert.match(out.t, /--json for the whole answer/);
+});
