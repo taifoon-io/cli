@@ -3,6 +3,8 @@
 //   markets search <query>            one query across every searchable marketplace at once
 //   markets connect <marketplace>     what activates it (keys, MFA, decisions) and its zero-cost discovery
 //   markets hire <marketplace> <ref>  the one pipeline: handshake → delivery → facts (grade on YOUR key) → settle plan (devnet)
+//   markets ls --sides / show <venue> _MARKET_SIDES_v1_: both sides per class in the commerce hops — asks, what buyers actually paid,
+//                                     the most expensive single payment with its tx, the spread (GET /v1/venues?view=sides)
 import { panel, pill, rule, table, clip } from '../brand.mjs';
 import { MARKETS, market, matrixRow, STATUSES } from '../markets.mjs';
 import { n } from '../context.mjs';
@@ -37,6 +39,73 @@ async function ls(ctx) {
   ctx.line(`  ${STATUSES.map((s) => `${pill(p, s)} ${by[s]}`).join(p.faint('  ·  '))}   ${p.faint(`${ctx.calls.length} /v1 reads, metered · ${ctx.calls.reduce((a, c) => Math.max(a, c.ms), 0)} ms slowest`)}`);
   for (const r of rows.filter((x) => x.status !== 'live' && x.unblock)) ctx.line(`  ${pill(p, r.status === 'blocked' ? '✗' : '!')} ${p.accent(r.id.padEnd(13))} ${p.faint(clip(r.unblock, ctx.width - 22))}`);
   ctx.line(`  ${p.faint('taifoon markets connect <market> · search <query> · hire <market> <ref>')}`);
+  return 0;
+}
+
+
+// _MARKET_SIDES_v1_: both sides of every marketplace (GET /v1/venues?view=sides). Buyers are refs (w:…); a key of ours also sees addresses.
+const usd = (v) => (v === null || v === undefined ? '—' : v >= 100 ? `$${Math.round(v).toLocaleString('en-US')}` : v >= 1 ? `$${v.toFixed(2)}` : `$${Number(v.toPrecision(3))}`);
+const q3 = (q) => (q ? `${usd(q.low)} · ${usd(q.median)} · ${usd(q.high)}` : '—');
+const buyOf = (s) => (s.buy?.unknown ? null : s.buy);
+const sideCols = (p) => [
+  { key: 'where', title: 'venue · class', fmt: (v) => p.accent(v) },
+  { key: 'sellers', title: 'sellers', align: 'right', fmt: (v) => (v == null ? p.faint('—') : n(v)) },
+  { key: 'ask', title: 'ask low·med·high', fmt: (v) => p.muted(v) },
+  { key: 'buyers', title: 'buyers', align: 'right', fmt: (v) => (v == null ? p.faint('—') : n(v)) },
+  { key: 'paid', title: 'paid low·med·high', fmt: (v) => v },
+  { key: 'top', title: 'top payment', fmt: (v) => p.accent(v) },
+  { key: 'room', title: 'room', align: 'right', fmt: (v) => (v === '—' ? p.faint(v) : p.live ? p.live(v) : v) },
+];
+const sideRow = (s) => {
+  const b = buyOf(s);
+  return { where: `${s.venue} · ${s.class === '*' ? 'all' : s.class.replace(/^inference\./, '')}`, sellers: s.sell?.sellers ?? null, ask: q3(s.sell?.ask_usd_per_call),
+    buyers: b ? b.buyers : null, paid: b ? q3(b.paid_usd) : `— ${s.buy?.reason ? '(not read)' : ''}`, top: b?.top_payment ? usd(b.top_payment.usd) : '—',
+    room: s.spread?.top_paid_over_low_ask ? `${Math.round(s.spread.top_paid_over_low_ask).toLocaleString('en-US')}×` : '—' };
+};
+async function sides(ctx) {
+  const { p } = ctx;
+  const qs = new URLSearchParams({ view: 'sides', ...(ctx.f.class ? { class: String(ctx.f.class) } : {}), ...(ctx.f.market ? { market: String(ctx.f.market) } : {}) });
+  const r = await ctx.get(`/v1/venues?${qs}`, { quiet: true });
+  if (!r.ok) { ctx.fail(`market sides: ${r.json?.error ?? r.status}`); return 1; }
+  if (ctx.json) { ctx.emit(r.json); return 0; }
+  const j = r.json;
+  ctx.line(rule(p, `markets · both sides · ${j.window_days} days · read ${String(j.read_at).slice(0, 16).replace('T', ' ')} UTC`));
+  ctx.line(`  ${p.faint('SELL offer_in → classify → listed (asks) · BUY hired → delivered → settled → paid (what buyers actually paid) · room = top paid ÷ low ask')}`);
+  for (const m of j.markets ?? []) {
+    const t = m.top_payment;
+    ctx.line(`  ${p.accent(m.market.padEnd(10))} ${usd(m.usd).padStart(12)} paid · ${n(m.buyers)} buyers${t ? ` · top ${usd(t.usd)} on ${t.venue} (${t.class}) tx ${String(j.view).startsWith('ours') ? t.tx : `${t.tx.slice(0, 10)}…`}` : ''}${m.widest ? p.faint(` · widest room ${Math.round(m.widest.top_paid_over_low_ask)}× ${m.widest.venue}`) : ''}`);
+  }
+  const rows = [...(j.inference ?? []), ...(j.venues ?? [])].filter((s) => s.sell?.sellers || (buyOf(s)?.payments ?? 0) > 0);
+  ctx.line('');
+  ctx.line(table(p, sideCols(p), rows.map(sideRow)));
+  const unread = [...(j.inference ?? [])].filter((s) => s.buy?.unknown).map((s) => s.network);
+  if (unread.length) ctx.line(`  ${p.faint(`buy side not read: ${[...new Set(unread)].join(', ')} — ${j.inference.find((s) => s.buy?.unknown)?.buy?.reason ?? ''}`)}`);
+  ctx.line(`  ${p.faint(`${j.view} · taifoon markets show <venue|market> for one`)}`);
+  return 0;
+}
+async function show(ctx, [id]) {
+  const { p } = ctx;
+  if (!id) { ctx.fail('usage: taifoon markets show <venue | market> [--class inference.chat]'); return 2; }
+  const qs = new URLSearchParams({ view: 'sides', ...(ctx.f.class ? { class: String(ctx.f.class) } : {}) });
+  const r = await ctx.get(`/v1/venues/${encodeURIComponent(id)}?${qs}`, { quiet: true });
+  if (!r.ok) { ctx.fail(`market sides ${id}: ${r.json?.error ?? r.status}`); return 1; }
+  if (ctx.json) { ctx.emit(r.json); return 0; }
+  const rows = [...(r.json.inference ?? []), ...(r.json.venues ?? [])];
+  if (!rows.length) { ctx.line(`  ${p.faint(`no sides for ${id}`)}`); return 0; }
+  for (const s of rows) {
+    const b = buyOf(s);
+    const hop = (h) => Object.entries(h ?? {}).map(([k, v]) => `${k} ${v.state}${v.count != null ? ` ${n(v.count)}` : ''}`).join(p.faint(' → '));
+    ctx.line(rule(p, `${s.venue} · ${s.class} · ${s.network ?? ''}`));
+    ctx.line(`  ${p.muted('SELL')}  ${hop(s.sell?.hops)}`);
+    ctx.line(`        ${n(s.sell?.sellers ?? 0)} sellers · ask ${q3(s.sell?.ask_usd_per_call)}${s.sell?.answering_share != null ? ` · ${Math.round(s.sell.answering_share * 100)}% answer` : ''}${s.sell?.ask_source ? p.faint(` · ${s.sell.ask_source}`) : ''}`);
+    if (!b) { ctx.line(`  ${p.muted('BUY')}   ${p.faint(`not read: ${s.buy?.reason ?? 'unknown'}`)}`); continue; }
+    ctx.line(`  ${p.muted('BUY')}   ${hop(b.hops)}`);
+    ctx.line(`        ${n(b.payments)} payments · ${usd(b.usd)} · ${b.buyers == null ? '—' : n(b.buyers)} buyers${b.repeat_buyers != null ? ` (${n(b.repeat_buyers)} repeat)` : ''}${b.per_day != null ? ` · ${n(Math.round(b.per_day))}/day` : ''} · paid ${q3(b.paid_usd)}${b.paid_source ? p.faint(` · ${b.paid_source}`) : ''}`);
+    if (b.top_payment) ctx.line(`        ${p.accent('top payment')} ${usd(b.top_payment.usd)} by ${b.top_payment.payer_address ?? b.top_payment.payer} → ${b.top_payment.host ?? b.top_payment.to} · tx ${b.top_payment.tx}${b.top_payment.at ? ` · ${b.top_payment.at.slice(0, 16)}` : ''}`);
+    if (b.top_spender) ctx.line(`        ${p.accent('top spender')} ${b.top_spender.payer_address ?? b.top_spender.payer} · ${usd(b.top_spender.usd)} over ${n(b.top_spender.payments)} payments`);
+    if (s.spread) ctx.line(`  ${p.muted('ROOM')}  top paid ÷ low ask ${s.spread.top_paid_over_low_ask == null ? '—' : `${Math.round(s.spread.top_paid_over_low_ask).toLocaleString('en-US')}×`} · median paid ÷ median ask ${s.spread.median_paid_over_median_ask == null ? '—' : `${s.spread.median_paid_over_median_ask}×`}`);
+  }
+  ctx.line(`  ${p.faint(r.json.view)}`);
   return 0;
 }
 
@@ -250,15 +319,19 @@ export default {
   summary: 'every marketplace and ecosystem: status, search across all, connect, hire',
   usage: [
     ['markets ls [--status live|devnet|discover-only|blocked]', 'status, seller counts and lane of every marketplace'],
+    ['markets ls --sides [--class inference.chat] [--market x402]', 'both sides per class: asks, what buyers actually paid, the top payment with its tx, the room'],
+    ['markets show <venue | market> [--class inference.chat]', 'one venue on both sides in the commerce hops (offer_in → listed · hired → paid)'],
     ['markets search <query> [--market id] [--limit n]', 'one query across every searchable marketplace'],
     ['markets connect <market>', 'what activates it (keys, MFA, decisions) + its zero-cost discovery'],
     ['markets hire <market> <ref> --task "…" [--send] [--grade] [--buyer 0x…] [--chain devnet|base --cap-usdc n]', 'handshake → delivery → facts → your grade → settle plan'],
   ],
-  subs: ['ls', 'search', 'connect', 'hire'],
-  complete: (words) => (words.length >= 1 && ['connect', 'hire'].includes(words[0]) ? MARKETS.map((m) => m.id) : []),
+  subs: ['ls', 'show', 'search', 'connect', 'hire'],
+  complete: (words) => (words.length >= 1 && ['connect', 'hire', 'show'].includes(words[0]) ? MARKETS.map((m) => m.id) : []),
   valued: ['status', 'market', 'limit', 'task', 'class', 'tool', 'args', 'chain', 'cap-usdc', 'price-usdc', 'buyer', 'seller', 'payment'],
   async run(ctx, [sub = 'ls', ...rest]) {
+    if ((sub === 'ls' || sub === 'list') && ctx.f.sides) return sides(ctx);
     if (sub === 'ls' || sub === 'list') return ls(ctx);
+    if (sub === 'show') return show(ctx, rest);
     if (sub === 'search') return search(ctx, rest);
     if (sub === 'connect') return connect(ctx, rest);
     if (sub === 'hire') return hire(ctx, rest);

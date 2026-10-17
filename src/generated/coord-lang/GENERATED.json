@@ -26,11 +26,11 @@
     {
      "file": "rpc-cards.json",
      "from": "lang/gen/rpc-cards.json",
-     "sha256": "4c3bb9aa0b1c911bd994958bfcc5662f447f1992a068c008d0e3c66e1975be1c"
+     "sha256": "ff082d5666869948f3114b6324795dc4d44c14c4f886ba531faa2ec0e150f83f"
     }
    ],
    "consumed_by": "the taifoon CLI's rpc command (one card per chain: gateway, WebSocket, proved reads and the price per 1M, beside the live rotation from GET /v1/rpc); a public file, so it names no internal path"
   }
  ],
- "commit": "242538c6881282622d322a4d6d944986e1027d2e"
+ "commit": "18e007d49e3b21c6d6436f3b5e26a6fb3d79c28f"
 }

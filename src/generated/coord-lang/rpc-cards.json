@@ -12,12 +12,12 @@
     "gateway_why": null,
     "proved": "proven",
     "proved_why": null,
-    "ws": false,
-    "ws_why": "the subscription opens, but the public upstream answers -32005 rate limit: a keyed Base socket provider is needed"
+    "ws": true,
+    "ws_why": null
    },
    "endpoints": {
     "gateway": "https://coord.taifoon.dev/gw/rpc/8453",
-    "ws": null,
+    "ws": "wss://coord.taifoon.dev/gw/ws/8453",
     "proved": "https://coord.taifoon.dev/v1/proof/tx/8453/{tx}",
     "rotation": "https://coord.taifoon.dev/v1/rpc/8453"
    },
@@ -129,12 +129,12 @@
     "gateway_why": null,
     "proved": "proven",
     "proved_why": null,
-    "ws": false,
-    "ws_why": "the upgrade failed (no WebSocket upstream in the rotation for Monad)"
+    "ws": true,
+    "ws_why": null
    },
    "endpoints": {
     "gateway": "https://coord.taifoon.dev/gw/rpc/143",
-    "ws": null,
+    "ws": "wss://coord.taifoon.dev/gw/ws/143",
     "proved": "https://coord.taifoon.dev/v1/proof/tx/143/{tx}",
     "rotation": "https://coord.taifoon.dev/v1/rpc/143"
    },
@@ -320,12 +320,12 @@
     "gateway_why": null,
     "proved": "untested",
     "proved_why": "no transaction in the last 8,000 blocks to test with",
-    "ws": false,
-    "ws_why": "the upgrade failed (no WebSocket upstream for Taifoon mainnet behind the gateway)"
+    "ws": true,
+    "ws_why": null
    },
    "endpoints": {
     "gateway": "https://coord.taifoon.dev/gw/rpc/3692781",
-    "ws": null,
+    "ws": "wss://coord.taifoon.dev/gw/ws/3692781",
     "proved": "https://coord.taifoon.dev/v1/proof/tx/3692781/{tx}",
     "rotation": "https://coord.taifoon.dev/v1/rpc/3692781"
    },

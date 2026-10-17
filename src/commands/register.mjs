@@ -138,6 +138,8 @@ export async function resource(ctx, [kind, target]) {
   const out = { ok: true, kind, target, steps: [] };
   const rec = (step, mark, fact, extra = {}) => { out.steps.push({ step, mark, fact, ...extra }); t.mark(mark, fact, extra.ms !== undefined ? { ms: extra.ms } : undefined); };
   ctx.line(p.faint(`taifoon register resource ${kind} ${target} · λ: register → probe → list → gateway`));
+  // _ONE_GPU_SELLER_v1_: a GPU that states a model and its own price sells on the ONE inference route (the same door, the same checks)
+  if (kind === 'gpu' && (ctx.f.model || ctx.f.price)) return sellGpu(ctx, target, out, rec);
   if (kind === 'rpc' || kind === 'gpu') {
     t.step(1, 2, `${kind}: the Grid's live rate and providers`);
     const g = await ctx.get(`/v1/grid/hire?kind=${kind}`, { key: false });
@@ -189,6 +191,37 @@ export async function resource(ctx, [kind, target]) {
   return 0;
 }
 
+/** _ONE_GPU_SELLER_v1_: list a GPU node as a community seller through the ONE door (POST /v1/resources/register): our battery and
+ *  fingerprint ask the model, the price must lie in the market band of its reference class, and the node is owned by your key. Listed →
+ *  sold at your price plus the reseller cut, rechecked hourly, your share accrued and paid behind the vault to --owner. */
+async function sellGpu(ctx, target, out, rec) {
+  const { p, t, f } = ctx;
+  const owner = String(f.owner ?? ctx.prof?.owner ?? '');
+  const price = Number(f.price);
+  const problems = [!f.model ? '--model <the id your server answers as>' : null, !(price > 0) ? '--price <USD per 1M output tokens>' : null,
+    !/^0x[0-9a-fA-F]{40}$/.test(owner) ? '--owner 0x… (where your share is paid; or taifoon login --owner 0x…)' : null, !/^https:\/\//.test(target) ? 'an https endpoint (OpenAI-compatible: <endpoint>/v1/chat/completions)' : null].filter(Boolean);
+  if (problems.length) { ctx.fail(`taifoon register resource gpu <endpoint> needs ${problems.join(', ')}`); return 2; }
+  const reference = String(f.reference ?? 'llama-3.1-8b');
+  ctx.line(p.faint(`selling ${f.model} at ${price} USD per 1M output tokens (class ${reference}) · battery → fingerprint → band → listed`));
+  t.step(1, 2, 'join (POST /v1/resources/register): we ask your model, then list it');
+  const meta = { service: 'inference', model: String(f.model), reference, price_out_usd_per_mtok: price, ...(f['price-in'] !== undefined ? { price_in_usd_per_mtok: Number(f['price-in']) } : {}), ...(f.capacity ? { capacity: Number(f.capacity) } : {}) };
+  const r = await ctx.post('/v1/resources/register', { kind: 'gpu', endpoint: target, owner, meta });
+  const j = r.json ?? {}; const l = j.listing ?? null;
+  rec('probe', j.probe?.ok ? 'ok' : 'fail', j.probe ? `battery ${j.probe.evidence?.battery ?? '—'} · ${j.probe.latencyMs ?? '—'} ms${j.probe.reason ? ` · ${j.probe.reason}` : ''}` : `the door answered ${r.status}: ${j.error ?? (j.errors ?? []).join('; ')}`, { ms: r.ms });
+  if (!l) { if (ctx.json) ctx.emit({ ...out, join: j }); return j.probe?.ok ? 0 : 1; }
+  rec('listed', l.listed ? 'ok' : 'fail', l.listed
+    ? `listed ${l.seller.id} · ${l.seller.model} (${l.seller.reference}) · you get ${l.seller.price.out_usd_per_mtok} · buyers pay ${l.buyer_pays_usd_per_1m.out} USD per 1M output tokens · payee ${l.seller.payee}`
+    : `not listed: ${l.why}${(l.problems ?? []).length ? ` (${l.problems.join('; ')})` : ''}`);
+  t.step(2, 2, 'terms');
+  if (l.terms) {
+    t.note(`recheck every ${l.terms.recheck_every_s} s (next ${l.terms.next_probe_at ?? 'after the next join'}); a failed check delists you until the next pass`);
+    t.note(`payout: ${l.terms.payout.accrual}; devnet ${l.terms.payout.devnet.state}; mainnet ${l.terms.payout.mainnet.state}`);
+    if (l.listed) t.note(`status: taifoon-sdk / curl https://coord.taifoon.dev/v1/inference/community?seller=${l.seller.id}`);
+  }
+  if (ctx.json) ctx.emit({ ...out, listing: l, probe: j.probe ?? null });
+  return l.listed ? 0 : 1;
+}
+
 export default {
   name: 'register',
   summary: 'register an ERC-8004 agent (calldata → card → layer → enrich → probe → verdict) or a resource (λ: register → probe → list → gateway)',
@@ -196,10 +229,11 @@ export default {
     ['register agent <chain>:<id> [--check] [--card url] [--enrich \'{…}\' --signature 0x…]', 'the onboarding walk; --check reads only'],
     ['register agent --uri <agentURI> --chain <id>', 'UNSIGNED register(agentURI) for a new ERC-8004 identity'],
     ['register resource <mcp|a2a|x402|rpc|gpu|mech> <endpoint> [--check]', 'the λ resource walk and its gateway terms'],
+    ['register resource gpu <endpoint> --model <id> --price <usd per 1M out> [--reference <class>] [--price-in n] [--owner 0x…]', 'sell your GPU on the one inference route: battery + fingerprint, listed at your price plus our cut, paid behind the vault'],
   ],
   subs: ['agent', 'resource'],
   complete: (w) => (w[0] === 'resource' && w.length === 1 ? RES_KINDS : []),
-  valued: ['uri', 'chain', 'card', 'enrich', 'signature'],
+  valued: ['uri', 'chain', 'card', 'enrich', 'signature', 'model', 'price', 'price-in', 'reference', 'owner', 'capacity'],
   async run(ctx, [sub, ...rest]) {
     if (sub === 'agent') return agent(ctx, rest);
     if (sub === 'resource') return resource(ctx, rest);

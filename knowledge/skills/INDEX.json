@@ -1,7 +1,7 @@
 {
  "schema": "taifoon.cli.knowledge.v1",
  "source": "the Taifoon skill catalog (skills/catalog)",
- "commit": "d920b0cae3d89db4055dba1f92006f71ceb00e67",
+ "commit": "d2652226a82cf514bb95061cdee999461251b26f",
  "note": "copied by scripts/knowledge-skills.mjs — do not edit; change the catalog and re-run",
  "skills": [
   {

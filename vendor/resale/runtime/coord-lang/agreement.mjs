@@ -10,7 +10,7 @@ export const PARTY_IDS = ["buyer","layer","seller","reseller","protocol","venue"
 export const VAULT_MOVES = ["deposit","hold","release","refund","payout"];
 export const ELISION_MARKER = "…";
 export const KIND_RULES = [{"kind":"offer","event":"forecast","agreement":"required"},{"kind":"advert","event":"forecast","agreement":"optional"},{"kind":"cover","event":"forecast","agreement":"required"},{"kind":"hire","event":"fire","agreement":"required"},{"kind":"delivery","event":"fire","agreement":"required"},{"kind":"grade","event":"fire","agreement":"required"},{"kind":"settle","event":"fire","agreement":"required"},{"kind":"release","event":"fire","agreement":"required"},{"kind":"observe","event":"fire","agreement":"lane"},{"kind":"record","event":"close","agreement":"required"},{"kind":"signal","event":"forecast","agreement":"optional"},{"kind":"ack","event":"fire","agreement":"none"}];
-export const COMMERCE_LANES = {"erc8183":"erc8183-base","memo_acp":"memoacp-base","bitagent":"bitagent-base","taifoon_assurance":"taifoon-hooks","jev":"grades","olas":"olas-base","acp":"acpv3-arc","x402":"x402-base","n8n":"n8n","u_taifoon_bridge_base":"bridge","u_taifoon_bridge_arc":"bridge","u_olas_mech_base":"olas-base"};
+export const COMMERCE_LANES = {"erc8183":"erc8183-base","memo_acp":"memoacp-base","bitagent":"bitagent-base","taifoon_assurance":"taifoon-hooks","jev":"grades","olas":"olas-base","acp":"acpv3-arc","x402":"x402-base","n8n":"n8n","u_taifoon_bridge_base":"bridge","u_taifoon_bridge_arc":"bridge","u_olas_mech_base":"olas-base","u_acpv3_arc":"acpv3-arc","u_acpv3_robinhood":"acpv3-robinhood"};
 
 const UNITS = /^(0|[1-9][0-9]{0,37})$/;
 const CAIP2 = /^[a-z0-9-]+:[A-Za-z0-9._-]+$/;

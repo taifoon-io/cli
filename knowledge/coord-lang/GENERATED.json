@@ -31,5 +31,5 @@
    "consumed_by": "the taifoon CLI (src/knowledge.mjs): taifoon docs, taifoon workflow check and the agent session's grounding; the golden set runs in the CLI tests"
   }
  ],
- "commit": "242538c6881282622d322a4d6d944986e1027d2e"
+ "commit": "18e007d49e3b21c6d6436f3b5e26a6fb3d79c28f"
 }
