@@ -9,7 +9,7 @@ export const LEG_IDS = ["our_fee","venue_fee","seller_share","reseller_markup","
 export const PARTY_IDS = ["buyer","layer","seller","reseller","protocol","venue","evaluator","assurer","settler"];
 export const VAULT_MOVES = ["deposit","hold","release","refund","payout"];
 export const ELISION_MARKER = "…";
-export const KIND_RULES = [{"kind":"offer","event":"forecast","agreement":"required"},{"kind":"advert","event":"forecast","agreement":"optional"},{"kind":"cover","event":"forecast","agreement":"required"},{"kind":"hire","event":"fire","agreement":"required"},{"kind":"delivery","event":"fire","agreement":"required"},{"kind":"grade","event":"fire","agreement":"required"},{"kind":"settle","event":"fire","agreement":"required"},{"kind":"release","event":"fire","agreement":"required"},{"kind":"observe","event":"fire","agreement":"required"},{"kind":"record","event":"close","agreement":"required"},{"kind":"signal","event":"forecast","agreement":"optional"},{"kind":"ack","event":"fire","agreement":"none"}];
+export const KIND_RULES = [{"kind":"offer","event":"forecast","agreement":"required"},{"kind":"advert","event":"forecast","agreement":"optional"},{"kind":"cover","event":"forecast","agreement":"required"},{"kind":"hire","event":"fire","agreement":"required"},{"kind":"delivery","event":"fire","agreement":"required"},{"kind":"grade","event":"fire","agreement":"required"},{"kind":"settle","event":"fire","agreement":"required"},{"kind":"release","event":"fire","agreement":"required"},{"kind":"observe","event":"fire","agreement":"lane"},{"kind":"record","event":"close","agreement":"required"},{"kind":"signal","event":"forecast","agreement":"optional"},{"kind":"ack","event":"fire","agreement":"none"}];
 export const COMMERCE_LANES = {"erc8183":"erc8183-base","memo_acp":"memoacp-base","bitagent":"bitagent-base","taifoon_assurance":"taifoon-hooks","jev":"grades","olas":"olas-base","acp":"acpv3-arc","x402":"x402-base","n8n":"n8n","u_taifoon_bridge_base":"bridge","u_taifoon_bridge_arc":"bridge","u_olas_mech_base":"olas-base"};
 
 const UNITS = /^(0|[1-9][0-9]{0,37})$/;
@@ -73,3 +73,9 @@ export function agreementView(a, full) {
 export const kindRule = (kind) => KIND_RULES.find((t) => t.kind === kind);
 /** the feature a producer lane's observations carry (undefined: an infrastructure lane, no agreement) */
 export const laneFeature = (lane) => COMMERCE_LANES[lane];
+/** whether an envelope of this kind on this lane (its from.venue) must carry the agreement: rule `required`, or rule `lane` on a
+ *  commerce lane. An observe on the superroot or an infrastructure lane is not a sale and carries none. Pure. */
+export const agreementRequiredFor = (kind, lane) => {
+  const r = kindRule(kind)?.agreement;
+  return r === 'required' || (r === 'lane' && lane != null && Object.prototype.hasOwnProperty.call(COMMERCE_LANES, String(lane)));
+};

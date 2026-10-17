@@ -16,7 +16,7 @@
 import { LANE_ORDER, canonicalUnitOf, normalizedOf, waitsOn } from './match-units.mjs';
 import { canonical, keccakHex, utf8Hex } from '../ports/transition.mjs';
 import { PIPE_KINDS, ROUTES, route, TRANSITIONS, untransitioned } from './coord-lang/pipe.mjs';
-import { agreementError, kindRule } from './coord-lang/agreement.mjs';
+import { agreementError, agreementRequiredFor } from './coord-lang/agreement.mjs';
 
 export const PIPE_URL = (process.env.PIPE_URL || 'http://127.0.0.1:8620').replace(/\/$/, '');
 export const SCHEMA = 'taifoon.pipe.envelope.v1';
@@ -59,7 +59,7 @@ export function envelope(f = {}) {
  *  record exempt), from the kind rules of the coord language. Pure. */
 export function agreementRequired(e) {
   if (e.kind === 'record' && e.to?.venue === 'coord' && e.to?.agent === 'audit') return false;
-  return kindRule(e.kind)?.agreement === 'required';
+  return agreementRequiredFor(e.kind, e.from?.venue);
 }
 /** _WIRE_SENDERS_v1_: a named transition must be a WRITE of the coord language carrying this kind (the pipe's check_send, client side). */
 export function checkTransition(kind, id) {

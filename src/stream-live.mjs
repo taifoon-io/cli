@@ -138,7 +138,14 @@ export function agreementChecker(m) {
     const a = d.envelope?.agreement ?? d.agreement;
     if (a) { const why = m.agreementError(viewOk(a)); return why ? { state: 'invalid', reason: why } : { state: 'ok' }; }
     const kind = d.envelope?.kind;
-    if (kind) { const r = m.kindRule(kind); return r?.agreement === 'required' ? { state: 'missing', reason: `a ${kind} envelope (${r.event}) carries envelope.agreement` } : null; }
+    // _AGREEMENT_LANE_v1_: the language decides per kind AND lane (rule `lane`: an observe needs one only on a commerce lane; the
+    // superroot's and the infrastructure lanes' observations are not sales and get no line)
+    if (kind) {
+      const lane = d.envelope?.from?.venue;
+      if (!m.agreementRequiredFor(kind, lane)) return null;
+      const r = m.kindRule(kind);
+      return { state: 'missing', reason: r?.agreement === 'lane' ? `the ${lane} lane is commerce (feature ${m.laneFeature(lane)}): its ${kind} envelopes carry envelope.agreement` : `a ${kind} envelope (${r.event}) carries envelope.agreement` };
+    }
     const lane = String(d.lane ?? ev?.event ?? '');
     const venue = lane === 'job' ? String(d.venue || 'erc8183') : lane;
     const feature = m.laneFeature(venue);

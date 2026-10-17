@@ -164,4 +164,8 @@ test('agreementChecker: ok, refused with the reason, missing on a commerce kind 
   assert.equal(check({ event: 'envelope', data: { envelope: { kind: 'ack' } } }), null);
   assert.equal(check({ event: 'root', data: { lane: 'root' } }), null);
   assert.equal(check({ event: 'jev', data: { lane: 'jev' } }).state, 'missing');
+  // _AGREEMENT_LANE_v1_: an observe needs one only on a commerce lane; the superroot's and an infrastructure lane's get no line
+  assert.equal(check({ event: 'envelope', data: { envelope: { kind: 'observe', from: { venue: 'superroot' } } } }), null);
+  assert.equal(check({ event: 'envelope', data: { envelope: { kind: 'observe', from: { venue: 'across_v3' } } } }), null);
+  assert.match(check({ event: 'envelope', data: { envelope: { kind: 'observe', from: { venue: 'erc8183' } } } }).reason, /the erc8183 lane is commerce \(feature erc8183-base\)/);
 });

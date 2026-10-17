@@ -32,5 +32,5 @@
    "consumed_by": "the taifoon CLI's rpc command (one card per chain: gateway, WebSocket, proved reads and the price per 1M, beside the live rotation from GET /v1/rpc); a public file, so it names no internal path"
   }
  ],
- "commit": "547719faa735aa73dbb9c71c6461436264adbe5f"
+ "commit": "242538c6881282622d322a4d6d944986e1027d2e"
 }
