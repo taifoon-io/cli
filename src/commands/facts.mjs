@@ -23,7 +23,11 @@ export default {
     let registry = REGISTRY;
     if (typeof ctx.f.registry === 'string') { try { registry = JSON.parse(readFileSync(ctx.f.registry, 'utf8')); } catch (e) { ctx.fail(`--registry: ${e.message}`); return 2; } }
     const out = await fn({ chain: arg, system: ctx.f.system, kind: ctx.f.kind, status: ctx.f.status }, { get: (p, o) => ctx.get(p, { ...o, key: false, quiet: true }), registry });
-    ctx.out.write(JSON.stringify(ctx.json ? { ...out, calls: ctx.calls } : out, null, ctx.json ? 0 : 2) + '\n');
+    // _CLI_FINISH_v1_: a terminal reads the facts in the pretty view; --json and a pipe keep the JSON
+    if (ctx.tty) {
+      if (!out.ok) { ctx.fail(out.error ?? out.why ?? 'no answer', { body: out }); return 1; }
+      const { pretty } = await import('../pretty.mjs'); ctx.out.write(pretty(ctx.p, out, { width: ctx.width }).join('\n') + '\n');
+    } else ctx.out.write(JSON.stringify(ctx.json ? { ...out, calls: ctx.calls } : out, null, ctx.json ? 0 : 2) + '\n');
     return out.ok ? 0 : 1;
   },
 };

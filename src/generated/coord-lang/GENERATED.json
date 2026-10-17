@@ -19,7 +19,18 @@
     }
    ],
    "consumed_by": "the taifoon CLI and its agent tools (its verbs and tools filtered by the caller's role, the same decision as the site and the pipe)"
+  },
+  {
+   "id": "rpc-cards-cli",
+   "files": [
+    {
+     "file": "rpc-cards.json",
+     "from": "lang/gen/rpc-cards.json",
+     "sha256": "4c3bb9aa0b1c911bd994958bfcc5662f447f1992a068c008d0e3c66e1975be1c"
+    }
+   ],
+   "consumed_by": "the taifoon CLI's rpc command (one card per chain: gateway, WebSocket, proved reads and the price per 1M, beside the live rotation from GET /v1/rpc); a public file, so it names no internal path"
   }
  ],
- "commit": "021dd681dc64713cb73aaaa5cd3bd9903c305ad5"
+ "commit": "87ce6727dd35c37e98559821f57e8d7cfadf4318"
 }

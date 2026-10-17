@@ -235,6 +235,9 @@ async function status(ctx) {
     `${p.faint('/v1/pools')} ${p.muted(j.listed_in_v1_pools?.listed === true ? 'listed' : j.listed_in_v1_pools?.listed === false ? 'not listed yet' : 'not read')}`,
     ...(j.why ?? []).map((w) => p.faint(w)),
   ]));
+  // _CLI_FINISH_v1_: a status that is not done says what to run next
+  if (!j.ok && j.state === 'no_pool') ctx.fail(`no pool for this seller on ${chainName(chain)} yet · open one: taifoon pools open --chain ${chain} --seller ${j.seller ?? ctx.f.seller}`);
+  else if (!j.ok) ctx.fail(`pool ${j.state ?? 'not confirmed'} · read it again: taifoon pools status --chain ${chain} ${ctx.f.tx ? `--tx ${ctx.f.tx}` : `--seller ${ctx.f.seller}`}`);
   return j.ok ? 0 : 1;
 }
 

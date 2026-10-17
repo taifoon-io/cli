@@ -77,14 +77,16 @@ async function ls(ctx) {
 }
 
 /** store a key the layer returned once; never printed. Rolling the profile's own key rewrites its entry. → where, or throws */
-function storeKey(ctx, apiKey, { replacesProfile = false } = {}) {
+function storeKey(ctx, apiKey, { replacesProfile = false, prefix = null } = {}) {
   if (!isKey(apiKey)) throw new Error('the layer returned no key');
   if (replacesProfile && ctx.prof?.store === 'keychain') {
     keychain.set(ctx.exec, ctx.prof.keychain?.service ?? KEYCHAIN_SERVICE, ctx.prof.keychain?.account ?? 'default', apiKey);
     const cfg = loadConfig(ctx.env); const pr = cfg.profiles[ctx.profile]; if (pr) { pr.key_prefix = prefixOf(apiKey); saveConfig(cfg, ctx.env); }
     return `macOS Keychain ${ctx.prof.keychain?.service ?? KEYCHAIN_SERVICE}/${ctx.prof.keychain?.account ?? 'default'} (this profile now uses it)`;
   }
-  const account = `key/${prefixOf(apiKey)}`;
+  // _CLI_FINISH_v1_: the account is the layer's whole key prefix (tfr_free_xrLYq), not prefixOf's 10 characters: every free key starts
+  // tfr_free_ and a second one would overwrite the first one's entry
+  const account = `key/${prefix && /^[\w-]+$/.test(prefix) ? prefix : prefixOf(apiKey)}`;
   keychain.set(ctx.exec, KEYCHAIN_SERVICE, account, apiKey);
   return `macOS Keychain ${KEYCHAIN_SERVICE}/${account}`;
 }
@@ -108,10 +110,10 @@ async function create(ctx) {
   if (!pol.label) { ctx.fail(`usage: taifoon keys create --label <text> [--scopes ${SCOPES.join(',')}] [--cap-day-grid n] [--cap-month-grid n]`); return 2; }
   const w = await write(ctx, { action: 'create', ...pol }, `create a key "${pol.label}"${pol.scopes ? ` with ${pol.scopes.join(', ')}` : ''}`);
   if (w.code) return w.code;
-  let where; try { where = storeKey(ctx, w.json.api_key); } catch (e) { ctx.fail(`the key was created (${w.json.key?.prefix ?? '?'}) but not stored: ${e.message}. Revoke it: taifoon keys revoke ${w.json.key?.prefix ?? '<prefix>'}`); return 1; }
+  let where; try { where = storeKey(ctx, w.json.api_key, { prefix: w.json.key?.prefix }); } catch (e) { ctx.fail(`the key was created (${w.json.key?.prefix ?? '?'}) but not stored: ${e.message}. Revoke it: taifoon keys revoke ${w.json.key?.prefix ?? '<prefix>'}`); return 1; }
   w.json.api_key = undefined;
   if (ctx.json) { ctx.emit({ ok: true, key: w.json.key, policy: w.json.policy, stored: where }); return 0; }
-  ctx.line(panel(ctx.p, 'key created', [`${ctx.p.faint('key     ')} ${ctx.p.accent(w.json.key?.prefix ?? '?')} ${ctx.p.faint('never shown')}`, `${ctx.p.faint('stored  ')} ${ctx.p.ink(where)}`, ctx.p.faint('use it: taifoon login --keychain key/<prefix> · change it: taifoon keys update <prefix> --scopes …')]));
+  ctx.line(panel(ctx.p, 'key created', [`${ctx.p.faint('key     ')} ${ctx.p.accent(w.json.key?.prefix ?? '?')} ${ctx.p.faint('never shown')}`, `${ctx.p.faint('stored  ')} ${ctx.p.ink(where)}`, ctx.p.faint(`use it: taifoon login --from-keychain ${KEYCHAIN_SERVICE}:key/${w.json.key?.prefix ?? '<prefix>'} --profile <name> · change it: taifoon keys update ${w.json.key?.prefix ?? '<prefix>'} --scopes …`)]));
   return 0;
 }
 
@@ -131,7 +133,7 @@ async function roll(ctx, [prefix]) {
   const grace = num(ctx.f['grace-hours']);
   const w = await write(ctx, { action: 'roll', env: ctx.f.env === 'sandbox' ? 'sandbox' : 'live', ...(prefix ? { prefix } : {}), ...(grace !== undefined ? { grace_hours: grace } : {}) }, `roll ${target ?? 'this key'}${grace ? ` (the old key keeps working ${grace} h)` : ' (the old key stops now)'}`);
   if (w.code) return w.code;
-  let where; try { where = storeKey(ctx, w.json.api_key, { replacesProfile: !prefix || prefix === mine }); } catch (e) { ctx.fail(`rolled, but the new key was not stored: ${e.message}`); return 1; }
+  let where; try { where = storeKey(ctx, w.json.api_key, { replacesProfile: !prefix || prefix === mine, prefix: w.json.key?.prefix }); } catch (e) { ctx.fail(`rolled, but the new key was not stored: ${e.message}`); return 1; }
   w.json.api_key = undefined;
   if (ctx.json) { ctx.emit({ ok: true, key: w.json.key ?? null, stored: where }); return 0; }
   ctx.line(panel(ctx.p, 'key rolled', [`${ctx.p.faint('new key ')} ${ctx.p.accent(w.json.key?.prefix ?? '?')} ${ctx.p.faint('never shown')}`, `${ctx.p.faint('stored  ')} ${ctx.p.ink(where)}`]));
@@ -143,7 +145,9 @@ async function revoke(ctx, [prefix]) {
   const w = await write(ctx, { action: 'revoke', prefix }, `revoke ${prefix} (it stops at its next call)`);
   if (w.code) return w.code;
   if (ctx.json) { ctx.emit({ ok: true, keys: w.json.keys ?? null }); return 0; }
-  ctx.line(`  ${pill(ctx.p, 'revoked')} ${ctx.p.accent(prefix)}`);
+  // _CLI_FINISH_v1_: a revoked key's Keychain entry (written by create or roll) goes too; the profile's own entry is never touched here
+  const dropped = /^[\w-]+$/.test(prefix) && keychain.del(ctx.exec, KEYCHAIN_SERVICE, `key/${prefix}`);
+  ctx.line(`  ${pill(ctx.p, 'revoked')} ${ctx.p.accent(prefix)}${dropped ? ctx.p.faint(` · its Keychain entry ${KEYCHAIN_SERVICE}/key/${prefix} deleted`) : ''}`);
   return 0;
 }
 

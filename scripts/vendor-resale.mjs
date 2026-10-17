@@ -19,6 +19,8 @@ export const FILES = [
   'resale/ports/coord-lang/genome-keys.mjs',
   'resale/runtime/pipe-client.mjs',
   'resale/runtime/pipe-sealed.mjs',
+  'resale/runtime/match-units.mjs',              // _MATCH_UNITS_v1_: the fake pipe ranks one canonical unit at a time
+  'resale/runtime/coord-lang/match-terms.json',  // its table (coord lang/gen/match-terms.json)
   'resale/runtime/coord-lang/pipe.mjs',
   'resale/runtime/coord-lang/agreement.mjs', // _ONE_FORMAT_v1_: pipe-client checks the agreement before it leaves
   'resale/runtime/coord-lang/agreement.json',  // its vectors (lang/vectors/agreement.json), so the published tests run them (stream's inline check)

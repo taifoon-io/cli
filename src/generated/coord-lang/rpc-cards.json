@@ -1,0 +1,423 @@
+{
+ "schema": "taifoon.rpc.cards.v1",
+ "generated_from": "lang/cue/rpc-resale.cue + lang/cue/chains.cue (lang/emit/rpc-resale.mjs)",
+ "cards": [
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:8453",
+   "name": "Base",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "proven",
+    "proved_why": null,
+    "ws": false,
+    "ws_why": "the subscription opens, but the public upstream answers -32005 rate limit: a keyed Base socket provider is needed"
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/8453",
+    "ws": null,
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/8453/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/8453"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Chainstack",
+    "usdc_per_1m": 2.5,
+    "source": "https://chainstack.com/pricing/"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/8453 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:42161",
+   "name": "Arbitrum One",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "after_finality",
+    "proved_why": "proofs once the block is final (a tx 2,000 blocks back answered not_final)",
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/42161",
+    "ws": "wss://coord.taifoon.dev/gw/ws/42161",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/42161/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/42161"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Chainstack",
+    "usdc_per_1m": 2.5,
+    "source": "https://chainstack.com/pricing/"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/42161 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:5042",
+   "name": "Arc",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "proven",
+    "proved_why": null,
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/5042",
+    "ws": "wss://coord.taifoon.dev/gw/ws/5042",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/5042/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/5042"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "QuickNode",
+    "usdc_per_1m": 10,
+    "source": "https://www.quicknode.com/pricing"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/5042 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:143",
+   "name": "Monad",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "proven",
+    "proved_why": null,
+    "ws": false,
+    "ws_why": "the upgrade failed (no WebSocket upstream in the rotation for Monad)"
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/143",
+    "ws": null,
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/143/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/143"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Ankr",
+    "usdc_per_1m": 20,
+    "source": "https://www.ankr.com/rpc/pricing/"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/143 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:4663",
+   "name": "Robinhood Chain",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "after_finality",
+    "proved_why": "proofs once the block is final (a tx 2,000 blocks back answered not_final)",
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/4663",
+    "ws": "wss://coord.taifoon.dev/gw/ws/4663",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/4663/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/4663"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Chainstack",
+    "usdc_per_1m": 2.5,
+    "source": "https://chainstack.com/pricing/"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/4663 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:100",
+   "name": "Gnosis",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "proven",
+    "proved_why": null,
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/100",
+    "ws": "wss://coord.taifoon.dev/gw/ws/100",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/100/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/100"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Chainstack",
+    "usdc_per_1m": 2.5,
+    "source": "https://chainstack.com/pricing/"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/100 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:130",
+   "name": "Unichain",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "not_read",
+    "proved_why": "spinner does not collect this chain (chain_not_read)",
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/130",
+    "ws": "wss://coord.taifoon.dev/gw/ws/130",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/130/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/130"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Tenderly Node RPC",
+    "usdc_per_1m": 39,
+    "source": "https://docs.tenderly.co/node/pricing"
+   },
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/130 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:36927",
+   "name": "Taifoon devnet",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "untested",
+    "proved_why": "no transaction in the last 8,000 blocks to test with",
+    "ws": true,
+    "ws_why": null
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/36927",
+    "ws": "wss://coord.taifoon.dev/gw/ws/36927",
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/36927/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/36927"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": null,
+   "send_relay": "live (a send verified on this chain)",
+   "own_node": true,
+   "upstream": "our own Taifoon node",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/36927 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:3692781",
+   "name": "Taifoon mainnet",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "untested",
+    "proved_why": "no transaction in the last 8,000 blocks to test with",
+    "ws": false,
+    "ws_why": "the upgrade failed (no WebSocket upstream for Taifoon mainnet behind the gateway)"
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/3692781",
+    "ws": null,
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/3692781/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/3692781"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": null,
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": true,
+   "upstream": "our own Taifoon node",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/3692781 (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "solana:mainnet",
+   "name": "Solana",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": false,
+    "gateway_why": "/gw/rpc serves EVM chains only (the warmbed rotation); Solana is proved reads only",
+    "proved": "untested",
+    "proved_why": "no transaction in the last 8,000 blocks to test with",
+    "ws": false,
+    "ws_why": "/gw/ws serves EVM chains only"
+   },
+   "endpoints": {
+    "gateway": null,
+    "ws": null,
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/solana/{sig}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/solana"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": {
+    "provider": "Chainstack",
+    "usdc_per_1m": 2.5,
+    "source": "https://chainstack.com/pricing/"
+   },
+   "send_relay": "not offered",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/solana (warmbed health, best endpoint first)"
+  },
+  {
+   "schema": "taifoon.rpc.card.v1",
+   "chain": "eip155:1284",
+   "name": "Moonbeam",
+   "verified": {
+    "at": "2026-10-17",
+    "gateway": true,
+    "gateway_why": null,
+    "proved": "untested",
+    "proved_why": "no transaction in the last 8,000 blocks to test with",
+    "ws": false,
+    "ws_why": "the upstream answers Unsupported subscription: newHeads"
+   },
+   "endpoints": {
+    "gateway": "https://coord.taifoon.dev/gw/rpc/1284",
+    "ws": null,
+    "proved": "https://coord.taifoon.dev/v1/proof/tx/1284/{tx}",
+    "rotation": "https://coord.taifoon.dev/v1/rpc/1284"
+   },
+   "price_usdc_per_1m": {
+    "plain": 0.5,
+    "proved": 5
+   },
+   "reseller_cut": "the ONE payment scheme: wall max(20 %, 0.002 USDC) on a resold provider; none on our own metered reads (TSUL split)",
+   "market_low": null,
+   "send_relay": "the same relay; no send verified on this chain yet",
+   "own_node": false,
+   "upstream": "the warmbed rotation of public endpoints, failover per request",
+   "doors": [
+    "gw key (POST /v1/register for a free key)",
+    "x402 key purchase",
+    "MCP"
+   ],
+   "latency": "live: GET https://coord.taifoon.dev/v1/rpc/1284 (warmbed health, best endpoint first)"
+  }
+ ]
+}

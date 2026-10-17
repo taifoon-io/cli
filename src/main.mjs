@@ -43,14 +43,15 @@ const GLOBAL = `  --json        machine output: one JSON value per command (with
   --no-color    plain output (NO_COLOR and a non-TTY stdout do the same)`;
 
 const ORDER = ['login', 'logout', 'whoami', 'balance', 'buy', 'register', 'collaborate', 'demand', 'pools', 'markets', 'metrics'];
-const usageLines = (c) => c.usage.map(([u, d]) => (u.length <= 56 ? `    taifoon ${pad(u, 56)} ${d}` : `    taifoon ${u}\n    ${' '.repeat(65)}${d}`));
+// _CLI_FINISH_v1_: an extra command (taifoon-sdk's coord) names the program that serves it: `taifoon coord` does not exist
+const usageLines = (c) => { const pr = c.prog ?? 'taifoon'; return c.usage.map(([u, d]) => (u.length + pr.length <= 63 ? `    ${pr} ${pad(u, 63 - pr.length)} ${d}` : `    ${pr} ${u}\n    ${' '.repeat(65)}${d}`)); };
 
 export async function helpText(cmdName, { admin = false, extra = [] } = {}) {
   const t = new Map(await commands(extra));
   if (!admin) for (const [k, c] of [...t]) if (c.admin) t.delete(k);
   if (cmdName && t.has(cmdName)) {
     const c = t.get(cmdName);
-    return `taifoon ${c.name} — ${c.summary}\n\n${usageLines(c).join('\n')}\n\n${GLOBAL}\n`;
+    return `${c.prog ?? 'taifoon'} ${c.name} — ${c.summary}\n\n${usageLines(c).join('\n')}\n\n${GLOBAL}\n`;
   }
   const names = [...ORDER.filter((x) => t.has(x)), ...[...t.keys()].filter((x) => !ORDER.includes(x)).sort()];
   const blocks = names.map((x) => { const c = t.get(x); return `  ${c.name} — ${c.summary}\n${usageLines(c).join('\n')}`; });
@@ -143,7 +144,8 @@ export async function main(argv, io = {}) {
   if (first === 'help' || argv.includes('--help') || argv.includes('-h')) {
     const { operatorToken } = await import('./roles.mjs');
     const admin = Boolean(operatorToken(env));
-    const words = parseFlags(argv).pos.slice(1);
+    // _CLI_FINISH_v1_: `taifoon <command> --help` is that command's usage, not the global help
+    const words = first === 'help' ? parseFlags(argv).pos.slice(1) : [first];
     const t = await commands(io.extra);
     // _ONE_PRODUCT_v1_: `taifoon help <topic>` that is not a command reads the knowledge shipped with the release
     if (first === 'help' && words.length && !t.has(words[0])) {
@@ -166,6 +168,7 @@ export async function main(argv, io = {}) {
   }
   if (!c) { createTerm({ out: io.err ?? process.stderr, env }).fail(`unknown command ${first} · taifoon help`); return 2; }
   const ctx = makeContext(io, f, VERSION);
+  ctx.cmd = first;
   try { return await c.run(ctx, pos.slice(1)); }
   catch (e) { ctx.fail(e?.message ?? String(e)); return 1; }
 }

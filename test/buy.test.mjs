@@ -106,3 +106,21 @@ test('taifoon balance: the balance, the plan with its days left, and how to rene
   const j = await run(['balance', '--json'], { 'GET /v1/access/key': { json: standing } });
   assert.equal(JSON.parse(j.out).plan.days_left, 5);
 });
+
+// _MARKET_ACCESS_v1_: taifoon buy <access id> buys once through POST /v1/access/buy; products and grants are reads
+test('taifoon buy topic:market.signal --recipient: one POST with the access id and the recipient; the grant is drawn', async () => {
+  const grant = { schema: 'taifoon.access.grant.v1', grant_ref: 'grant_' + 'ab'.repeat(12), buyer: 'key:x', tenant: 't', product: 'world-clock-signals', resource: 'topic:market.signal', bought_at: '2026-10-17T00:00:00Z', until: '2026-11-16T00:00:00Z', paid: { grid: 500, from: 'balance', ref: 'r' }, state: 'active' };
+  const rcpt = '0x' + 'ee'.repeat(20);
+  const r = await run(['buy', 'topic:market.signal', '--recipient', rcpt], { 'POST /v1/access/buy': { status: 201, json: { ok: true, already: false, grant, entitlements: ['topic:market.signal'], recipient_key: 'named', agreement: { feature: 'access', hop: 'paid', legs: [{ leg: 'our_fee', units: '5000000', to: 'layer' }] } } } });
+  assert.equal(r.code, 0, r.err);
+  assert.deepEqual(r.seen.map((s) => `${s.method} ${s.path}`), ['POST /v1/access/buy']);
+  assert.deepEqual(r.seen[0].body, { resource: 'topic:market.signal', recipient: rcpt });
+  assert.equal(r.seen[0].key, KEY);
+  assert.match(r.out, /grant_abab/); assert.match(r.out, /500 GRID from your balance/); assert.match(r.out, /topic:market\.signal/);
+  const p = await run(['buy', 'access', 'world-clock-signals'], { 'POST /v1/access/buy': { json: { ok: true, already: true, grant, entitlements: ['topic:market.signal'], recipient_key: 'missing' } } });
+  assert.equal(p.code, 0, p.err); assert.deepEqual(p.seen[0].body, { product: 'world-clock-signals' }); assert.match(p.out, /Already held/);
+  const bad = await run(['buy', 'topic:market.signal', '--recipient', 'nope'], {});
+  assert.equal(bad.code, 2); assert.equal(bad.seen.length, 0);
+  const g = await run(['buy', 'grants'], { 'GET /v1/access/grants': { json: { ok: true, grants: [grant], entitlements: ['topic:market.signal'] } } });
+  assert.equal(g.code, 0, g.err); assert.match(g.out, /entitled: topic:market\.signal/);
+});

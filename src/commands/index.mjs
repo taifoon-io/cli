@@ -33,10 +33,14 @@ export function genericCommand(verb) {
       const { runRow } = await import('../mcp.mjs');
       const { operatorToken } = await import('../roles.mjs');
       const key = row.key || row.kind === 'plan' || row.optKey ? ctx.key() : null;
+      // _CLI_FINISH_v1_: a keyed row without a key says what to run here, before the MCP runner answers in its own (server) words
+      if (row.key && !key) { ctx.fail(`${row.cli} reads with your key: taifoon login --free gets one, with no payment`); return 2; }
       // the knowledge runners read the operator skills only for an admin (an operator token on this machine)
       const admin = Boolean(operatorToken(ctx.env));
       const out = await runRow(row, args, { base: ctx.base, key, fetch: ctx.io.fetch ?? globalThis.fetch, version: ctx.version, role: admin ? 'admin' : undefined, env: admin ? ctx.env : {} });
       // _PRETTY_v1_: a terminal reads the answer in the stream view's language; --json and a pipe keep the JSON as answered
+      // _CLI_FINISH_v1_: a refusal on a terminal is one ✗ line with the layer's reason and what to run next, not a dump of the answer
+      if (ctx.tty && !ctx.f.raw && out.ok === false) { const b = out.body ?? out; ctx.fail(b?.error ?? b?.hint ?? out.error ?? `${row.op} answered ${out.status ?? 'no'}`, { status: out.status, body: out }); return 1; }
       if (ctx.tty && !ctx.f.raw) { const { pretty } = await import('../pretty.mjs'); ctx.out.write(pretty(ctx.p, out, { width: ctx.width }).join('\n') + '\n'); }
       else ctx.out.write(JSON.stringify(out, null, ctx.json ? 0 : 2) + '\n');
       return out.ok === false ? 1 : 0;

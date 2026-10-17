@@ -18,7 +18,7 @@ const pair = (h, k) => (h ? `${n(h.customers?.[k])} · ${n(h.ours?.[k])}` : '—
 /** The dashboard as plain lines (no colour): pure over the two answers, so tests snapshot it. */
 export function metricsLines(m, net, { base = 'https://coord.taifoon.dev' } = {}) {
   const L = [];
-  if (!m?.ok) { L.push(['fail', `/v1/metrics did not answer${m?.error ? `: ${m.error}` : ''}`]); return L; }
+  if (!m?.ok) { L.push(['fail', `/v1/metrics did not answer${m?.error ? `: ${m.error}` : ''} · next: taifoon status (the layer's health), then taifoon metrics again`]); return L; }
   L.push(['head', `through us · ${m.day} UTC · customers · ours`]);
   L.push(['raw', `  ${pad('', 20)}${lpad('TODAY', 16)}${lpad('YESTERDAY', 16)}${lpad('7-DAY AVG', 16)}`]);
   for (const [k, label] of HEAD) L.push(['raw', `  ${pad(label, 20)}${lpad(pair(m.compare?.today, k), 16)}${lpad(pair(m.compare?.yesterday, k), 16)}${lpad(pair(m.compare?.avg7, k), 16)}`]);

@@ -11,6 +11,9 @@ import { kv, rule } from '../brand.mjs';
 import { markPlan, readPlan, savePlan } from '../config.mjs';
 
 const PLANS = ['builder-99', 'team-199', 'protocol-299'];
+// _MARKET_ACCESS_v1_: an access id <kind>:<name> (coord lang/cue/access.cue), and the identity a seller seals epoch keys to
+export const ACCESS_ID = /^(topic|venue|signals|board|dataset|match):[a-z0-9][a-z0-9._:-]{0,79}$/;
+const RECIPIENT = /^(0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{32,44})$/;
 const TX = /^0x[0-9a-fA-F]{64}$/;
 const SIG = /^0x[0-9a-fA-F]{130}$/;
 
@@ -89,6 +92,43 @@ async function claim(ctx, id) {
   return 0;
 }
 
+
+/** _MARKET_ACCESS_v1_: buy access to a resource once (POST /v1/access/buy): a product id or the access id it sells. Paid from what the
+ *  key holds; a retry never pays twice; what you hold live is not bought again. */
+async function access(ctx, what) {
+  if (!what) { ctx.fail('buy access <product | access id> [--recipient 0x… | <base58>] · taifoon buy products lists them'); return 2; }
+  const recipient = ctx.f.recipient === undefined ? null : String(ctx.f.recipient);
+  if (recipient && !RECIPIENT.test(recipient)) { ctx.fail('--recipient is the identity of your POST /v1/pipe/keys statement: an EVM address or a base58 Ed25519 key'); return 2; }
+  const body = { ...(ACCESS_ID.test(what) ? { resource: what } : { product: what }), ...(recipient ? { recipient } : {}) };
+  const r = await ctx.post('/v1/access/buy', body);
+  if (ctx.json) { ctx.emit({ ok: r.ok, status: r.status, ...(r.json ?? {}) }); return r.ok ? 0 : 1; }
+  if (!r.ok) return refusal(ctx, 'the purchase', r);
+  const j = r.json; const g = j.grant; const { p } = ctx;
+  ctx.line(rule(p, j.already ? `Already held · ${g.resource}` : `Bought · ${g.resource}`));
+  ctx.line(kv(p, [
+    ['grant', g.grant_ref],
+    ['product', g.product],
+    ['paid', j.already ? 'nothing new' : `${g.paid.grid} GRID from your ${g.paid.from}`],
+    ['until', g.until ?? (g.quota_left != null ? `${g.quota_left} reads` : '—')],
+    ['entitled', (j.entitlements ?? []).join(', ') || '—'],
+    ['recipient', j.recipient_key],
+  ]));
+  if (!j.already && j.agreement) ctx.line(p.dim ? p.dim(`  agreement ${j.agreement.feature} · ${j.agreement.hop} · ${j.agreement.legs.map((l) => `${l.leg} ${l.units} → ${l.to}`).join(' · ')}`) : `  agreement ${j.agreement.feature} · ${j.agreement.hop}`);
+  return 0;
+}
+
+async function accessRead(ctx, path, key) {
+  const q = ctx.f.resource === undefined ? '' : `?resource=${encodeURIComponent(String(ctx.f.resource))}`;
+  const r = await ctx.get(`${path}${q}`, key ? undefined : { key: false });
+  if (!r.ok) return refusal(ctx, path, r);
+  if (ctx.json) { ctx.emit({ ok: true, ...r.json }); return 0; }
+  const j = r.json;
+  if (j.products) for (const x of j.products) ctx.line(`  ${x.product.padEnd(24)} ${x.resource.padEnd(26)} ${x.price_grid} GRID (${x.price_usdc} USDC) · ${x.term.period_days ? `${x.term.period_days} days` : `${x.term.quota} reads`} · ${x.seller}`);
+  if (j.roster) for (const x of j.roster) ctx.line(`  ${String(x.prefix ?? '…').padEnd(16)} ${x.x25519 ?? `no key: ${x.missing}`}`);
+  if (j.grants) { for (const g of j.grants) ctx.line(`  ${g.resource.padEnd(26)} ${g.state.padEnd(8)} ${g.until ?? ''} ${g.grant_ref}`); ctx.line(`  entitled: ${(j.entitlements ?? []).join(', ') || 'nothing'}`); }
+  return 0;
+}
+
 export default {
   name: 'buy',
   summary: 'a balance (Buy GRID) or a monthly plan for your key, on Base, Arbitrum One, Arc, Monad or Robinhood Chain; nothing is sent from here',
@@ -97,12 +137,19 @@ export default {
     ['buy <builder-99 | team-199 | protocol-299> [--chain <id | name>]', 'the quote for a monthly plan: 30 days, paid up front, nothing renews by itself'],
     ['buy claim [<saved id>] --tx 0x… --signature 0x… [--chain <id>]', 'credit the payment to your key; the same claim again adds nothing'],
     ['buy plans', 'the three plans, what each includes and where they are paid'],
+    ['buy products [--resource <access id>]', 'what is for sale as resource access: access id, seller, price, term'],
+    ['buy access <product | access id> [--recipient <identity>]', 'buy access once (also: taifoon buy <access id>); your stream then carries what you bought'],
+    ['buy grants [--resource <access id>]', 'your grants and entitlements; a seller’s roster with --resource'],
   ],
-  valued: ['chain', 'tx', 'signature'],
+  valued: ['chain', 'tx', 'signature', 'recipient', 'resource'],
   async run(ctx, rest) {
     const [what, id] = rest;
     if (!what) { ctx.fail(`taifoon buy <dollars | ${PLANS.join(' | ')}> [--chain base | arbitrum | arc | monad | robinhood] · taifoon help buy`); return 2; }
     if (what === 'claim') return claim(ctx, id);
+    if (what === 'access') return access(ctx, id);
+    if (ACCESS_ID.test(what)) return access(ctx, what);
+    if (what === 'products') return accessRead(ctx, '/v1/access/products', false);
+    if (what === 'grants') return accessRead(ctx, '/v1/access/grants', true);
     if (what === 'plans') {
       const r = await ctx.get('/v1/access/plan', { key: false });
       if (!r.ok) return refusal(ctx, 'the plans', r);

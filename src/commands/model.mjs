@@ -19,8 +19,13 @@ export default {
   async run(ctx, rest) {
     const [sub, arg] = rest;
     if (sub === 'local') {
-      const r = spawnSync('mamba', rest.slice(1).length ? rest.slice(1) : ['status'], { stdio: ctx.io.stdio ?? 'inherit', timeout: 10 * 60_000 });
-      if (r.error) { ctx.fail('mamba is not installed (open-mamba: cargo install --path crates/mamba-cli)'); return 3; }
+      const verbs = rest.slice(1).length ? rest.slice(1) : ['status'];
+      // _CLI_FINISH_v1_: the daemon verbs are open-mamba's; another `mamba` on PATH (the box-62 GPU client) answers them with
+      // "unknown command", which is said plainly here instead of passing its error through
+      const probe = spawnSync('mamba', ['--help'], { encoding: 'utf8', timeout: 10_000 });
+      if (probe.error) { ctx.fail('mamba is not installed: open-mamba, cargo install --path crates/mamba-cli'); return 3; }
+      if (!/\b(up|down|logs)\b/.test(`${probe.stdout}${probe.stderr}`)) { ctx.fail(`the mamba on PATH is not open-mamba's runtime (it has no ${verbs[0]}): install open-mamba, cargo install --path crates/mamba-cli, or run the other one as mamba help`); return 3; }
+      const r = spawnSync('mamba', verbs, { stdio: ctx.io.stdio ?? 'inherit', timeout: 10 * 60_000 });
       return r.status ?? 1;
     }
     if (sub === 'key') {

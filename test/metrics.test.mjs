@@ -38,5 +38,5 @@ test('--watch re-reads on its period (two ticks, no real sleep)', async () => {
   assert.deepEqual(slept, [10_000, 10_000]);
 });
 test('a layer that does not answer is said plainly', () => {
-  assert.deepEqual(metricsLines({ ok: false, error: 'HTTP 503' }, null), [['fail', '/v1/metrics did not answer: HTTP 503']]);
+  assert.deepEqual(metricsLines({ ok: false, error: 'HTTP 503' }, null), [['fail', "/v1/metrics did not answer: HTTP 503 · next: taifoon status (the layer's health), then taifoon metrics again"]]);
 });

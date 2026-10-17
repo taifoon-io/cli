@@ -1,0 +1,445 @@
+{
+    "schema": "taifoon.match.terms.v1",
+    "units": {
+        "canonical": {
+            "compute": "1m_tokens_out",
+            "rpc": "1m_requests",
+            "content": "call",
+            "grade": "call",
+            "alert": "call"
+        },
+        "per_canonical": {
+            "compute": {
+                "1m_tokens_out": 1,
+                "1k_tokens": 1000,
+                "token": 1000000
+            },
+            "rpc": {
+                "1m_requests": 1,
+                "read": 1000000,
+                "request": 1000000,
+                "call": 1000000
+            },
+            "content": {
+                "call": 1
+            },
+            "grade": {
+                "call": 1,
+                "grade": 1
+            },
+            "alert": {
+                "call": 1,
+                "alert": 1
+            }
+        },
+        "rounding": "half_up"
+    },
+    "fees": {
+        "x402-base": {
+            "rule": "wall",
+            "source": "commerce.cue venues.x402-base legs: quoteSale(fee wall) · OUR_FEE.wall door: an x402 payment",
+            "scheme_venue": "x402-base"
+        },
+        "x402-solana": {
+            "rule": "wall",
+            "source": "commerce.cue venues.x402-solana legs: quoteSale(fee wall) · OUR_FEE.wall door: an x402 payment",
+            "scheme_venue": "x402-solana"
+        },
+        "x402-arbitrum": {
+            "rule": "wall",
+            "source": "commerce.cue venues.x402-arbitrum legs: quoteSale(fee wall) · OUR_FEE.wall door: an x402 payment",
+            "scheme_venue": "x402-arbitrum"
+        },
+        "x402-robinhood": {
+            "rule": "wall",
+            "source": "commerce.cue venues.x402-robinhood legs: quoteSale(fee wall) · OUR_FEE.wall door: an x402 payment",
+            "scheme_venue": "x402-robinhood"
+        },
+        "x402-monad": {
+            "rule": "wall",
+            "source": "commerce.cue venues.x402-monad legs: quoteSale(fee wall) · OUR_FEE.wall door: an x402 payment",
+            "scheme_venue": "x402-monad"
+        },
+        "erc8183-base": {
+            "rule": "wall",
+            "source": "commerce.cue venues.erc8183-base legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "erc8183-base"
+        },
+        "memoacp-base": {
+            "rule": "wall",
+            "source": "commerce.cue venues.memoacp-base legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "memoacp-base"
+        },
+        "acpv3-arc": {
+            "rule": "wall",
+            "source": "commerce.cue venues.acpv3-arc legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "acpv3-arc"
+        },
+        "acpv3-robinhood": {
+            "rule": "wall",
+            "source": "commerce.cue venues.acpv3-robinhood legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "acpv3-robinhood"
+        },
+        "bitagent-base": {
+            "rule": "wall",
+            "source": "commerce.cue venues.bitagent-base legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "bitagent-base"
+        },
+        "olas-gnosis": {
+            "rule": "wall",
+            "source": "commerce.cue venues.olas-gnosis legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "olas-gnosis"
+        },
+        "olas-base": {
+            "rule": "wall",
+            "source": "commerce.cue venues.olas-base legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "olas-base"
+        },
+        "olas-polygon": {
+            "rule": "wall",
+            "source": "commerce.cue venues.olas-polygon legs: quoteSale(venue) with the scheme's door rule · OUR_FEE.wall door: a venue job",
+            "scheme_venue": "olas-polygon"
+        },
+        "rpc-alchemy": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-quicknode": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-infura": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-ankr": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-drpc": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-chainstack": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-getblock": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-tenderly": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-helius": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-triton": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-grove": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-lava": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-blastapi": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-blockmachine": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "rpc-publicnode": {
+            "rule": "wall",
+            "reseller_bps": 0,
+            "source": "rpc-resale.cue resell step: quoteSale(wall) + reseller_markup when a tenant sold (0 for our own sale)",
+            "scheme_venue": "coord"
+        },
+        "grid": {
+            "rule": "metered",
+            "source": "products register taifoon.gpu (the GPU gate meters from a key) · OUR_FEE.metered door: GPU · commerce.cue venues.taifoon-gpu legs usage-settle",
+            "scheme_venue": "coord"
+        },
+        "rpc": {
+            "rule": "metered",
+            "source": "products register taifoon.rpc (the gateway meters from a key) · OUR_FEE.metered door: RPC · rpc-resale.cue ours",
+            "scheme_venue": "coord"
+        },
+        "devnet": {
+            "rule": "job_quote",
+            "source": "commerce.cue venues.taifoon-hooks legs: quoteSale(job_quote)",
+            "scheme_venue": "devnet",
+            "reason": "the fee is the answer of GET /v1/fees/quote (live gas): quoted at hire, not at search"
+        },
+        "jev": {
+            "rule": "unknown",
+            "source": "match.cue venue_masters jev (protocol:jev)",
+            "scheme_venue": "coord",
+            "reason": "no commerce venue profile names a fee module for a grade sold through the matcher: owner decision"
+        },
+        "openrouter": {
+            "rule": "unknown",
+            "source": "inference.cue venues.openrouter.resale",
+            "scheme_venue": "coord",
+            "reason": "the venue's terms forbid resale: onboarded with reference prices, never an offer"
+        },
+        "together": {
+            "rule": "unknown",
+            "source": "inference.cue venues.together.resale",
+            "scheme_venue": "coord",
+            "reason": "the venue's terms forbid resale: onboarded with reference prices, never an offer"
+        },
+        "deepinfra": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "hyperbolic": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "vast": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "runpod": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "akash": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "ionet": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "nosana": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "chutes": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "groq": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "fireworks": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "targon": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        },
+        "taifoon-gpu": {
+            "rule": "metered",
+            "source": "inference.cue listing (our own GPU: no cut) · payment-scheme OUR_FEE.metered (GPU)",
+            "scheme_venue": "coord"
+        },
+        "x402-inference": {
+            "rule": "metered",
+            "reseller_bps": 300,
+            "reseller": "taifoon",
+            "source": "inference.cue listing: quoteSale our_fee metered + reseller_markup cut_bps to taifoon",
+            "scheme_venue": "coord"
+        }
+    },
+    "vectors": {
+        "normalize": [
+            {
+                "id": "gpu-1k",
+                "class": "compute",
+                "unit": "1k_tokens",
+                "price_micro": 200,
+                "upq": 1,
+                "norm": {
+                    "unit": "1m_tokens_out",
+                    "price_micro": 200000
+                }
+            },
+            {
+                "id": "inference-1m",
+                "class": "compute",
+                "unit": "1m_tokens_out",
+                "price_micro": 329400,
+                "upq": 1,
+                "norm": {
+                    "unit": "1m_tokens_out",
+                    "price_micro": 329400
+                }
+            },
+            {
+                "id": "rpc-read-exact",
+                "class": "rpc",
+                "unit": "read",
+                "price_micro": 500000,
+                "upq": 1000000,
+                "norm": {
+                    "unit": "1m_requests",
+                    "price_micro": 500000
+                }
+            },
+            {
+                "id": "rpc-read-rounded",
+                "class": "rpc",
+                "unit": "read",
+                "price_micro": 1,
+                "upq": 1,
+                "norm": {
+                    "unit": "1m_requests",
+                    "price_micro": 1000000
+                }
+            },
+            {
+                "id": "rpc-x402-call",
+                "class": "rpc",
+                "unit": "call",
+                "price_micro": 1000,
+                "upq": 1,
+                "norm": {
+                    "unit": "1m_requests",
+                    "price_micro": 1000000000
+                }
+            },
+            {
+                "id": "content-call",
+                "class": "content",
+                "unit": "call",
+                "price_micro": 1000,
+                "upq": 1,
+                "norm": {
+                    "unit": "call",
+                    "price_micro": 1000
+                }
+            },
+            {
+                "id": "content-unknown-unit",
+                "class": "content",
+                "unit": "1k_tokens",
+                "price_micro": 5,
+                "upq": 1,
+                "norm": null
+            }
+        ],
+        "fees": [
+            {
+                "venue": "grid",
+                "rule": "metered",
+                "scheme_venue": "coord",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "deepinfra",
+                "rule": "metered",
+                "scheme_venue": "coord",
+                "reseller_bps": 300
+            },
+            {
+                "venue": "taifoon-gpu",
+                "rule": "metered",
+                "scheme_venue": "coord",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "x402-base",
+                "rule": "wall",
+                "scheme_venue": "x402-base",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "rpc",
+                "rule": "metered",
+                "scheme_venue": "coord",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "devnet",
+                "rule": "job_quote",
+                "scheme_venue": "devnet",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "jev",
+                "rule": "unknown",
+                "scheme_venue": "coord",
+                "reseller_bps": 0
+            },
+            {
+                "venue": "openrouter",
+                "rule": "unknown",
+                "scheme_venue": "coord",
+                "reseller_bps": 0
+            }
+        ]
+    }
+}

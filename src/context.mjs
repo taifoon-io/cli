@@ -42,6 +42,7 @@ export function makeContext(io, f, version) {
   const now = io.now ?? (() => Date.now());
   const calls = [];
   let keyInfo = null;
+  let lastRefused = null; // _CLI_FINISH_v1_: the last answer the layer refused, so a failure line can name what to run next
   const ctx = {
     io, out, err, env, exec, json, p, t, et, width, cfg, profile, prof, base, host, now, version, f, calls,
     tty: !!out.isTTY && !json,
@@ -66,6 +67,7 @@ export function makeContext(io, f, version) {
       spin?.stop();
       const ms = now() - t0;
       calls.push({ method, path, status, ms, ...(error ? { error } : {}) });
+      if (status !== null && (status >= 400 || body?.ok === false)) lastRefused = { status, body };
       if (!opts.quiet && !json && f.verbose) t.called(status, ms, error);
       return { status, json: body, ms, ok: status !== null && status >= 200 && status < 300 && body?.ok !== false, error };
     },
@@ -74,7 +76,8 @@ export function makeContext(io, f, version) {
     /** --json: one JSON value, with the calls this run made (the metering the layer also records) */
     emit(v) { out.write(JSON.stringify({ ...v, calls }) + '\n'); },
     line: (s = '') => { if (!json) out.write(s + '\n'); },
-    fail: (s) => { et.fail(s); },
+    /** a failure line, always with what to run next (the layer's own next_step when it sends one); see nextStep */
+    fail: (s, o = {}) => { et.fail(withNext(String(s), { cmd: ctx.cmd, keyed: Boolean(keyInfo?.key), ...(o.status !== undefined || o.body !== undefined ? o : lastRefused ?? {}) })); },
     /** ask y/N on a TTY; refuse (false) when there is no TTY or --yes was not given in a pipe */
     async confirm(q) {
       if (f.yes === true) return true;
@@ -100,6 +103,29 @@ export function makeContext(io, f, version) {
     },
   };
   return ctx;
+}
+
+const CMD_RE = /(^|[\s(·:])taifoon [a-z]|https?:\/\/|--[a-z]/;
+const cliOf = (c) => (typeof c === 'string' ? c.replace(/^npx\s+@taifoon\/cli(@\S+)?\s*/, 'taifoon ').trim() : null);
+/**
+ * _CLI_FINISH_v1_ (owner 2026-10-17: every error a terminal user sees says what to run): a failure line that names no command, URL or
+ * flag gets one. Order: the layer's own next_step.cli (or its get_key.cli for a keyless caller); then by status: 401 → login --free,
+ * 402 → balance / buy, 403 → role (what this key may do); else the command's own usage.
+ */
+export function nextStep({ status, body, cmd, keyed } = {}) {
+  const b = body?.body && typeof body.body === 'object' ? body.body : body;
+  const ns = b?.next_step;
+  const own = cliOf(ns?.cli) ?? (keyed ? null : cliOf(b?.get_key?.cli));
+  if (own && !(keyed && /login --free/.test(own))) return own;
+  const st = body?.status ?? status;
+  if (st === 401 || (!keyed && /key_required|needs a (relayer )?key/.test(JSON.stringify(b ?? '')))) return 'taifoon login --free';
+  if (st === 402 || /not_paid|covers? \d|balance/.test(b?.error ?? '')) return 'taifoon balance · taifoon buy <dollars>';
+  if (st === 403) return 'taifoon role (what this key may do) · taifoon buy plans';
+  return cmd ? `taifoon ${cmd} --help` : 'taifoon help';
+}
+export function withNext(s, o) {
+  if (CMD_RE.test(s)) return s;
+  return `${s} · next: ${nextStep(o)}`;
 }
 
 function readLine(input) {

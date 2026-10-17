@@ -3645,7 +3645,7 @@
           },
           "status": "live",
           "since": "2026-10-15",
-          "notes": "Jev answers on Base: guardian the Safe, delayed tombstoned rotation."
+          "notes": "Jev answers on Base: a guardian with a delayed, tombstoned rotation."
         },
         {
           "chain": 8453,
@@ -3663,7 +3663,7 @@
           },
           "status": "live",
           "since": "2026-10-15",
-          "notes": "Evaluator adapter on Base for the V4 hook 0x93122A47d1824afFA3bAa5751aacf4919F67eb25: anchored verdict + Safe-vetoable delay."
+          "notes": "Evaluator adapter on Base for the V4 hook 0x93122A47d1824afFA3bAa5751aacf4919F67eb25: anchored verdict + a vetoable delay."
         }
       ]
     },

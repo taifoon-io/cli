@@ -18,7 +18,8 @@ export default {
   async run(ctx, rest) {
     const { p } = ctx;
     const [sub, a, b, ...extra] = rest;
-    const get = (path, o) => ctx.get(path, { ...o, key: false, quiet: true });
+    // _CLI_FINISH_v1_: the proof reads go with the profile's key when it has one (its own budget, not the 30-a-minute keyless rate)
+    const get = (path, o) => ctx.get(path, { ...o, ...(ctx.key() ? {} : { key: false }), quiet: true });
     let out;
     if (sub === 'tx' && a && b && !extra.length) out = await proveTx({ chain: a, tx: b }, { get });
     else if (sub === 'sale' && a && !b) out = await proveSale({ sale_key: a, summary: typeof ctx.f.summary === 'string' ? ctx.f.summary : SUMMARY_URL }, { get, fetchSummary: summaryFetcher(ctx.io.fetch ?? globalThis.fetch) });
@@ -36,6 +37,12 @@ export default {
     }
     ctx.line(`  ${p.faint(`verifier ${out.verifier ? `${out.verifier.name} ${out.verifier.address} (chain ${out.verifier.chain})` : '—'}`)}`);
     ctx.line(`  ${p.faint(out.trust)}`);
+    // _CLI_FINISH_v1_: a state that is not proven says what to run next
+    const again = sub === 'tx' ? `taifoon prove tx ${a} ${b}` : `taifoon prove sale ${a}`;
+    const next = out.state === 'awaiting_proof' ? `read it again once the block is final: ${again}`
+      : out.state === 'unproven' ? (/key|rate|x402/i.test(String(out.why ?? '')) && !ctx.key() ? 'taifoon login --free (its own budget), then ' + again : `taifoon debug rpc ${sub === 'tx' ? a : '<chain>'} (is the chain read?) · ${again}`)
+        : out.state === 'not_found' ? 'taifoon prove sale <sale_key> with a key the published sale run names' : null;
+    if (next) ctx.line(`  ${p.you('next:')} ${next}`);
     return EXIT[out.state] ?? 1;
   },
 };
