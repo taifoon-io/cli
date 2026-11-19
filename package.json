@@ -49,6 +49,7 @@
     "knowledge": "node scripts/knowledge-skills.mjs",
     "install-global": "scripts/install.sh",
     "vendor": "node scripts/vendor-resale.mjs",
-    "test:pack": "node --test test/pack.test.mjs"
+    "test:pack": "node --test test/pack.test.mjs",
+    "prepublishOnly": "pack-guard"
   }
 }
